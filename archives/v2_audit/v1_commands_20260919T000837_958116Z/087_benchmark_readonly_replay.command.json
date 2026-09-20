@@ -1,0 +1,26 @@
+{
+  "number": 87,
+  "name": "benchmark_readonly_replay",
+  "argv": [
+    "C:\\Users\\zelin\\AppData\\Local\\Programs\\Python\\Python312\\python-real.exe",
+    "-B",
+    "J:\\project\\project_open_gate\\proof_of_simulation\\archives\\v2_tools\\audit_v1.py",
+    "--benchmark-worker"
+  ],
+  "cwd": "J:\\project\\project_open_gate\\proof_of_simulation\\archives\\v2_audit\\v1_commands_20260919T000837_958116Z",
+  "timeout_seconds": 120,
+  "environment_overrides": {
+    "PATH_prefix": "C:\\Users\\zelin\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "pid": 7912,
+  "timed_out": false,
+  "returncode": 0,
+  "elapsed_seconds": 29.176189099998737,
+  "stdout_path": "J:\\project\\project_open_gate\\proof_of_simulation\\archives\\v2_audit\\v1_commands_20260919T000837_958116Z\\087_benchmark_readonly_replay.stdout.log",
+  "stdout_bytes": 111648,
+  "stdout_sha256": "79eb4d24d5f3f6449c33f7380c7369c0e4783b6ebbdf449bc2f416ee5ca41d22",
+  "stderr_path": "J:\\project\\project_open_gate\\proof_of_simulation\\archives\\v2_audit\\v1_commands_20260919T000837_958116Z\\087_benchmark_readonly_replay.stderr.log",
+  "stderr_bytes": 0,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

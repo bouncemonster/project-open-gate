@@ -1,0 +1,20 @@
+{
+  "cr": 0.9831880807715164,
+  "ci": -0.0058667288803120905,
+  "model_id": "V1_INV_PI",
+  "driver": "V1",
+  "score": 0.830429,
+  "pearson01": 0.891802,
+  "spearman01": 0.890916,
+  "mae01": 0.602684,
+  "gradient01": 0.64409,
+  "spectral01": 0.912882,
+  "autocorrelation01": 0.999284,
+  "entropy": 0.0,
+  "anisotropy": 0.033303,
+  "compression_ratio": 0.001111,
+  "escaped_fraction": 1.0,
+  "max_iter": 200,
+  "alpha": 1.0,
+  "degree": 2
+}

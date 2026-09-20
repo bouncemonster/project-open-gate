@@ -1,0 +1,75 @@
+{
+  "attribution": {
+    "boundary_effect": {
+      "escaped_fraction_at_best": 1,
+      "interpretation": "BOUNDARY_ARTIFACT: score rises monotonically across the sampled cr range, so the V2 optimum at cr=2.0 is not a local maximum",
+      "mean_gradient": 0.0209899680420782,
+      "monotone_increasing_over_full_range": true,
+      "score_at_cr_1.0": 0.820852473027983,
+      "score_at_cr_3.0": 0.8628324091121394
+    },
+    "generic_geometry": {
+      "V14_CONSTANT_FIELD": 0.5447111700758839,
+      "V15_X_RAMP": 0.5986741151104621,
+      "V16_Y_RAMP": 0.5961677138806748,
+      "V17_BILINEAR_RAMP": 0.603552447974048,
+      "V18_RADIAL_GRADIENT": 0.6386319001252343
+    },
+    "optimization_selection": {
+      "null_max": 0.858190761051176,
+      "null_mean": 0.857036626413746
+    },
+    "prime_event_timing": {
+      "autocorrelation": 0.0,
+      "correlation_with_target_residual": 0.0,
+      "entropy": 0.0,
+      "max_abs": 0.0,
+      "rms": 0.0,
+      "spectral_high_energy": 0.0,
+      "spectral_low_energy": 0.0
+    },
+    "prime_residual": {
+      "autocorrelation": 0.5027541696123025,
+      "correlation_with_target_residual": 0.34799638117323906,
+      "entropy": 0.6040429719235919,
+      "max_abs": 0.0014651816353236907,
+      "rms": 0.0003921246641189583,
+      "spectral_high_energy": 0.00022671463867093343,
+      "spectral_low_energy": 0.00012044831924551189
+    },
+    "smooth_forcing": {
+      "S1_ANALYTIC": 0.8583213052764331,
+      "S2_DATA_SMOOTHED": 0.8519913473489458
+    }
+  },
+  "delta_fields": {
+    "V10_RESIDUAL": {
+      "autocorrelation": 0.5027541696123025,
+      "correlation_with_target_residual": 0.34799638117323906,
+      "entropy": 0.6040429719235919,
+      "max_abs": 0.0014651816353236907,
+      "rms": 0.0003921246641189583,
+      "spectral_high_energy": 0.00022671463867093343,
+      "spectral_low_energy": 0.00012044831924551189
+    },
+    "V1_FULL": {
+      "autocorrelation": 0.9108092627966453,
+      "correlation_with_target_residual": -0.41648636894524094,
+      "entropy": 0.9582291560456452,
+      "max_abs": 0.0033006799096550986,
+      "rms": 0.0006992480080860973,
+      "spectral_high_energy": 0.0003483558575215033,
+      "spectral_low_energy": 0.005400430358788359
+    },
+    "V9_EVENT": {
+      "autocorrelation": 0.0,
+      "correlation_with_target_residual": 0.0,
+      "entropy": 0.0,
+      "max_abs": 0.0,
+      "rms": 0.0,
+      "spectral_high_energy": 0.0,
+      "spectral_low_energy": 0.0
+    }
+  },
+  "note": "Diagnostic attribution, not causal coefficients. No hidden machine learning is used."
+}

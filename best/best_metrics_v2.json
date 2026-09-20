@@ -1,0 +1,17 @@
+{
+  "cr": 2.0,
+  "ci": 0.01113203125,
+  "driver": "V1_INV_PI",
+  "model": "V2_EXPANDED_DOMAIN",
+  "score": 0.8583213052764331,
+  "pearson01": 0.910834383692445,
+  "spearman01": 0.9012466615256411,
+  "mae01": 0.5968703158115423,
+  "gradient01": 0.7938629186357735,
+  "spectral01": 0.9141975183312652,
+  "autocorrelation01": 0.9979073147179244,
+  "entropy": 0,
+  "anisotropy": 0.021697654713125125,
+  "compression_ratio": 0.0011111111111111111,
+  "escaped_fraction": 1
+}

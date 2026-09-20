@@ -1,0 +1,3425 @@
+# PROOF OF SIMULATION V2
+
+## Forensic audit, mathematical correction, prime-specific isolation and architectural hardening of the existing Proof of Simulation project
+
+---
+
+# 0. Твоя задача
+
+В текущем workspace уже существует реализованный проект:
+
+```text
+Proof of Simulation
+```
+
+Он уже был:
+
+* написан;
+* скомпилирован;
+* запущен;
+* протестирован;
+* доведён до полного pipeline;
+* снабжён `report.md`;
+* снабжён SQLite;
+* снабжён synthetic-world benchmark;
+* снабжён null-search;
+* снабжён validation.
+
+Твоя задача **НЕ состоит в том, чтобы создать проект заново**.
+
+Твоя задача:
+
+> провести независимый forensic-аудит существующего проекта, найти ошибки, скрытые методологические слабости, математические недоделки, расхождения между заявленным протоколом и фактическим кодом, ошибки в статистике и архитектуре, затем исправить их и провести новый воспроизводимый эксперимент V2.
+
+Работай поверх существующего проекта.
+
+Ничего существенного не удаляй до создания полного baseline snapshot.
+
+---
+
+# 1. Самое важное правило
+
+Сначала:
+
+```text
+AUDIT
+```
+
+потом:
+
+```text
+PATCH
+```
+
+потом:
+
+```text
+TEST
+```
+
+потом:
+
+```text
+RE-RUN
+```
+
+Никогда не делай:
+
+```text
+patch → сразу report
+```
+
+и никогда не переписывай старые результаты без сохранения их исходного состояния.
+
+---
+
+# 2. Не доверяй Completion Report
+
+Считай Completion Report **заявлением, которое нужно проверить**, а не источником истины.
+
+Проверяй по:
+
+```text
+исходникам
+SQLite
+JSON
+CSV
+stdout/stderr
+protocol.json
+source hash
+protocol hash
+фактически сгенерированным картам
+```
+
+Если отчёт говорит:
+
+```text
+"Reproducibility: identical"
+```
+
+самостоятельно перепроверь.
+
+Если говорит:
+
+```text
+"Benchmark holdout: 100%"
+```
+
+проверь, что holdout действительно не использовался для настройки.
+
+Если говорит:
+
+```text
+"null p = 1.0"
+```
+
+проверь:
+
+* формулу;
+* число null runs;
+* число сравнений;
+* что сравнивались именно maxima;
+* что observed score определён корректно;
+* что null budget сопоставим с original search budget.
+
+---
+
+# 3. Сначала создать baseline snapshot
+
+До любых изменений:
+
+```text
+archives/v1_baseline/
+```
+
+Скопировать туда:
+
+```text
+*.c
+*.py
+*.json
+*.md
+*.csv
+history.sqlite3
+*.txt
+best/
+validation/
+benchmark/
+```
+
+Если существует `.git`:
+
+```bash
+git status
+git rev-parse HEAD
+```
+
+и сохранить commit hash.
+
+Если git отсутствует — создать файловый snapshot.
+
+---
+
+# 4. Создать V2 branch metadata
+
+Создать:
+
+```text
+V2_AUDIT.md
+V2_CHANGELOG.md
+V2_PROTOCOL.md
+```
+
+Все изменения должны быть записаны.
+
+Формат change log:
+
+```text
+CHANGE ID
+OLD BEHAVIOR
+PROBLEM
+FIX
+MATHEMATICAL REASON
+TEST
+IMPACT ON RESULTS
+```
+
+---
+
+# 5. Нельзя уничтожать V1
+
+Старый эксперимент должен остаться доступным как:
+
+```text
+V1_BASELINE
+```
+
+Новая версия:
+
+```text
+V2_CORRECTED
+```
+
+Нельзя смешивать evaluations V1 и V2 в одну статистику.
+
+---
+
+# 6. Первый этап — inventory audit
+
+Сначала составь фактический список:
+
+```text
+source files
+test files
+generated files
+database tables
+artifacts
+```
+
+Сверь его с Completion Report.
+
+Отдельно проверь заявленные:
+
+```text
+12 source files
+5178 lines
+14 phases
+3235 evaluations
+```
+
+и фактические значения.
+
+Если обнаружено расхождение:
+
+```text
+FILE_COUNT_MISMATCH
+LINE_COUNT_MISMATCH
+EVALUATION_COUNT_MISMATCH
+ARTIFACT_COUNT_MISMATCH
+```
+
+зафиксируй его.
+
+Не исправляй статистику отчёта вручную.
+
+---
+
+# 7. Особое внимание к текущему расхождению
+
+В имеющемся Completion Report заявлено:
+
+```text
+Evaluations = 3235
+```
+
+при этом:
+
+```text
+control_summary.csv = 3244 rows
+```
+
+Это нужно расследовать.
+
+Определи:
+
+1. включает ли CSV header;
+2. включает ли он control evaluations;
+3. включает ли baseline;
+4. включает ли duplicates;
+5. включает ли failed evaluations;
+6. соответствует ли каждая строка SQLite evaluation;
+7. не считает ли отчёт только primary evaluations.
+
+После расследования сформулируй:
+
+```text
+PRIMARY_EVALUATIONS
+CONTROL_EVALUATIONS
+TOTAL_EVALUATIONS
+```
+
+отдельно.
+
+Никогда больше не использовать одно неоднозначное число `Evaluations`.
+
+---
+
+# 8. Второе обязательное расследование
+
+Completion Report говорит:
+
+```text
+Best Score = 0.830
+```
+
+но:
+
+```text
+V2_SMOOTH = 0.846
+V1_INV_PI = 0.824
+```
+
+при той же лучшей точке.
+
+Проверь, что именно означает:
+
+```text
+Best Score
+```
+
+Возможны варианты:
+
+```text
+best primary V1 score
+overall control score
+global score
+best score encountered in search
+```
+
+В V2 это должно быть разделено минимум на:
+
+```text
+best_primary_score
+best_control_score
+best_overall_evaluated_score
+best_V1_score
+best_V4_score
+```
+
+В отчёте нельзя называть `0.830` просто:
+
+```text
+Best Score
+```
+
+без уточнения.
+
+---
+
+# 9. Третье обязательное расследование
+
+Лучшая точка:
+
+```text
+cr = 0.983
+ci = -0.006
+```
+
+при исходном диапазоне:
+
+```text
+cr ∈ [-1.5, 1.0]
+ci ∈ [-1.2, 1.2]
+```
+
+Точка находится очень близко к верхней границе `cr`.
+
+Проверь:
+
+1. достигал ли optimiser границы;
+2. был ли candidate rejected из-за clipping;
+3. пытался ли optimiser идти дальше;
+4. находится ли gradient score по направлению +cr;
+5. является ли максимум внутренним или boundary maximum.
+
+Если:
+
+```text
+distance(best_cr, upper_cr_bound)
+/
+range_cr
+< 0.05
+```
+
+выполнить отдельный boundary diagnostic.
+
+---
+
+# 10. Boundary expansion protocol
+
+Если best находится близко к границе, старый V1 protocol НЕ менять.
+
+Создать отдельную V2 model:
+
+```text
+V2_EXPANDED_DOMAIN
+```
+
+с:
+
+```text
+cr ∈ [-2.0, 2.0]
+ci ∈ [-2.0, 2.0]
+```
+
+Не считать результаты расширенного диапазона прямым продолжением V1.
+
+Перед search выполнить coarse scout.
+
+---
+
+# 11. Coarse scout V2
+
+Перед hill-climbing выполнить:
+
+```text
+17 x 17
+```
+
+coarse scan:
+
+```text
+cr ∈ [-2,2]
+ci ∈ [-2,2]
+```
+
+только для:
+
+```text
+V0
+V1
+V4
+```
+
+Не использовать control explosion.
+
+Цель:
+
+```text
+найти basins
+определить boundary effects
+```
+
+---
+
+# 12. Mathematical audit
+
+Проверь фактическую реализацию:
+
+```text
+z_{n+1} = z_n² + c + D(n)
+```
+
+и убедись, что:
+
+```text
+z0
+c
+D(n)
+escape
+smooth escape
+```
+
+реализованы буквально так, как заявлено в protocol.
+
+---
+
+# 13. Complex arithmetic correctness
+
+Для каждого pixel должно быть:
+
+```c
+old_zr = zr;
+old_zi = zi;
+
+zr_next =
+    old_zr * old_zr
+    - old_zi * old_zi
+    + cr
+    + real_correction;
+
+zi_next =
+    2.0 * old_zr * old_zi
+    + ci
+    + imag_correction;
+```
+
+Никогда:
+
+```text
+не использовать уже обновлённый zr
+```
+
+для `zi_next`.
+
+Создать regression test.
+
+---
+
+# 14. Mathematical metamorphic tests
+
+Добавить тесты, использующие известные свойства системы.
+
+Проверить:
+
+```text
+conjugate symmetry
+```
+
+Для real forcing проверить соответствующее преобразование:
+
+```text
+(ci, y) → (-ci, -y)
+```
+
+и убедиться, что expected symmetry сохраняется с численной tolerance.
+
+Проверить:
+
+```text
+alpha = 0
+```
+
+даёт тот же результат, что:
+
+```text
+V0
+```
+
+Проверить:
+
+```text
+driver = NONE
+```
+
+идентичен baseline.
+
+---
+
+# 15. pi(k) audit
+
+Проверить:
+
+```text
+pi(0)   = protected value
+pi(1)   = protected value
+pi(2)   = 1
+pi(3)   = 2
+pi(5)   = 3
+pi(10)  = 4
+pi(100) = 25
+pi(1000)=168
+```
+
+Проверить monotonically non-decreasing:
+
+```text
+pi(k+1) >= pi(k)
+```
+
+и:
+
+```text
+pi(k+1)-pi(k) ∈ {0,1}
+```
+
+для integer k.
+
+---
+
+# 16. Prime forcing audit
+
+Для:
+
+```text
+P(k)=1/pi(k)
+```
+
+вывести первые:
+
+```text
+100
+```
+
+значений.
+
+Проверить:
+
+```text
+P(k)
+```
+
+изменяется только при prime events.
+
+Проверить exact event locations:
+
+```text
+2
+3
+5
+7
+11
+13
+17
+...
+```
+
+---
+
+# 17. Критический математический пересмотр
+
+Основная слабость V1:
+
+```text
+P(k)=1/pi(k)
+```
+
+смешивает:
+
+```text
+smooth downward trend
+```
+
+и:
+
+```text
+prime-event structure
+```
+
+Это нужно разделить.
+
+---
+
+# 18. Prime event decomposition
+
+Создать:
+
+```text
+P(k) = 1/pi(k)
+```
+
+и:
+
+```text
+E(k) = P(k) - P(k-1)
+```
+
+с:
+
+```text
+P(0) = protected initialization
+```
+
+`E(k)` должен быть ненулевым только при prime events, кроме специального первого элемента по protocol.
+
+Сохранить:
+
+```text
+event_count
+event_positions
+event_amplitudes
+event_mean
+event_std
+event_gap_distribution
+```
+
+---
+
+# 19. Prime event train
+
+Создать отдельный driver:
+
+```text
+V9_PRIME_EVENT
+```
+
+который использует:
+
+```text
+E(k)
+```
+
+а не `P(k)`.
+
+Это важно:
+
+```text
+V1 = full inverse-pi signal
+V9 = isolated prime-event signal
+```
+
+---
+
+# 20. Smooth component
+
+Не использовать только:
+
+```text
+log(k+2)/(k+1)
+```
+
+как единственный smooth surrogate.
+
+Создать минимум два заранее определённых smooth controls:
+
+```text
+S1_ANALYTIC
+S2_DATA_SMOOTHED
+```
+
+---
+
+# 21. S1 analytic smooth approximation
+
+Использовать математически осмысленное smooth approximation к `pi(k)`.
+
+Предпочтительно:
+
+```text
+Riemann R(x)
+```
+
+или:
+
+```text
+logarithmic-integral-based approximation
+```
+
+если реализация устойчива.
+
+Если Riemann R реализуется:
+
+```text
+не использовать внешние библиотеки
+```
+
+и документировать numerical approximation.
+
+Для малых k обеспечить безопасное поведение.
+
+Получить:
+
+```text
+S1(k) = 1 / smooth_pi(k)
+```
+
+---
+
+# 22. S2 empirical smooth control
+
+Построить deterministic low-pass smoothing исходного:
+
+```text
+P(k)
+```
+
+например:
+
+```text
+moving / Gaussian-like kernel
+```
+
+с заранее фиксированным окном.
+
+Важно:
+
+окно должно быть зафиксировано ДО просмотра search results.
+
+Провести sensitivity только по заранее зарегистрированному малому набору:
+
+```text
+window = 3
+window = 5
+window = 9
+```
+
+---
+
+# 23. Matching smooth controls
+
+Для каждого smooth surrogate отдельно сохранить:
+
+```text
+mean
+std
+min
+max
+RMS
+```
+
+Не просто масштабировать молча.
+
+---
+
+# 24. Prime residual
+
+Создать:
+
+```text
+V10_PRIME_RESIDUAL
+```
+
+где:
+
+```text
+R(k) = P(k) - S1(k)
+```
+
+и:
+
+```text
+Rz(k) =
+(R(k)-mean(R))
+/
+std(R)
+```
+
+если std > 0.
+
+---
+
+# 25. Why residual matters
+
+Смысл:
+
+```text
+V1
+```
+
+проверяет:
+
+```text
+full 1/pi
+```
+
+а:
+
+```text
+V10
+```
+
+проверяет:
+
+```text
+что остаётся после удаления smooth trend
+```
+
+Именно V10 является более прямым test of prime-specific structure.
+
+---
+
+# 26. Matched event controls
+
+Создать отдельное control family:
+
+```text
+V11_MATCHED_EVENT
+V12_SHIFTED_EVENT
+V13_GAP_MATCHED
+```
+
+---
+
+# 27. V11 — matched amplitude event surrogate
+
+Сохранить:
+
+```text
+event_count
+event_amplitudes
+```
+
+но случайно разместить amplitudes в control positions.
+
+Использовать deterministic seeds:
+
+```text
+101
+202
+303
+404
+505
+```
+
+---
+
+# 28. V12 — circularly shifted event train
+
+Это важный control.
+
+Возьми exact sequence:
+
+```text
+E(k)
+```
+
+и циклически сдвигай event train на заранее заданные offset:
+
+```text
+1
+2
+3
+5
+7
+11
+13
+17
+19
+23
+```
+
+Не выбирать лучший shift.
+
+Сохранить все результаты.
+
+Это сохраняет:
+
+```text
+event amplitudes
+event spacing structure
+```
+
+но меняет alignment с реальными prime positions.
+
+---
+
+# 29. V13 — gap-matched control
+
+Сохранять приблизительно:
+
+```text
+prime gap distribution
+```
+
+но строить event train с другой deterministic placement.
+
+Не делать random optimisation.
+
+Список seed должен быть заранее зарегистрирован.
+
+---
+
+# 30. Strongest arithmetic contrast
+
+Рассчитывать:
+
+```text
+prime_specific_uplift =
+score(V9_PRIME_EVENT)
+-
+mean(score(V11_MATCHED_EVENT))
+```
+
+и:
+
+```text
+alignment_uplift =
+score(V9_PRIME_EVENT)
+-
+mean(score(V12_SHIFTED_EVENT))
+```
+
+и:
+
+```text
+residual_uplift =
+score(V10_PRIME_RESIDUAL)
+-
+score(S1_ANALYTIC)
+```
+
+Не называть это causal effect.
+
+Называть:
+
+```text
+prime-specific intervention contrast
+```
+
+или:
+
+```text
+prime-specific uplift
+```
+
+---
+
+# 31. Почему нельзя называть это causal uplift
+
+Мы исследуем математическую систему, а не физический treatment-control experiment.
+
+Поэтому:
+
+```text
+causal
+```
+
+заменить на:
+
+```text
+contrast
+```
+
+или:
+
+```text
+intervention comparison
+```
+
+---
+
+# 32. Target audit
+
+Проверить exact formulas:
+
+```text
+TARGET_A
+TARGET_B
+TARGET_PHASE
+T_nm
+```
+
+и координатную нормализацию.
+
+Убедиться, что нигде не используется:
+
+```text
+px / WIDTH
+```
+
+в одном месте и:
+
+```text
+px / (WIDTH-1)
+```
+
+в другом без явного protocol definition.
+
+Все coordinate conventions должны быть централизованы.
+
+---
+
+# 33. Target abstraction
+
+Создать единую функцию:
+
+```python
+target_field(target_id, width, height)
+```
+
+Никаких отдельно написанных формул в разных файлах.
+
+---
+
+# 34. Target B audit
+
+Поскольку:
+
+```text
+TARGET_B = 0.849
+```
+
+оказался лучше:
+
+```text
+TARGET_A ≈ 0.830
+```
+
+провести spectral analysis.
+
+Определить:
+
+```text
+mean
+variance
+dominant frequencies
+low-frequency energy
+high-frequency energy
+DCT energy concentration
+```
+
+для всех targets.
+
+---
+
+# 35. Low-frequency bias test
+
+Создать family:
+
+```text
+T_LOW_1
+T_LOW_2
+T_LOW_3
+...
+```
+
+с простыми гладкими separable fields.
+
+Не использовать их для optimisation.
+
+Использовать holdout.
+
+Цель:
+
+проверить, не является ли система просто:
+
+```text
+generic low-frequency pattern matcher
+```
+
+---
+
+# 36. Spectral-matched target controls
+
+Для TARGET_A создать как минимум:
+
+```text
+10 surrogate targets
+```
+
+которые сохраняют примерно:
+
+```text
+DCT coefficient magnitude
+```
+
+но получают deterministic random signs/phases.
+
+Сохранить:
+
+```text
+same mean
+same variance
+same spectral magnitude
+different spatial organisation
+```
+
+---
+
+# 37. Если реализуешь 2D DFT
+
+Для сетки:
+
+```text
+60x30
+```
+
+допускается прямой DFT без внешних библиотек.
+
+Это достаточно маленькая сетка.
+
+Но использовать DFT:
+
+```text
+только для validation
+```
+
+а не для каждого search candidate.
+
+---
+
+# 38. Spectral null
+
+Сравнить:
+
+```text
+TARGET_A
+```
+
+с:
+
+```text
+spectrally matched randomized targets
+```
+
+Если resonance остаётся почти тем же:
+
+это аргумент в пользу generic spectral matching.
+
+---
+
+# 39. Search-space audit
+
+Проверить:
+
+```text
+cr domain
+ci domain
+step
+mutation
+multi-start
+coarse scan
+boundary behavior
+duplicate handling
+```
+
+---
+
+# 40. Search correctness
+
+Проверить, что:
+
+```text
+candidate_score <= current_score
+```
+
+не приводит к скрытому изменению global best.
+
+Проверить:
+
+```text
+step_size
+```
+
+не зависит от будущих результатов.
+
+---
+
+# 41. Random seed audit
+
+Все random decisions должны иметь:
+
+```text
+named seed
+algorithm name
+```
+
+Например:
+
+```text
+PRNG = SplitMix64
+seed = 133742
+```
+
+Запрещено скрыто использовать:
+
+```python
+random.seed(None)
+```
+
+или системную случайность во время основного search.
+
+---
+
+# 42. Null-search audit
+
+Это критически важно.
+
+Для каждого null run сохранить:
+
+```text
+seed
+search_algorithm
+search_budget
+number_of_candidates
+domain
+step schedule
+model
+target
+```
+
+---
+
+# 43. Null fairness
+
+Original search и null search должны иметь одинаковые:
+
+```text
+budget
+candidate count
+parameter domain
+step rules
+restart rules
+model family
+```
+
+Единственное отличие:
+
+```text
+null hypothesis
+```
+
+---
+
+# 44. Null interpretation
+
+Если:
+
+```text
+null_max >= observed_best
+```
+
+не писать:
+
+```text
+p-value = 1
+```
+
+если это не строгий statistical p-value.
+
+Писать:
+
+```text
+empirical_search_null = 1.0
+```
+
+или:
+
+```text
+all null runs reached or exceeded observed best
+```
+
+---
+
+# 45. More informative null statistics
+
+Рассчитать:
+
+```text
+null_mean
+null_std
+null_median
+null_max
+observed_minus_null_mean
+observed_minus_null_max
+percentile
+```
+
+---
+
+# 46. Boundary-aware null
+
+Если primary best находится около boundary, null search должен иметь тот же expanded domain.
+
+Нельзя сравнивать:
+
+```text
+observed expanded search
+```
+
+с:
+
+```text
+null old domain
+```
+
+---
+
+# 47. Random search control
+
+Создать:
+
+```text
+RANDOM_PARAMETER_SEARCH
+```
+
+с тем же количеством evaluations.
+
+Не использовать Hill Climbing.
+
+Цель:
+
+проверить:
+
+```text
+selection pressure
+```
+
+самого optimiser.
+
+---
+
+# 48. Optimizer advantage test
+
+Сравнить:
+
+```text
+Hill Climbing best
+```
+
+с:
+
+```text
+Random Search best
+```
+
+при одинаковом budget.
+
+Если random search регулярно достигает сопоставимого score:
+
+локальный optimiser не даёт существенной эффективности.
+
+---
+
+# 49. Repeat-search stability
+
+Для main search выполнить минимум:
+
+```text
+3 seeds
+```
+
+и сохранить:
+
+```text
+best_score
+best_cr
+best_ci
+model
+```
+
+для каждого.
+
+---
+
+# 50. Do not pool independent searches as one history
+
+Каждый independent seed:
+
+```text
+run_id
+```
+
+отдельно.
+
+---
+
+# 51. Synthetic World Benchmark audit
+
+Проверить implementation:
+
+```text
+WORLD_ANALYTIC
+WORLD_RANDOM_IID
+WORLD_GAUSSIAN
+WORLD_FRACTAL_ANALYTIC
+WORLD_LATTICE
+WORLD_QUANTIZED
+WORLD_PRNG
+WORLD_HASH
+WORLD_PRIME
+```
+
+---
+
+# 52. Проверка label leakage
+
+Убедиться:
+
+```text
+WORLD_PRIME
+```
+
+никогда не использовался для:
+
+```text
+centroid estimation
+threshold selection
+feature scaling
+feature selection
+```
+
+если он объявлен holdout.
+
+---
+
+# 53. Train/holdout separation
+
+Feature standardization должна обучаться только на:
+
+```text
+train worlds
+```
+
+Нельзя рассчитывать mean/std features сразу на train+holdout.
+
+---
+
+# 54. Benchmark score audit
+
+Если написано:
+
+```text
+WORLD_PRIME Detection = 10/10
+```
+
+проверить:
+
+```text
+10/10 seeds
+```
+
+действительно являются unseen seeds.
+
+Вывести confusion matrix:
+
+```text
+TP
+TN
+FP
+FN
+```
+
+и:
+
+```text
+accuracy
+precision
+recall
+```
+
+---
+
+# 55. Adversarial benchmark
+
+Добавить:
+
+```text
+WORLD_HIGHLY_COMPRESSED_ANALYTIC
+WORLD_SMOOTH_WITH_LATTICE_ARTIFACT
+WORLD_FRACTAL_WITH_QUANTIZATION
+```
+
+чтобы проверить, не считает ли detector:
+
+```text
+compressible = computational
+fractal = computational
+quantized = always computational
+```
+
+---
+
+# 56. Detector should stay interpretable
+
+Не добавлять neural network.
+
+Не добавлять sklearn.
+
+Использовать:
+
+```text
+normalized features
+nearest centroid
+simple distance
+thresholds
+```
+
+---
+
+# 57. Numerical correctness tests
+
+Добавить автоматические тесты на:
+
+```text
+pi
+target
+complex arithmetic
+score
+driver
+batch/single equivalence
+render/field equivalence
+```
+
+---
+
+# 58. Batch vs single equivalence
+
+Одна точка должна давать:
+
+```text
+single kernel result
+==
+batch kernel result
+```
+
+с numerical tolerance.
+
+---
+
+# 59. Render vs internal field equivalence
+
+ASCII map должен быть построен из того же field buffer, который использовался для metrics.
+
+Нельзя:
+
+```text
+render field
+```
+
+и:
+
+```text
+score field
+```
+
+вычислять разными формулами.
+
+---
+
+# 60. Score implementation audit
+
+Убедиться, что:
+
+```text
+Pearson01
+Spearman01
+MAE01
+Gradient01
+Spectral01
+Autocorrelation01
+```
+
+каждый находится в:
+
+```text
+[0,1]
+```
+
+до composite score.
+
+---
+
+# 61. Edge cases
+
+Протестировать:
+
+```text
+max_iter = 1
+max_iter = 2
+max_iter = 10
+```
+
+и:
+
+```text
+cr = 0
+ci = 0
+```
+
+а также несколько известных divergent/stable regimes.
+
+---
+
+# 62. Input validation
+
+CLI должен корректно отклонять:
+
+```text
+NaN
+Inf
+нечисловые cr/ci
+negative max_iter
+слишком большой max_iter
+unknown model
+unknown driver
+unknown target
+```
+
+---
+
+# 63. Resource safety
+
+Установить hard limit для CLI:
+
+```text
+max_iter <= 20000
+```
+
+если явно не запускается специальный research mode.
+
+Width/height:
+
+```text
+width <= 512
+height <= 512
+```
+
+---
+
+# 64. Timeout audit
+
+Проверить, что зависший kernel:
+
+```text
+terminate
+kill
+log
+checkpoint
+```
+
+и не оставляет orphan process.
+
+---
+
+# 65. SQLite audit
+
+Проверить:
+
+```text
+foreign_keys
+WAL
+transactions
+unique constraints
+indexes
+```
+
+Добавить unique index для canonical evaluation key:
+
+```text
+run_id
+step
+candidate_id
+```
+
+---
+
+# 66. Database integrity
+
+После каждого major phase:
+
+```sql
+PRAGMA integrity_check;
+```
+
+Если результат не:
+
+```text
+ok
+```
+
+остановить эксперимент.
+
+---
+
+# 67. Resume audit
+
+Искусственно остановить эксперимент:
+
+```text
+после шага N
+```
+
+затем:
+
+```text
+resume
+```
+
+и сравнить с uninterrupted run.
+
+Они должны давать одинаковый final state при одном seed.
+
+---
+
+# 68. Protocol hash audit
+
+Проверить, что изменение protocol:
+
+```text
+score
+target
+range
+seed
+weights
+```
+
+изменяет hash.
+
+---
+
+# 69. Source hash audit
+
+Изменение source должно менять source hash.
+
+---
+
+# 70. Report provenance audit
+
+Каждый major number в report должен быть traceable:
+
+```text
+report
+→ table
+→ evaluation
+→ run
+→ protocol hash
+→ source hash
+```
+
+---
+
+# 71. Context audit
+
+Проверить:
+
+```text
+context.md <= 120 lines
+agent_context.json
+```
+
+и отсутствие полного history injection.
+
+---
+
+# 72. LLM context policy
+
+LLM должна видеть:
+
+```text
+current phase
+best
+controls
+null summary
+next action
+```
+
+а не:
+
+```text
+3235+ evaluations
+```
+
+---
+
+# 73. UI audit
+
+Проверить, что terminal animation:
+
+```text
+не влияет на computation
+не меняет timing-dependent random state
+не изменяет result
+```
+
+---
+
+# 74. Headless mode
+
+Убедиться, что:
+
+```bash
+python3 agent_loop.py auto --ui quiet
+```
+
+даёт те же результаты, что live mode.
+
+UI никогда не должен быть частью scientific logic.
+
+---
+
+# 75. Performance audit
+
+Измерить:
+
+```text
+single evaluation ms
+batch evaluation ms
+database insert time
+analysis time
+render time
+```
+
+---
+
+# 76. Batch performance
+
+Проверить:
+
+```text
+N separate processes
+```
+
+против:
+
+```text
+1 batch process with N candidates
+```
+
+и убедиться, что batch действительно эффективнее.
+
+---
+
+# 77. C memory / UB audit
+
+Для GCC, если доступно, собрать debug binary:
+
+```bash
+gcc -O1 -g \
+-fsanitize=address,undefined \
+-fno-omit-frame-pointer \
+-std=c11 \
+-Wall -Wextra -Wpedantic \
+kernel.c -lm -o kernel_sanitize
+```
+
+Запустить self-tests и representative evaluations.
+
+Если sanitizer недоступен в Windows environment:
+
+зафиксировать это.
+
+---
+
+# 78. Release build
+
+После sanitizer:
+
+```bash
+gcc -O3 -std=c11 -Wall -Wextra -Wpedantic kernel.c -lm -o kernel
+```
+
+---
+
+# 79. Не оптимизировать код до потери прозрачности
+
+Performance improvements допускаются только если:
+
+```text
+numerical outputs
+```
+
+остаются эквивалентными с установленной tolerance.
+
+---
+
+# 80. Main mathematical experiment V2
+
+После audit и tests создать:
+
+```text
+V2_ARITHMETIC_ISOLATION
+```
+
+---
+
+# 81. V2 research tracks
+
+Запустить отдельно:
+
+```text
+TRACK A
+V1_INV_PI
+
+TRACK B
+V10_PRIME_RESIDUAL
+
+TRACK C
+V9_PRIME_EVENT
+```
+
+Не смешивать их optimisation histories.
+
+---
+
+# 82. Search budget
+
+Каждый track:
+
+```text
+100 logical steps
+```
+
+при:
+
+```text
+9 candidates / step
+```
+
+если time budget позволяет.
+
+Если time budget недостаточен:
+
+приоритизировать:
+
+```text
+V9
+V10
+V1
+```
+
+но зарегистрировать фактический budget.
+
+---
+
+# 83. Coarse scout
+
+Перед optimisation:
+
+```text
+17x17
+```
+
+для каждого track.
+
+---
+
+# 84. Multi-start
+
+Минимум:
+
+```text
+5 deterministic starts
+```
+
+для наиболее важных tracks:
+
+```text
+V9
+V10
+```
+
+---
+
+# 85. Boundary expansion
+
+Если best:
+
+```text
+< 5% от domain boundary
+```
+
+запустить expanded domain.
+
+---
+
+# 86. Search output
+
+Для каждого track сохранить:
+
+```text
+best_score
+best_cr
+best_ci
+best_alpha
+best_model
+search_steps
+total_evaluations
+boundary_status
+```
+
+---
+
+# 87. Main intervention comparison
+
+Для найденного best `c` одновременно выполнить:
+
+```text
+V0
+V1
+V2
+V4
+V5
+V6
+V8
+V9
+V10
+V11
+V12
+V13
+```
+
+---
+
+# 88. Prime-specific primary metrics
+
+Рассчитать:
+
+```text
+prime_full_minus_baseline =
+V1 - V0
+
+prime_full_minus_smooth =
+V1 - max(S1,S2)
+
+prime_event_vs_matched =
+V9 - mean(V11)
+
+prime_alignment_vs_shift =
+V9 - mean(V12)
+
+prime_residual_vs_smooth =
+V10 - max(S1,S2)
+```
+
+---
+
+# 89. Do not call these causal
+
+Использовать:
+
+```text
+contrast
+difference
+uplift
+intervention comparison
+```
+
+---
+
+# 90. Temporal test
+
+Для best tracks:
+
+```text
+V1
+V9
+V10
+```
+
+запустить:
+
+```text
+max_iter = 5000
+```
+
+только один раз на candidate.
+
+Extract:
+
+```text
+iteration
+prime_event
+driver_value
+active_fraction
+mean_abs_z
+std_abs_z
+```
+
+---
+
+# 91. Temporal prime event analysis
+
+Сравнить:
+
+```text
+after-prime response
+```
+
+против:
+
+```text
+matched non-prime response
+```
+
+с контролем baseline trend.
+
+Рассчитать:
+
+```text
+effect_size
+confidence_interval_bootstrap_or_permutation
+```
+
+без внешних libraries.
+
+---
+
+# 92. Permutation control
+
+Минимум:
+
+```text
+1000 permutations
+```
+
+для temporal prime-event test.
+
+Seed:
+
+```text
+424242
+```
+
+---
+
+# 93. Prime gap branch
+
+Создать отдельный analysis-only test:
+
+```text
+prime indicator
+prime gaps
+pi(k)
+1/pi(k)
+prime residual
+```
+
+Сравнить temporal/spatial fingerprints.
+
+Не добавлять prime gaps как unconstrained search dimension.
+
+---
+
+# 94. Alpha sensitivity
+
+Для selected best:
+
+```text
+alpha =
+0.25
+0.5
+1.0
+2.0
+```
+
+не оптимизировать непрерывно.
+
+---
+
+# 95. Target spectral controls
+
+Для best V9/V10:
+
+проверить:
+
+```text
+TARGET_A
+TARGET_B
+TARGET_PHASE
+spectral-matched surrogates
+```
+
+---
+
+# 96. Low-frequency control family
+
+Создать заранее:
+
+```text
+LOW_MODE_1
+LOW_MODE_2
+LOW_MODE_3
+LOW_MODE_4
+```
+
+и проверить best без re-optimization.
+
+---
+
+# 97. Important distinction
+
+Если system совпадает со многими low-frequency targets:
+
+это:
+
+```text
+generic wave-like resonance
+```
+
+а не:
+
+```text
+prime-specific resonance
+```
+
+---
+
+# 98. Null-search V2
+
+Для V9/V10:
+
+```text
+minimum 8 null runs
+```
+
+При extended mode:
+
+```text
+12 null runs
+```
+
+Каждый с тем же evaluation budget.
+
+---
+
+# 99. Search-aware comparison
+
+Основной metric:
+
+```text
+observed_best
+```
+
+сравнивать с:
+
+```text
+null_best
+```
+
+а не с произвольным null point.
+
+---
+
+# 100. Random search
+
+При одинаковом number of evaluations:
+
+```text
+random search
+```
+
+против:
+
+```text
+hill climbing
+```
+
+---
+
+# 101. Report V2
+
+Создать:
+
+```text
+report_v2.md
+```
+
+Не заменять:
+
+```text
+report.md
+```
+
+---
+
+# 102. V2 report structure
+
+```markdown
+# Proof of Simulation V2
+
+## 1. V1 Baseline Audit
+
+## 2. Audit Findings
+
+## 3. Software Corrections
+
+## 4. Mathematical Corrections
+
+## 5. Numerical Validation
+
+## 6. Prime Event Decomposition
+
+## 7. Smooth Surrogates
+
+## 8. Prime Residual
+
+## 9. Matched Event Controls
+
+## 10. Search-space Audit
+
+## 11. Boundary Analysis
+
+## 12. Resonance Search
+
+## 13. Temporal Prime Analysis
+
+## 14. Spectral Target Controls
+
+## 15. Null Search
+
+## 16. Synthetic World Benchmark
+
+## 17. Computational Fingerprints
+
+## 18. V1 vs V2 Comparison
+
+## 19. Reproducibility
+
+## 20. Remaining Weaknesses
+
+## 21. Final Scientific Interpretation
+```
+
+---
+
+# 103. V1 vs V2 comparison
+
+Обязательно показать:
+
+```text
+V1 best
+V2 best
+V1 controls
+V2 controls
+V1 null
+V2 null
+```
+
+Не заменять V1 conclusion задним числом.
+
+---
+
+# 104. Scientific wording correction
+
+Если V1 report сейчас содержит:
+
+```text
+"the prime arithmetic forcing does not produce structure beyond what smooth forcing achieves"
+```
+
+переформулировать в более строгий вариант:
+
+```text
+"Under the V1 protocol, model family, search domain and control suite,
+the experiment did not demonstrate a prime-specific structural contribution
+beyond the tested smooth surrogate models."
+```
+
+---
+
+# 105. Не делать более сильного вывода
+
+Не писать:
+
+```text
+prime arithmetic has no effect
+```
+
+Потому что V1 не способен доказать отрицание во всех возможных model classes.
+
+---
+
+# 106. Correct interpretation of V1 result
+
+Проверяемый вывод:
+
+```text
+V1 does not establish a prime-specific advantage.
+```
+
+---
+
+# 107. Correct interpretation of V2
+
+Если после isolation:
+
+```text
+V9
+V10
+```
+
+также не превосходят controls:
+
+заключение:
+
+```text
+No evidence for a prime-specific resonance was found
+under the expanded arithmetic isolation protocol.
+```
+
+Если появляется effect:
+
+не объявлять его доказательством симуляции.
+
+---
+
+# 108. If V2 finds stronger prime-specific signal
+
+Если одновременно:
+
+```text
+V9 > matched event controls
+V10 > smooth controls
+V9 > random-search null
+```
+
+и результат сохраняется на:
+
+```text
+depth
+resolution
+holdout targets
+```
+
+тогда отметить:
+
+```text
+PRIME_SPECIFIC_SIGNAL_DETECTED
+```
+
+но всё равно:
+
+```text
+NOT EVIDENCE OF PHYSICAL SIMULATION
+```
+
+---
+
+# 109. If V2 disproves current resonance interpretation
+
+Это тоже успешный результат.
+
+Report должен сказать:
+
+```text
+The apparent V1 resonance is adequately explained by
+generic smooth or low-frequency dynamics.
+```
+
+---
+
+# 110. Do not chase 0.95
+
+После V2:
+
+не пытайся искусственно достичь:
+
+```text
+score > 0.95
+```
+
+если controls не подтверждают специфичность.
+
+Ценность эксперимента определяется не максимальным score.
+
+---
+
+# 111. Primary scientific objective V2
+
+Главная метрика теперь:
+
+```text
+prime-specific uplift
+```
+
+а не:
+
+```text
+absolute resonance_score
+```
+
+---
+
+# 112. Secondary scientific objective
+
+```text
+temporal prime-event response
+```
+
+---
+
+# 113. Tertiary objective
+
+```text
+computational fingerprint
+```
+
+---
+
+# 114. Do not merge three objectives
+
+Не создавать composite:
+
+```text
+simulation_score
+```
+
+объединяющий:
+
+```text
+prime resonance
++
+temporal response
++
+computational fingerprint
+```
+
+Эти результаты должны оставаться независимыми.
+
+---
+
+# 115. Final evidence matrix
+
+В конце report создать:
+
+| Evidence                  | Result | Interpretation |
+| ------------------------- | -----: | -------------- |
+| Spatial resonance         |    ... | ...            |
+| Baseline uplift           |    ... | ...            |
+| Smooth-surrogate uplift   |    ... | ...            |
+| Prime residual uplift     |    ... | ...            |
+| Prime-event uplift        |    ... | ...            |
+| Shuffle degradation       |    ... | ...            |
+| Shift-control degradation |    ... | ...            |
+| Temporal prime response   |    ... | ...            |
+| Null separation           |    ... | ...            |
+| Depth stability           |    ... | ...            |
+| Resolution stability      |    ... | ...            |
+| Holdout stability         |    ... | ...            |
+| Computational fingerprint |    ... | ...            |
+
+---
+
+# 116. Final confidence categories
+
+Использовать:
+
+```text
+NO_SIGNAL
+GENERIC_RESONANCE
+PRIME_CANDIDATE_SIGNAL
+ROBUST_PRIME_SPECIFIC_SIGNAL
+COMPUTATIONAL_ANOMALY_WITHIN_MODEL
+```
+
+Не использовать:
+
+```text
+PROOF_OF_SIMULATION
+```
+
+как автоматически присваиваемый статус.
+
+---
+
+# 117. Source integrity
+
+После V2 изменений пересчитать:
+
+```text
+source_hash
+protocol_hash
+```
+
+V1 hashes должны остаться сохранёнными.
+
+---
+
+# 118. Performance regression
+
+Сравнить V1/V2:
+
+```text
+kernel ms
+batch throughput
+memory
+database throughput
+```
+
+V2 не должна стать существенно медленнее без причины.
+
+---
+
+# 119. Ordinary-PC constraint
+
+Основной V2 search должен оставаться выполнимым:
+
+```text
+на обычном desktop/laptop CPU
+без GPU
+без external Python packages
+```
+
+---
+
+# 120. Graceful degradation
+
+Если extended validation слишком дорогая:
+
+выполнить её только для:
+
+```text
+V9 best
+V10 best
+V1 best
+```
+
+и соответствующих controls.
+
+---
+
+# 121. Do not modify user environment unnecessarily
+
+Не устанавливать глобальные Python packages.
+
+Не менять системный Python.
+
+Не требовать administrator privileges.
+
+---
+
+# 122. Dependencies
+
+Проверить:
+
+```text
+Python >= 3.10
+SQLite >= 3
+GCC >= 11
+или Clang
+```
+
+Если версия выше:
+
+работать без изменения API assumptions.
+
+---
+
+# 123. External dependency audit
+
+После завершения:
+
+```bash
+python3 -m pip list
+```
+
+не считать наличие стороннего пакета обязательным.
+
+Все обязательные runtime features должны работать через standard library + C.
+
+---
+
+# 124. Test suite
+
+Создать:
+
+```text
+tests/
+```
+
+и минимум:
+
+```text
+test_pi.py
+test_math.py
+test_targets.py
+test_drivers.py
+test_score.py
+test_batch.py
+test_db.py
+test_resume.py
+test_protocol.py
+test_benchmark.py
+```
+
+Можно использовать стандартный:
+
+```text
+unittest
+```
+
+---
+
+# 125. No pytest requirement
+
+Не требовать pytest.
+
+Использовать:
+
+```bash
+python3 -m unittest discover
+```
+
+---
+
+# 126. Acceptance criteria — software
+
+До V2 experiment должны проходить:
+
+```text
+self-test
+unit tests
+integration tests
+batch/single equivalence
+resume test
+database integrity
+protocol hashing
+determinism test
+sanitizer test if available
+```
+
+---
+
+# 127. Acceptance criteria — mathematics
+
+Проверить:
+
+```text
+pi
+prime event train
+smooth surrogate
+prime residual
+matched event controls
+target normalization
+score components
+```
+
+---
+
+# 128. Acceptance criteria — science
+
+Нельзя завершать V2 только потому, что:
+
+```text
+code works
+```
+
+Необходимо выполнить:
+
+```text
+prime-specific comparison
+null
+holdout
+depth
+resolution
+temporal analysis
+```
+
+---
+
+# 129. Human-readable audit summary
+
+Создать:
+
+```text
+AUDIT_SUMMARY.md
+```
+
+с разделами:
+
+```markdown
+# V1 Audit Summary
+
+## Confirmed Correct
+
+## Bugs Found
+
+## Methodological Weaknesses
+
+## Mathematical Weaknesses
+
+## Statistical Weaknesses
+
+## Architecture Weaknesses
+
+## Fixed
+
+## Not Fixed and Why
+
+## Impact on V1 Result
+```
+
+---
+
+# 130. Critical requirement
+
+Если обнаружишь ошибку, которая потенциально меняет V1 scientific conclusion:
+
+НЕ просто исправь её.
+
+Обязательно:
+
+1. воспроизведи старое поведение;
+2. покажи corrected behavior;
+3. запусти минимальный test;
+4. сообщи влияние на V1 conclusion;
+5. только затем продолжай V2.
+
+---
+
+# 131. Examples of conclusion-changing bugs
+
+Особенно внимательно искать:
+
+```text
+неправильный max_iter
+неправильная pi(k)
+неправильный k = iter+1
+неправильный target normalization
+leakage holdout target
+null budget mismatch
+search budget mismatch
+boundary clipping bias
+wrong baseline comparison
+wrong score weighting
+duplicate candidates counted
+failed evaluations counted
+random seed leakage
+control evaluated at different parameters
+```
+
+---
+
+# 132. Current V1 null p audit
+
+Отдельно доказать математически и программно:
+
+```text
+null_max = 0.852
+observed primary best = 0.830
+```
+
+и:
+
+```text
+count(null_best >= observed_best)
+```
+
+Если это действительно все null runs:
+
+```text
+empirical_search_null = 1.0
+```
+
+сформулировать словами:
+
+```text
+All null runs reached or exceeded the observed primary best.
+```
+
+---
+
+# 133. Current V1 holdout audit
+
+Проверить:
+
+```text
+TARGET_B = 0.849
+TARGET_PHASE = 0.795
+```
+
+при:
+
+```text
+same c
+same model
+same alpha
+```
+
+без re-optimization.
+
+Если parameters были изменены для этих targets:
+
+это не holdout.
+
+---
+
+# 134. Current WORLD_PRIME audit
+
+Проверить:
+
+```text
+WORLD_PRIME
+```
+
+действительно не использовался при:
+
+```text
+threshold choice
+centroid
+feature scaling
+feature selection
+```
+
+Если использовался:
+
+переквалифицировать result.
+
+---
+
+# 135. Current V1 benchmark audit
+
+Проверить все synthetic worlds по:
+
+```text
+train
+validation
+holdout
+```
+
+и сохранить seeds.
+
+---
+
+# 136. V2 report must include V1 weaknesses
+
+Не прячь проблемы V1.
+
+Наоборот:
+
+```text
+V1 was useful but under-isolated.
+```
+
+и перечисли конкретно:
+
+```text
+smooth trend confounding
+boundary proximity
+search-selection null
+generic spectral matching
+limited prime-event isolation
+```
+
+если audit их подтвердил.
+
+---
+
+# 137. Important mathematical distinction
+
+Не называй:
+
+```text
+1/pi(k)
+```
+
+"prime noise".
+
+Это детерминированный arithmetic sequence.
+
+Лучше:
+
+```text
+prime-related deterministic forcing
+```
+
+---
+
+# 138. Important statistical distinction
+
+Не называй:
+
+```text
+high score
+```
+
+"significance".
+
+Score — это similarity metric.
+
+Statistical evidence — отдельная процедура.
+
+---
+
+# 139. Important physical distinction
+
+Не называй:
+
+```text
+wave target
+```
+
+реальной квантовой волновой функцией.
+
+Использовать:
+
+```text
+wave-like target
+```
+
+или:
+
+```text
+quantum-inspired target
+```
+
+---
+
+# 140. Final interpretation
+
+В конце V2 ответить на:
+
+```text
+Did the original V1 conclusion survive audit?
+
+Did the smooth surrogate explain the resonance?
+
+Does isolated prime-event structure add anything?
+
+Does prime ordering matter?
+
+Does prime residual matter?
+
+Does the result survive matched controls?
+
+Does it survive search-aware null?
+
+Does it survive holdout targets?
+
+Does it exhibit computational fingerprints?
+
+What is still unknown?
+```
+
+---
+
+# 141. Never ask the user for routine decisions
+
+Самостоятельно:
+
+```text
+inspect
+test
+patch
+validate
+rerun
+document
+```
+
+Не спрашивать:
+
+```text
+"Можно ли исправить?"
+```
+
+---
+
+# 142. Но не скрывать destructive operations
+
+Все destructive operations делать только после:
+
+```text
+baseline snapshot
+```
+
+---
+
+# 143. Final execution order
+
+Выполняй строго:
+
+```text
+PHASE 1
+Inventory
+
+PHASE 2
+V1 forensic audit
+
+PHASE 3
+Mathematical audit
+
+PHASE 4
+Software tests
+
+PHASE 5
+Statistical audit
+
+PHASE 6
+Benchmark leakage audit
+
+PHASE 7
+Create baseline snapshot
+
+PHASE 8
+Implement fixes
+
+PHASE 9
+Run full test suite
+
+PHASE 10
+Run corrected baseline
+
+PHASE 11
+Run boundary diagnostics
+
+PHASE 12
+Run prime-event decomposition
+
+PHASE 13
+Run V9/V10 search
+
+PHASE 14
+Run matched-event controls
+
+PHASE 15
+Run spectral target controls
+
+PHASE 16
+Run temporal prime-event test
+
+PHASE 17
+Run null-search
+
+PHASE 18
+Run depth/resolution validation
+
+PHASE 19
+Run benchmark validation
+
+PHASE 20
+Generate report_v2.md
+```
+
+---
+
+# 144. Final deliverables
+
+После выполнения должны существовать:
+
+```text
+V2_AUDIT.md
+AUDIT_SUMMARY.md
+V2_CHANGELOG.md
+V2_PROTOCOL.md
+report_v2.md
+reproducibility_v2.json
+```
+
+а также:
+
+```text
+archives/v1_baseline/
+```
+
+---
+
+# 145. Required artifact set
+
+Минимально:
+
+```text
+best_v2/
+best_v2_map.txt
+best_v2_difference.txt
+best_v2_metrics.json
+
+validation_v2/
+control_summary_v2.csv
+depth_summary_v2.csv
+null_summary_v2.csv
+prime_event_summary.csv
+target_spectral_summary.csv
+fingerprint_summary_v2.csv
+```
+
+---
+
+# 146. Final console summary
+
+По завершении вывести:
+
+```text
+╔══════════════════════════════════════════════════════════════╗
+║              PROOF OF SIMULATION V2                         ║
+║            ARITHMETIC ISOLATION COMPLETE                    ║
+╠══════════════════════════════════════════════════════════════╣
+║ V1 PRIMARY BEST:        ...                                 ║
+║ V2 PRIMARY BEST:        ...                                 ║
+║ V1 SMOOTH CONTROL:      ...                                 ║
+║ V2 SMOOTH CONTROL:      ...                                 ║
+║ PRIME EVENT UPLIFT:     ...                                 ║
+║ PRIME RESIDUAL UPLIFT:  ...                                 ║
+║ SHIFT CONTROL:          ...                                 ║
+║ MATCHED EVENT CONTROL:  ...                                 ║
+║ NULL MAX:               ...                                 ║
+║ DEPTH STABLE:           YES/NO                              ║
+║ RESOLUTION STABLE:      YES/NO                              ║
+║ TEMPORAL SIGNAL:        YES/NO                              ║
+║ HOLDOUT:                PASS/PARTIAL/FAIL                   ║
+║ BENCHMARK:              ...                                 ║
+║                                                              ║
+║ STATUS: ...                                                   ║
+║ REPORT: report_v2.md                                        ║
+╚══════════════════════════════════════════════════════════════╝
+```
+
+---
+
+# 147. Final scientific status values
+
+Использовать:
+
+```text
+NO_SIGNAL
+GENERIC_RESONANCE
+UNRESOLVED
+PRIME_CANDIDATE_SIGNAL
+ROBUST_PRIME_SPECIFIC_SIGNAL
+COMPUTATIONAL_ANOMALY_WITHIN_TESTED_MODEL
+```
+
+Никогда:
+
+```text
+PROOF_OF_SIMULATION
+```
+
+---
+
+# 148. Final rule
+
+Ты не должен пытаться получить более красивый результат, чем V1.
+
+Ты должен попытаться выяснить:
+
+> почему V1 получил именно такой результат.
+
+А затем экспериментально разделить:
+
+```text
+generic fractal geometry
+```
+
+от:
+
+```text
+smooth forcing
+```
+
+от:
+
+```text
+prime arithmetic
+```
+
+от:
+
+```text
+prime event timing
+```
+
+от:
+
+```text
+generic spectral matching
+```
+
+от:
+
+```text
+search selection bias
+```
+
+от:
+
+```text
+computational artifacts
+```
+
+---
+
+# 149. Основной научный вопрос V2
+
+Не:
+
+```text
+Can we get score > 0.95?
+```
+
+а:
+
+```text
+Does the ordered arithmetic structure of prime events
+produce a reproducible effect that survives mathematically
+matched controls, search-aware nulls, target holdouts,
+depth validation, resolution validation, and independent
+temporal analysis?
+```
+
+---
+
+# 150. Финальное правило проекта
+
+Если после всех исправлений V2 показывает:
+
+```text
+prime-specific uplift ≈ 0
+```
+
+это хороший результат.
+
+Если:
+
+```text
+prime-specific uplift > 0
+```
+
+но исчезает в matched controls:
+
+это хороший результат.
+
+Если:
+
+```text
+prime-specific uplift > 0
+```
+
+и переживает matched controls:
+
+это очень интересный результат.
+
+Если вместе с ним появляется:
+
+```text
+temporal prime response
+```
+
+и:
+
+```text
+search-aware null separation
+```
+
+и:
+
+```text
+depth/resolution stability
+```
+
+это уже серьёзная вычислительная аномалия в рамках данной математической системы.
+
+Ни один из этих исходов сам по себе не доказывает, что физическая Вселенная является симуляцией.
+
+---
+
+# 151. Начинай сейчас
+
+Работай в существующем workspace.
+
+Сначала найди текущий:
+
+```text
+Proof of Simulation
+```
+
+проект.
+
+Затем:
+
+```text
+1. Snapshot V1.
+2. Audit V1.
+3. Run tests.
+4. Verify every result in Completion Report.
+5. Document discrepancies.
+6. Patch confirmed problems.
+7. Build V2 arithmetic isolation layer.
+8. Run corrected experiment.
+9. Compare V1 and V2.
+10. Generate report_v2.md.
+```
+
+Не ограничивайся написанием рекомендаций.
+
+**Ты должен реально исследовать существующий код, исправить его, протестировать его и выполнить V2 эксперимент.**

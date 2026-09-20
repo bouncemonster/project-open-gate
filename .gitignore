@@ -1,0 +1,50 @@
+# ---------------------------------------------------------------------------
+# Proof of Simulation — version-control hygiene
+# Principle: track the durable source of truth (code, kernels' C source,
+# reports, protocol/result JSON, summary CSVs, small artifacts). Exclude heavy,
+# regenerable, or binary material that would bloat history. Excluded files
+# REMAIN on disk as the local evidentiary record; they are reproducible via
+# the pipelines / Makefile and are summarised by the committed reports.
+# ---------------------------------------------------------------------------
+
+# --- Python build residue -------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# --- Compiled kernels (regenerable from kernel.c / kernel_v3.c via Makefile)
+*.o
+*.obj
+kernel.exe
+kernel_v2.exe
+kernel_v3.exe
+kernel_v3test.exe
+
+# --- Heavy evidence databases (kept on disk, not in VCS) ------------------
+# Sole copies of closed-branch results; too large for history. Reports + CSV/JSON
+# summaries committed here capture their decisive numbers.
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+
+# --- Regenerable pipeline caches ------------------------------------------
+*.pkl
+
+# --- Large generated artifact trees (closed branches, reproducible) -------
+v3_artifacts/
+v4_artifacts/
+v5_artifacts/
+v5_2_artifacts/
+v5_3_artifacts/
+v5_5_artifacts/
+
+# NOTE: v6_artifacts/ is intentionally TRACKED (small, active-branch §11 deliverable).
+
+# --- Empty scratch dirs ---------------------------------------------------
+benchmark/
+validation/
+
+# --- Editor / OS noise ----------------------------------------------------
+.DS_Store
+Thumbs.db
+*.swp

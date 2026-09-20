@@ -1,0 +1,26 @@
+{
+  "number": 74,
+  "name": "invalid_render_invalid_channel",
+  "argv": [
+    "J:\\project\\project_open_gate\\proof_of_simulation\\archives\\v1_baseline\\kernel.exe",
+    "--render",
+    "--channel",
+    "9"
+  ],
+  "cwd": "J:\\project\\project_open_gate\\proof_of_simulation\\archives\\v2_audit\\v1_commands_20260919T000837_958116Z",
+  "timeout_seconds": 2,
+  "environment_overrides": {
+    "PATH_prefix": "C:\\Users\\zelin\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "pid": 9504,
+  "timed_out": false,
+  "returncode": 0,
+  "elapsed_seconds": 0.02899479999905452,
+  "stdout_path": "J:\\project\\project_open_gate\\proof_of_simulation\\archives\\v2_audit\\v1_commands_20260919T000837_958116Z\\074_invalid_render_invalid_channel.stdout.log",
+  "stdout_bytes": 1900,
+  "stdout_sha256": "977b83aef630a86a24e3d3e79e3fce07942c4454790c6377d64777b9050aa50b",
+  "stderr_path": "J:\\project\\project_open_gate\\proof_of_simulation\\archives\\v2_audit\\v1_commands_20260919T000837_958116Z\\074_invalid_render_invalid_channel.stderr.log",
+  "stderr_bytes": 0,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

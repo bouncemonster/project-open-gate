@@ -1,0 +1,25 @@
+{
+  "number": 42,
+  "name": "stored_replay_1024",
+  "argv": [
+    "J:\\project\\project_open_gate\\proof_of_simulation\\archives\\v1_baseline\\kernel.exe",
+    "--batch"
+  ],
+  "cwd": "J:\\project\\project_open_gate\\proof_of_simulation\\archives\\v2_audit\\v1_commands_20260919T000837_958116Z",
+  "timeout_seconds": 15,
+  "environment_overrides": {
+    "PATH_prefix": "C:\\Users\\zelin\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "stdin_path": "J:\\project\\project_open_gate\\proof_of_simulation\\archives\\v2_audit\\v1_commands_20260919T000837_958116Z\\042_stored_replay_1024.stdin.log",
+  "pid": 10244,
+  "timed_out": false,
+  "returncode": 0,
+  "elapsed_seconds": 0.599226300000737,
+  "stdout_path": "J:\\project\\project_open_gate\\proof_of_simulation\\archives\\v2_audit\\v1_commands_20260919T000837_958116Z\\042_stored_replay_1024.stdout.log",
+  "stdout_bytes": 15465,
+  "stdout_sha256": "22d5226b356a379f5c43a380b69508fe216a8d6982dd4cd89cdda2acef8a1e5b",
+  "stderr_path": "J:\\project\\project_open_gate\\proof_of_simulation\\archives\\v2_audit\\v1_commands_20260919T000837_958116Z\\042_stored_replay_1024.stderr.log",
+  "stderr_bytes": 0,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

@@ -1,0 +1,317 @@
+[V3 04:25:24] === V3 INIT ===
+[V3 04:25:24] protocol=ef965853e1f50aae source=1b251aadf508cee2 binary=4160a6492ed343e2
+[V3 04:25:24] === V3 SELF TEST ===
+[V3 04:25:24] kernel self-test: PASSED
+[V3 04:26:21] === V3 INIT ===
+[V3 04:26:21] protocol=ef965853e1f50aae source=60e379ea42758687 binary=4160a6492ed343e2
+[V3 04:26:21] === V3 SELF TEST ===
+[V3 04:26:21] kernel self-test: PASSED
+[V3 04:26:21] driver registry collisions: 0
+[V3 04:26:21]   cross-check V1_FULL: {'kernel_driver': 'V1_INV_PI', 'match': True}
+[V3 04:26:21]   cross-check V9_EVENT: {'kernel_driver': 'V9_PRIME_EVENT', 'match': True}
+[V3 04:26:21]   cross-check V0_NONE: {'kernel_driver': 'V0_NONE', 'match': True}
+[V3 04:26:21]   cross-check S2_DATA_SMOOTHED: {'kernel_driver': 'S2_DATA_SMOOTHED', 'match': True}
+[V3 04:26:21]   cross-check V10_RESIDUAL: {'kernel_driver': 'V10_PRIME_RESIDUAL', 'max_abs_difference_vs_v3': 3.52434228884534, 'note': 'kernel S1 is li-based; V3 S1 is Riemann R (documented)'}
+[V3 04:26:21] === V3 PROTOCOL LOCK ===
+[V3 04:26:21] === V3 BOUNDARY DIAGNOSTIC ===
+[V3 04:26:21] boundary: monotone=True V1(cr=1)=0.820852 V1(cr=3)=0.862832
+[V3 04:26:21] === V3 PRIMARY SEARCH (3 tracks) ===
+[V3 04:27:04] === V3 INIT ===
+[V3 04:27:04] protocol=ef965853e1f50aae source=b547b6d3f9a8ce2d binary=4160a6492ed343e2
+[V3 04:27:05] === V3 SELF TEST ===
+[V3 04:27:05] kernel self-test: PASSED
+[V3 04:27:05] driver registry collisions: 0
+[V3 04:27:05]   cross-check V1_FULL: {'kernel_driver': 'V1_INV_PI', 'match': True}
+[V3 04:27:05]   cross-check V9_EVENT: {'kernel_driver': 'V9_PRIME_EVENT', 'match': True}
+[V3 04:27:05]   cross-check V0_NONE: {'kernel_driver': 'V0_NONE', 'match': True}
+[V3 04:27:05]   cross-check S2_DATA_SMOOTHED: {'kernel_driver': 'S2_DATA_SMOOTHED', 'match': True}
+[V3 04:27:05]   cross-check V10_RESIDUAL: {'kernel_driver': 'V10_PRIME_RESIDUAL', 'max_abs_difference_vs_v3': 3.52434228884534, 'note': 'kernel S1 is li-based; V3 S1 is Riemann R (documented)'}
+[V3 04:27:05] === V3 PROTOCOL LOCK ===
+[V3 04:27:05] === V3 BOUNDARY DIAGNOSTIC ===
+[V3 04:27:05] boundary: monotone=True V1(cr=1)=0.820852 V1(cr=3)=0.862832
+[V3 04:27:05] === V3 PRIMARY SEARCH (3 tracks) ===
+[V3 04:27:18] === V3 INIT ===
+[V3 04:27:18] protocol=ef965853e1f50aae source=00721e7652f813b0 binary=4160a6492ed343e2
+[V3 04:27:18] === V3 SELF TEST ===
+[V3 04:27:18] kernel self-test: PASSED
+[V3 04:27:18] driver registry collisions: 0
+[V3 04:27:18]   cross-check V1_FULL: {'kernel_driver': 'V1_INV_PI', 'match': True}
+[V3 04:27:18]   cross-check V9_EVENT: {'kernel_driver': 'V9_PRIME_EVENT', 'match': True}
+[V3 04:27:18]   cross-check V0_NONE: {'kernel_driver': 'V0_NONE', 'match': True}
+[V3 04:27:18]   cross-check S2_DATA_SMOOTHED: {'kernel_driver': 'S2_DATA_SMOOTHED', 'match': True}
+[V3 04:27:18]   cross-check V10_RESIDUAL: {'kernel_driver': 'V10_PRIME_RESIDUAL', 'max_abs_difference_vs_v3': 3.52434228884534, 'note': 'kernel S1 is li-based; V3 S1 is Riemann R (documented)'}
+[V3 04:27:18] === V3 PROTOCOL LOCK ===
+[V3 04:27:18] === V3 BOUNDARY DIAGNOSTIC ===
+[V3 04:27:18] boundary: monotone=True V1(cr=1)=0.820852 V1(cr=3)=0.862832
+[V3 04:27:18] === V3 PRIMARY SEARCH (3 tracks) ===
+[V3 04:49:25] === V3 INIT ===
+[V3 04:49:25] protocol=df623b3ad6f836a4 source=89d286d00f8fcdd0 binary=4160a6492ed343e2
+[V3 04:49:26] === V3 SELF TEST ===
+[V3 04:49:26] kernel self-test: PASSED
+[V3 04:49:26] driver registry collisions: 0
+[V3 04:49:26]   cross-check V1_FULL: {'kernel_driver': 'V1_INV_PI', 'match': True}
+[V3 04:49:26]   cross-check V9_EVENT: {'kernel_driver': 'V9_PRIME_EVENT', 'match': True}
+[V3 04:49:26]   cross-check V0_NONE: {'kernel_driver': 'V0_NONE', 'match': True}
+[V3 04:49:26]   cross-check S2_DATA_SMOOTHED: {'kernel_driver': 'S2_DATA_SMOOTHED', 'match': True}
+[V3 04:49:26]   cross-check V10_RESIDUAL: {'kernel_driver': 'V10_PRIME_RESIDUAL', 'max_abs_difference_vs_v3': 3.52434228884534, 'note': 'kernel S1 is li-based; V3 S1 is Riemann R (documented)'}
+[V3 04:49:26] === V3 PROTOCOL LOCK ===
+[V3 04:49:26] === V3 BOUNDARY DIAGNOSTIC ===
+[V3 04:49:47] boundary: monotone=True V1(cr=1)=0.820852 V1(cr=3)=0.862832
+[V3 04:49:47] === V3 PRIMARY SEARCH (3 tracks) ===
+[V3 05:12:25] === V3 INIT ===
+[V3 05:12:25] protocol=df623b3ad6f836a4 source=ef9c477777469b92 binary=4160a6492ed343e2
+[V3 05:12:26] === V3 SELF TEST ===
+[V3 05:12:26] kernel self-test: PASSED
+[V3 05:12:26] driver registry collisions: 0
+[V3 05:12:26]   cross-check V1_FULL: {'kernel_driver': 'V1_INV_PI', 'match': True}
+[V3 05:12:26]   cross-check V9_EVENT: {'kernel_driver': 'V9_PRIME_EVENT', 'match': True}
+[V3 05:12:26]   cross-check V0_NONE: {'kernel_driver': 'V0_NONE', 'match': True}
+[V3 05:12:26]   cross-check S2_DATA_SMOOTHED: {'kernel_driver': 'S2_DATA_SMOOTHED', 'match': True}
+[V3 05:12:26]   cross-check V10_RESIDUAL: {'kernel_driver': 'V10_PRIME_RESIDUAL', 'max_abs_difference_vs_v3': 3.52434228884534, 'note': 'kernel S1 is li-based; V3 S1 is Riemann R (documented)'}
+[V3 05:12:26] === V3 PROTOCOL LOCK ===
+[V3 05:12:26] === V3 BOUNDARY DIAGNOSTIC ===
+[V3 05:12:38] boundary: monotone=True V1(cr=1)=0.820852 V1(cr=3)=0.862832
+[V3 05:12:38] === V3 PRIMARY SEARCH (3 tracks) ===
+[V3 05:12:52] TRACK_A (V1_FULL): best=0.858321 at (2.000000,0.011132) scout=289 search=891
+[V3 05:13:04] TRACK_B (V9_EVENT): best=0.852335 at (1.508228,0.000000) scout=289 search=891
+[V3 05:13:16] TRACK_C (V10_RESIDUAL): best=0.849851 at (1.769142,0.019591) scout=289 search=891
+[V3 05:13:28]   repeat seed 233742: 0.858321
+[V3 05:13:40]   repeat seed 333742: 0.858321
+[V3 05:13:40] === V3 MATCHED CONTROLS ===
+[V3 05:13:42] TRACK_A: V0=0.000000 V1=0.000000 S1=0.000000 V9=0.000000 V10=0.000000 C1=+0.000000 C3=+0.000000
+[V3 05:13:45] TRACK_B: V0=0.000000 V1=0.000000 S1=0.000000 V9=0.000000 V10=0.000000 C1=+0.000000 C3=+0.000000
+[V3 05:13:49] TRACK_C: V0=0.000000 V1=0.000000 S1=0.000000 V9=0.000000 V10=0.000000 C1=+0.000000 C3=+0.000000
+[V3 05:13:49] field controls: {'V14_CONSTANT_FIELD': 0.5447111700758839, 'V15_X_RAMP': 0.5986741151104621, 'V16_Y_RAMP': 0.5961677138806748, 'V17_BILINEAR_RAMP': 0.603552447974048, 'V18_RADIAL_GRADIENT': 0.6386319001252343}
+[V3 05:13:49] === V3 SEARCH-AWARE NULL ===
+[V3 05:14:16]   null 4/8: best so far 0.857651
+[V3 05:14:42]   null 8/8: best so far 0.858191
+[V3 05:14:42] null: N=8 max=0.858191 mean=0.856766 observed=0.858321 p_emp=0.1111
+[V3 05:14:42] === V3 VALIDATION ===
+[V3 05:14:52] validation: depth_range=0.000000 repeat_identical=True TARGET_B=0.000000 surr_mean=0.463567
+[V3 05:14:52] === V3 TEMPORAL ANALYSIS ===
+[V3 05:14:53]   V1_best: V0_NONE=NA, V1_FULL=NA, V9_EVENT=NA, V10_RESIDUAL=NA
+[V3 05:14:55]   initial_point: V0_NONE=-0.08009390880191096, V1_FULL=-0.015937601142338997, V9_EVENT=0.05713179976047499, V10_RESIDUAL=NA
+[V3 05:14:55]   TRACK_A_best: V0_NONE=NA, V1_FULL=NA, V9_EVENT=NA, V10_RESIDUAL=NA
+[V3 05:14:56]   TRACK_B_best: V0_NONE=NA, V1_FULL=NA, V9_EVENT=NA, V10_RESIDUAL=NA
+[V3 05:14:56]   TRACK_C_best: V0_NONE=NA, V1_FULL=NA, V9_EVENT=NA, V10_RESIDUAL=NA
+[V3 05:14:58] === V3 WORLD_PRIME BENCHMARK AUDIT ===
+[V3 05:15:16] benchmark: train=0.8571428571428571 holdout=0.6285714285714286 prime=1/20 leakage=False
+[V3 05:15:16] === V3 EXPLANATORY DECOMPOSITION ===
+[V3 05:18:35] === V3 INIT ===
+[V3 05:18:35] protocol=df623b3ad6f836a4 source=7bd5b6e9719c8964 binary=4160a6492ed343e2
+[V3 05:18:35] === V3 SELF TEST ===
+[V3 05:18:35] kernel self-test: PASSED
+[V3 05:18:36] driver registry collisions: 0
+[V3 05:18:36]   cross-check V1_FULL: {'kernel_driver': 'V1_INV_PI', 'match': True}
+[V3 05:18:36]   cross-check V9_EVENT: {'kernel_driver': 'V9_PRIME_EVENT', 'match': True}
+[V3 05:18:36]   cross-check V0_NONE: {'kernel_driver': 'V0_NONE', 'match': True}
+[V3 05:18:36]   cross-check S2_DATA_SMOOTHED: {'kernel_driver': 'S2_DATA_SMOOTHED', 'match': True}
+[V3 05:18:36]   cross-check V10_RESIDUAL: {'kernel_driver': 'V10_PRIME_RESIDUAL', 'max_abs_difference_vs_v3': 3.52434228884534, 'note': 'kernel S1 is li-based; V3 S1 is Riemann R (documented)'}
+[V3 05:18:36] === V3 PROTOCOL LOCK ===
+[V3 05:18:36] === V3 BOUNDARY DIAGNOSTIC ===
+[V3 05:18:49] boundary: monotone=True V1(cr=1)=0.820852 V1(cr=3)=0.862832
+[V3 05:18:49] === V3 PRIMARY SEARCH (3 tracks) ===
+[V3 05:19:01] TRACK_A (V1_FULL): best=0.858321 at (2.000000,0.011132) scout=289 search=891
+[V3 05:19:12] TRACK_B (V9_EVENT): best=0.852335 at (1.508228,0.000000) scout=289 search=891
+[V3 05:19:24] TRACK_C (V10_RESIDUAL): best=0.849851 at (1.769142,0.019591) scout=289 search=891
+[V3 05:19:36]   repeat seed 233742: 0.858321
+[V3 05:19:49]   repeat seed 333742: 0.858321
+[V3 05:19:49] === V3 MATCHED CONTROLS ===
+[V3 05:19:51] TRACK_A: V0=0.000000 V1=0.000000 S1=0.000000 V9=0.000000 V10=0.000000 C1=+0.000000 C3=+0.000000
+[V3 05:19:53] TRACK_B: V0=0.000000 V1=0.000000 S1=0.000000 V9=0.000000 V10=0.000000 C1=+0.000000 C3=+0.000000
+[V3 05:19:55] TRACK_C: V0=0.000000 V1=0.000000 S1=0.000000 V9=0.000000 V10=0.000000 C1=+0.000000 C3=+0.000000
+[V3 05:19:56] field controls: {'V14_CONSTANT_FIELD': 0.5447111700758839, 'V15_X_RAMP': 0.5986741151104621, 'V16_Y_RAMP': 0.5961677138806748, 'V17_BILINEAR_RAMP': 0.603552447974048, 'V18_RADIAL_GRADIENT': 0.6386319001252343}
+[V3 05:19:56] === V3 SEARCH-AWARE NULL ===
+[V3 05:20:22]   null 4/8: best so far 0.857651
+[V3 05:20:47]   null 8/8: best so far 0.858191
+[V3 05:20:47] null: N=8 max=0.858191 mean=0.856766 observed=0.858321 p_emp=0.1111
+[V3 05:20:47] === V3 VALIDATION ===
+[V3 05:20:56] validation: depth_range=0.000000 repeat_identical=True TARGET_B=0.000000 surr_mean=0.463567
+[V3 05:20:56] === V3 TEMPORAL ANALYSIS ===
+[V3 05:20:57]   V1_best: V0_NONE=NA, V1_FULL=NA, V9_EVENT=NA, V10_RESIDUAL=NA
+[V3 05:20:58]   initial_point: V0_NONE=-0.08009390880191096, V1_FULL=-0.015937601142338997, V9_EVENT=0.05713179976047499, V10_RESIDUAL=NA
+[V3 05:20:58]   TRACK_A_best: V0_NONE=NA, V1_FULL=NA, V9_EVENT=NA, V10_RESIDUAL=NA
+[V3 05:20:59]   TRACK_B_best: V0_NONE=NA, V1_FULL=NA, V9_EVENT=NA, V10_RESIDUAL=NA
+[V3 05:20:59]   TRACK_C_best: V0_NONE=NA, V1_FULL=NA, V9_EVENT=NA, V10_RESIDUAL=NA
+[V3 05:21:01] === V3 WORLD_PRIME BENCHMARK AUDIT ===
+[V3 05:21:17] benchmark: train=0.8571428571428571 holdout=0.6285714285714286 prime=1/20 leakage=False
+[V3 05:21:17] === V3 EXPLANATORY DECOMPOSITION ===
+[V3 05:21:18] WARNING: V0_NONE field is None, skipping explanation
+[V3 05:21:18] === V3 REPORT ===
+[V3 05:21:18] report_v3.md written (263 lines)
+[V3 05:21:18] === V3 REPRODUCIBILITY ===
+[V3 05:21:18] reproducibility: [0, 0, 0] identical=True integrity=ok
+[V3 05:21:18] === V3 PIPELINE COMPLETE (status: BOUNDARY_ARTIFACT) ===
+[V3 05:26:28] === V3 INIT ===
+[V3 05:26:28] protocol=df623b3ad6f836a4 source=7bd5b6e9719c8964 binary=ce0d806f19d4c54b
+[V3 05:26:28] === V3 SELF TEST ===
+[V3 05:26:28] kernel self-test: PASSED
+[V3 05:26:28] driver registry collisions: 0
+[V3 05:26:28]   cross-check V1_FULL: {'kernel_driver': 'V1_INV_PI', 'match': True}
+[V3 05:26:28]   cross-check V9_EVENT: {'kernel_driver': 'V9_PRIME_EVENT', 'match': True}
+[V3 05:26:28]   cross-check V0_NONE: {'kernel_driver': 'V0_NONE', 'match': True}
+[V3 05:26:28]   cross-check S2_DATA_SMOOTHED: {'kernel_driver': 'S2_DATA_SMOOTHED', 'match': True}
+[V3 05:26:28]   cross-check V10_RESIDUAL: {'kernel_driver': 'V10_PRIME_RESIDUAL', 'max_abs_difference_vs_v3': 3.52434228884534, 'note': 'kernel S1 is li-based; V3 S1 is Riemann R (documented)'}
+[V3 05:26:29] === V3 PROTOCOL LOCK ===
+[V3 05:26:29] === V3 BOUNDARY DIAGNOSTIC ===
+[V3 05:26:33] boundary: monotone=True V1(cr=1)=0.820852 V1(cr=3)=0.862832
+[V3 05:26:33] === V3 PRIMARY SEARCH (3 tracks) ===
+[V3 05:26:41] TRACK_A (V1_FULL): best=0.858321 at (2.000000,0.011132) scout=289 search=891
+[V3 05:26:49] TRACK_B (V9_EVENT): best=0.852335 at (1.508228,0.000000) scout=289 search=891
+[V3 05:26:57] TRACK_C (V10_RESIDUAL): best=0.849851 at (1.769142,0.019591) scout=289 search=891
+[V3 05:27:04]   repeat seed 233742: 0.858321
+[V3 05:27:12]   repeat seed 333742: 0.858321
+[V3 05:27:12] === V3 MATCHED CONTROLS ===
+[V3 05:27:13] TRACK_A: V0=0.000000 V1=0.000000 S1=0.000000 V9=0.000000 V10=0.000000 C1=+0.000000 C3=+0.000000
+[V3 05:27:14] TRACK_B: V0=0.000000 V1=0.000000 S1=0.000000 V9=0.000000 V10=0.000000 C1=+0.000000 C3=+0.000000
+[V3 05:27:15] TRACK_C: V0=0.000000 V1=0.000000 S1=0.000000 V9=0.000000 V10=0.000000 C1=+0.000000 C3=+0.000000
+[V3 05:27:15] field controls: {'V14_CONSTANT_FIELD': 0.5447111700758839, 'V15_X_RAMP': 0.5986741151104621, 'V16_Y_RAMP': 0.5961677138806748, 'V17_BILINEAR_RAMP': 0.603552447974048, 'V18_RADIAL_GRADIENT': 0.6386319001252343}
+[V3 05:27:15] === V3 SEARCH-AWARE NULL ===
+[V3 05:27:40]   null 4/32: best so far 0.857651
+[V3 05:28:06]   null 8/32: best so far 0.858191
+[V3 05:28:31]   null 12/32: best so far 0.858191
+[V3 05:28:57]   null 16/32: best so far 0.858191
+[V3 05:29:22]   null 20/32: best so far 0.858191
+[V3 05:29:48]   null 24/32: best so far 0.858191
+[V3 05:30:14]   null 28/32: best so far 0.858191
+[V3 05:30:40]   null 32/32: best so far 0.858191
+[V3 05:30:40] null: N=32 max=0.858191 mean=0.857037 observed=0.858321 p_emp=0.0303
+[V3 05:30:40] === V3 VALIDATION ===
+[V3 05:30:46] validation: depth_range=0.000000 repeat_identical=True TARGET_B=0.000000 surr_mean=0.463567
+[V3 05:30:46] === V3 TEMPORAL ANALYSIS ===
+[V3 05:30:47]   V1_best: V0_NONE=NA, V1_FULL=NA, V9_EVENT=NA, V10_RESIDUAL=NA
+[V3 05:30:48]   initial_point: V0_NONE=-0.08009390880191096, V1_FULL=-0.015937601142338997, V9_EVENT=0.05713179976047499, V10_RESIDUAL=NA
+[V3 05:30:48]   TRACK_A_best: V0_NONE=NA, V1_FULL=NA, V9_EVENT=NA, V10_RESIDUAL=NA
+[V3 05:30:49]   TRACK_B_best: V0_NONE=NA, V1_FULL=NA, V9_EVENT=NA, V10_RESIDUAL=NA
+[V3 05:30:49]   TRACK_C_best: V0_NONE=NA, V1_FULL=NA, V9_EVENT=NA, V10_RESIDUAL=NA
+[V3 05:30:50] === V3 WORLD_PRIME BENCHMARK AUDIT ===
+[V3 05:31:08] benchmark: train=0.8571428571428571 holdout=0.6285714285714286 prime=1/20 leakage=False
+[V3 05:31:08] === V3 EXPLANATORY DECOMPOSITION ===
+[V3 05:31:09] WARNING: V0_NONE field is None, skipping explanation
+[V3 05:31:09] === V3 REPORT ===
+[V3 05:31:09] report_v3.md written (263 lines)
+[V3 05:31:09] === V3 REPRODUCIBILITY ===
+[V3 05:31:09] reproducibility: [0, 0, 0] identical=True integrity=ok
+[V3 05:31:09] === V3 PIPELINE COMPLETE (status: BOUNDARY_ARTIFACT) ===
+[V3 05:33:10] === V3 INIT ===
+[V3 05:33:10] protocol=df623b3ad6f836a4 source=89a5bac18eb51ac5 binary=ce0d806f19d4c54b
+[V3 05:33:10] === V3 SELF TEST ===
+[V3 05:33:10] kernel self-test: PASSED
+[V3 05:33:10] driver registry collisions: 0
+[V3 05:33:10]   cross-check V1_FULL: {'kernel_driver': 'V1_INV_PI', 'match': True}
+[V3 05:33:10]   cross-check V9_EVENT: {'kernel_driver': 'V9_PRIME_EVENT', 'match': True}
+[V3 05:33:10]   cross-check V0_NONE: {'kernel_driver': 'V0_NONE', 'match': True}
+[V3 05:33:10]   cross-check S2_DATA_SMOOTHED: {'kernel_driver': 'S2_DATA_SMOOTHED', 'match': True}
+[V3 05:33:10]   cross-check V10_RESIDUAL: {'kernel_driver': 'V10_PRIME_RESIDUAL', 'max_abs_difference_vs_v3': 3.52434228884534, 'note': 'kernel S1 is li-based; V3 S1 is Riemann R (documented)'}
+[V3 05:33:11] === V3 PROTOCOL LOCK ===
+[V3 05:33:12] === V3 BOUNDARY DIAGNOSTIC ===
+[V3 05:33:17] boundary: monotone=True V1(cr=1)=0.820852 V1(cr=3)=0.862832
+[V3 05:33:17] === V3 PRIMARY SEARCH (3 tracks) ===
+[V3 05:33:25] TRACK_A (V1_FULL): best=0.858321 at (2.000000,0.011132) scout=289 search=891
+[V3 05:33:33] TRACK_B (V9_EVENT): best=0.852335 at (1.508228,0.000000) scout=289 search=891
+[V3 05:33:41] TRACK_C (V10_RESIDUAL): best=0.849851 at (1.769142,0.019591) scout=289 search=891
+[V3 05:33:49]   repeat seed 233742: 0.858321
+[V3 05:33:57]   repeat seed 333742: 0.858321
+[V3 05:33:57] === V3 MATCHED CONTROLS ===
+[V3 05:33:58] TRACK_A: V0=0.820852 V1=0.858321 S1=0.858321 V9=0.820852 V10=0.836232 C1=-0.000100 C3=-0.022090
+[V3 05:33:59] TRACK_B: V0=0.852378 V1=0.837880 S1=0.837880 V9=0.852335 V10=0.839810 C1=+0.000009 C3=+0.001930
+[V3 05:34:00] TRACK_C: V0=0.845178 V1=0.848432 S1=0.848432 V9=0.845178 V10=0.849851 C1=-0.000030 C3=+0.001419
+[V3 05:34:01] field controls: {'V14_CONSTANT_FIELD': 0.5447111700758839, 'V15_X_RAMP': 0.5986741151104621, 'V16_Y_RAMP': 0.5961677138806748, 'V17_BILINEAR_RAMP': 0.603552447974048, 'V18_RADIAL_GRADIENT': 0.6386319001252343}
+[V3 05:34:01] === V3 SEARCH-AWARE NULL ===
+[V3 05:34:26]   null 4/32: best so far 0.857651
+[V3 05:34:52]   null 8/32: best so far 0.858191
+[V3 05:35:17]   null 12/32: best so far 0.858191
+[V3 05:35:43]   null 16/32: best so far 0.858191
+[V3 05:36:08]   null 20/32: best so far 0.858191
+[V3 05:36:34]   null 24/32: best so far 0.858191
+[V3 05:36:59]   null 28/32: best so far 0.858191
+[V3 05:37:27]   null 32/32: best so far 0.858191
+[V3 05:37:27] null: N=32 max=0.858191 mean=0.857037 observed=0.858321 p_emp=0.0303
+[V3 05:37:27] === V3 VALIDATION ===
+[V3 05:37:35] validation: depth_range=0.858321 repeat_identical=True TARGET_B=0.889939 surr_mean=0.463567
+[V3 05:37:35] === V3 TEMPORAL ANALYSIS ===
+[V3 05:37:36]   V1_best: V0_NONE=NA, V1_FULL=NA, V9_EVENT=NA, V10_RESIDUAL=NA
+[V3 05:37:37]   initial_point: V0_NONE=-0.08009390880191096, V1_FULL=-0.015937601142338997, V9_EVENT=0.05713179976047499, V10_RESIDUAL=NA
+[V3 05:37:38]   TRACK_A_best: V0_NONE=NA, V1_FULL=NA, V9_EVENT=NA, V10_RESIDUAL=NA
+[V3 05:37:38]   TRACK_B_best: V0_NONE=NA, V1_FULL=NA, V9_EVENT=NA, V10_RESIDUAL=NA
+[V3 05:37:38]   TRACK_C_best: V0_NONE=NA, V1_FULL=NA, V9_EVENT=NA, V10_RESIDUAL=NA
+[V3 05:37:39] === V3 WORLD_PRIME BENCHMARK AUDIT ===
+[V3 05:37:58] benchmark: train=0.8571428571428571 holdout=0.6285714285714286 prime=1/20 leakage=False
+[V3 05:37:58] === V3 EXPLANATORY DECOMPOSITION ===
+[V3 05:37:59] v3_explanation.json written
+[V3 05:37:59] === V3 REPORT ===
+[V3 05:37:59] report_v3.md written (269 lines)
+[V3 05:37:59] === V3 REPRODUCIBILITY ===
+[V3 05:38:00] reproducibility: [0.8583213052764331, 0.8583213052764331, 0.8583213052764331] identical=True integrity=ok
+[V3 05:38:00] === V3 PIPELINE COMPLETE (status: BOUNDARY_ARTIFACT) ===
+[V3 05:41:29] === V3 INIT ===
+[V3 05:41:29] protocol=df623b3ad6f836a4 source=89a5bac18eb51ac5 binary=ce0d806f19d4c54b
+[V3 05:41:30] === V3 SELF TEST ===
+[V3 05:41:30] kernel self-test: PASSED
+[V3 05:41:30] driver registry collisions: 0
+[V3 05:41:30]   cross-check V1_FULL: {'kernel_driver': 'V1_INV_PI', 'match': True}
+[V3 05:41:30]   cross-check V9_EVENT: {'kernel_driver': 'V9_PRIME_EVENT', 'match': True}
+[V3 05:41:30]   cross-check V0_NONE: {'kernel_driver': 'V0_NONE', 'match': True}
+[V3 05:41:30]   cross-check S2_DATA_SMOOTHED: {'kernel_driver': 'S2_DATA_SMOOTHED', 'match': True}
+[V3 05:41:30]   cross-check V10_RESIDUAL: {'kernel_driver': 'V10_PRIME_RESIDUAL', 'max_abs_difference_vs_v3': 3.52434228884534, 'note': 'kernel S1 is li-based; V3 S1 is Riemann R (documented)'}
+[V3 05:42:16] === V3 INIT ===
+[V3 05:42:16] protocol=df623b3ad6f836a4 source=89a5bac18eb51ac5 binary=ce0d806f19d4c54b
+[V3 05:42:17] === V3 SELF TEST ===
+[V3 05:42:17] kernel self-test: PASSED
+[V3 05:42:17] driver registry collisions: 0
+[V3 05:42:17]   cross-check V1_FULL: {'kernel_driver': 'V1_INV_PI', 'match': True}
+[V3 05:42:17]   cross-check V9_EVENT: {'kernel_driver': 'V9_PRIME_EVENT', 'match': True}
+[V3 05:42:17]   cross-check V0_NONE: {'kernel_driver': 'V0_NONE', 'match': True}
+[V3 05:42:17]   cross-check S2_DATA_SMOOTHED: {'kernel_driver': 'S2_DATA_SMOOTHED', 'match': True}
+[V3 05:42:17]   cross-check V10_RESIDUAL: {'kernel_driver': 'V10_PRIME_RESIDUAL', 'max_abs_difference_vs_v3': 3.52434228884534, 'note': 'kernel S1 is li-based; V3 S1 is Riemann R (documented)'}
+[V3 05:44:12] === V3 INIT ===
+[V3 05:44:12] protocol=df623b3ad6f836a4 source=9af112c6f33bcb3c binary=ce0d806f19d4c54b
+[V3 05:44:13] === V3 SELF TEST ===
+[V3 05:44:13] kernel self-test: PASSED
+[V3 05:44:13] driver registry collisions: 0
+[V3 05:44:13]   cross-check V1_FULL: {'kernel_driver': 'V1_INV_PI', 'match': True}
+[V3 05:44:13]   cross-check V9_EVENT: {'kernel_driver': 'V9_PRIME_EVENT', 'match': True}
+[V3 05:44:13]   cross-check V0_NONE: {'kernel_driver': 'V0_NONE', 'match': True}
+[V3 05:44:13]   cross-check S2_DATA_SMOOTHED: {'kernel_driver': 'S2_DATA_SMOOTHED', 'match': True}
+[V3 05:44:13]   cross-check V10_RESIDUAL: {'kernel_driver': 'V10_PRIME_RESIDUAL', 'max_abs_difference_vs_v3': 3.52434228884534, 'note': 'kernel S1 is li-based; V3 S1 is Riemann R (documented)'}
+[V3 05:44:14] === V3 PROTOCOL LOCK ===
+[V3 05:44:15] === V3 BOUNDARY DIAGNOSTIC ===
+[V3 05:44:20] boundary: monotone=True V1(cr=1)=0.820852 V1(cr=3)=0.862832
+[V3 05:44:20] === V3 PRIMARY SEARCH (3 tracks) ===
+[V3 05:44:30] TRACK_A (V1_FULL): best=0.858321 at (2.000000,0.011132) scout=289 search=891
+[V3 05:44:41] TRACK_B (V9_EVENT): best=0.852335 at (1.508228,0.000000) scout=289 search=891
+[V3 05:44:49] TRACK_C (V10_RESIDUAL): best=0.849851 at (1.769142,0.019591) scout=289 search=891
+[V3 05:44:56]   repeat seed 233742: 0.858321
+[V3 05:45:04]   repeat seed 333742: 0.858321
+[V3 05:45:04] === V3 MATCHED CONTROLS ===
+[V3 05:45:06] TRACK_A: V0=0.820852 V1=0.858321 S1=0.858321 V9=0.820852 V10=0.836232 C1=-0.000100 C3=-0.022090
+[V3 05:45:07] TRACK_B: V0=0.852378 V1=0.837880 S1=0.837880 V9=0.852335 V10=0.839810 C1=+0.000009 C3=+0.001930
+[V3 05:45:08] TRACK_C: V0=0.845178 V1=0.848432 S1=0.848432 V9=0.845178 V10=0.849851 C1=-0.000030 C3=+0.001419
+[V3 05:45:09] field controls: {'V14_CONSTANT_FIELD': 0.5447111700758839, 'V15_X_RAMP': 0.5986741151104621, 'V16_Y_RAMP': 0.5961677138806748, 'V17_BILINEAR_RAMP': 0.603552447974048, 'V18_RADIAL_GRADIENT': 0.6386319001252343}
+[V3 05:45:09] === V3 SEARCH-AWARE NULL ===
+[V3 05:45:34]   null 4/32: best so far 0.857651
+[V3 05:45:59]   null 8/32: best so far 0.858191
+[V3 05:46:24]   null 12/32: best so far 0.858191
+[V3 05:46:50]   null 16/32: best so far 0.858191
+[V3 05:47:15]   null 20/32: best so far 0.858191
+[V3 05:47:40]   null 24/32: best so far 0.858191
+[V3 05:48:05]   null 28/32: best so far 0.858191
+[V3 05:48:32]   null 32/32: best so far 0.858191
+[V3 05:48:33] null: N=32 max=0.858191 mean=0.857037 observed=0.858321 p_emp=0.0303
+[V3 05:48:33] === V3 VALIDATION ===
+[V3 05:48:41] validation: depth_range=0.858321 repeat_identical=True TARGET_B=0.889939 surr_mean=0.463567
+[V3 05:48:41] === V3 TEMPORAL ANALYSIS ===
+[V3 05:48:42]   V1_best: V0_NONE=NA, V1_FULL=NA, V9_EVENT=NA, V10_RESIDUAL=NA
+[V3 05:48:43]   initial_point: V0_NONE=-0.08009390880191096, V1_FULL=-0.015937601142338997, V9_EVENT=0.05713179976047499, V10_RESIDUAL=NA
+[V3 05:48:43]   TRACK_A_best: V0_NONE=NA, V1_FULL=NA, V9_EVENT=NA, V10_RESIDUAL=NA
+[V3 05:48:43]   TRACK_B_best: V0_NONE=NA, V1_FULL=NA, V9_EVENT=NA, V10_RESIDUAL=NA
+[V3 05:48:44]   TRACK_C_best: V0_NONE=NA, V1_FULL=NA, V9_EVENT=NA, V10_RESIDUAL=NA
+[V3 05:48:45] === V3 WORLD_PRIME BENCHMARK AUDIT ===
+[V3 05:49:03] benchmark: train=0.8571428571428571 holdout=0.6285714285714286 prime=1/20 leakage=False
+[V3 05:49:03] === V3 EXPLANATORY DECOMPOSITION ===
+[V3 05:49:04] v3_explanation.json written
+[V3 05:49:04] === V3 REPRODUCIBILITY ===
+[V3 05:49:06] reproducibility: [0.8583213052764331, 0.8583213052764331, 0.8583213052764331] identical=True integrity=ok
+[V3 05:49:06] === V3 REPORT ===
+[V3 05:49:06] report_v3.md written (269 lines)
+[V3 05:49:06] === V3 PIPELINE COMPLETE (status: BOUNDARY_ARTIFACT) ===

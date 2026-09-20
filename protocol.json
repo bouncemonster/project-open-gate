@@ -1,0 +1,207 @@
+{
+  "protocol_version": "1.0.0",
+  "grid": {
+    "width": 60,
+    "height": 30,
+    "x_min": -1.8,
+    "x_max": 1.8,
+    "y_min": -1.0,
+    "y_max": 1.0
+  },
+  "targets": {
+    "TARGET_A": "abs(sin(pi*u)*cos(pi*v))",
+    "TARGET_B": "sin(pi*u)^2 * cos(pi*v)^2",
+    "TARGET_PHASE": "abs(sin(pi*(u+0.07))*cos(pi*(v-0.11)))",
+    "eigenmode_range": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "primary_target": "TARGET_A"
+  },
+  "score_formula": {
+    "weights": {
+      "pearson01": 0.25,
+      "spearman01": 0.15,
+      "mae01": 0.15,
+      "gradient01": 0.15,
+      "spectral01": 0.15,
+      "autocorrelation01": 0.15
+    }
+  },
+  "models": {
+    "V0_NONE": {
+      "driver": "V0_NONE",
+      "description": "Baseline Julia (no forcing)"
+    },
+    "V1_INV_PI": {
+      "driver": "V1_INV_PI",
+      "description": "1/pi(k) forcing"
+    },
+    "V2_SMOOTH": {
+      "driver": "V2_SMOOTH",
+      "description": "Smooth surrogate"
+    },
+    "V3_CENTERED_INV_PI": {
+      "driver": "V3_CENTERED_INV_PI",
+      "description": "Centered 1/pi(k)"
+    },
+    "V4_PRIME_RESIDUAL": {
+      "driver": "V4_PRIME_RESIDUAL",
+      "description": "Prime residual (1/pi - smooth)"
+    },
+    "V5_SHUFFLED": {
+      "driver": "V5_SHUFFLED",
+      "description": "Shuffled 1/pi(k)",
+      "seed": 7331
+    },
+    "V6_REVERSED": {
+      "driver": "V6_REVERSED",
+      "description": "Reversed 1/pi(k)"
+    },
+    "V7_IMAGINARY": {
+      "driver": "V7_IMAGINARY",
+      "description": "Forcing on imaginary component"
+    },
+    "V8_PHASE_RANDOMIZED": {
+      "driver": "V8_PHASE_RANDOMIZED",
+      "description": "Phase-randomized surrogate"
+    }
+  },
+  "search_range": {
+    "cr_min": -1.5,
+    "cr_max": 1.0,
+    "ci_min": -1.2,
+    "ci_max": 1.2
+  },
+  "default_params": {
+    "cr": -0.7,
+    "ci": 0.27015,
+    "alpha": 1.0,
+    "degree": 2,
+    "channel": 0,
+    "max_iter": 200
+  },
+  "seeds": {
+    "shuffle_seed": 7331,
+    "mutation_seed": 133742
+  },
+  "search_budget": {
+    "max_logical_steps": 100,
+    "evaluations_per_step": 9,
+    "initial_step": 0.02,
+    "min_step": 1e-05,
+    "max_step": 0.2,
+    "step_growth": 1.15,
+    "step_decay": 0.5,
+    "plateau_threshold": 15,
+    "multi_start_after": 20,
+    "restart_points": [
+      [
+        -0.7,
+        0.27015
+      ],
+      [
+        -0.5,
+        0.27015
+      ],
+      [
+        -0.9,
+        0.27015
+      ],
+      [
+        -0.7,
+        0.47015
+      ],
+      [
+        -0.7,
+        0.07015
+      ],
+      [
+        -0.25,
+        0.0
+      ],
+      [
+        -0.75,
+        0.0
+      ],
+      [
+        -1.0,
+        0.3
+      ]
+    ],
+    "coarse_scout_max": 2,
+    "coarse_scout_grid": 11
+  },
+  "time_budget": {
+    "default_seconds": 900,
+    "max_seconds": 3600
+  },
+  "null_budget": {
+    "default_null_runs": 8,
+    "extended_null_runs": 12,
+    "steps_per_null": 30,
+    "extended_steps_per_null": 50
+  },
+  "validation": {
+    "depth_levels": [
+      200,
+      500,
+      1000,
+      1500,
+      2000
+    ],
+    "resolution_levels": [
+      "60x30",
+      "120x60"
+    ],
+    "reproducibility_runs": 3
+  },
+  "benchmark": {
+    "seeds_per_world": 20,
+    "train_seeds": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "holdout_seeds": [
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "acceptance_accuracy": 0.75
+  },
+  "research_tracks": {
+    "TRACK_A": "V1_INV_PI",
+    "TRACK_B": "V4_PRIME_RESIDUAL"
+  },
+  "alpha_sensitivity": [
+    0.25,
+    0.5,
+    1.0,
+    2.0
+  ],
+  "thresholds": {
+    "search_success": 0.85,
+    "strong_result": 0.9,
+    "target_score": 0.95,
+    "prime_uplift_strong": 0.05,
+    "order_uplift_strong": 0.05,
+    "shuffle_degradation_strong": 0.05
+  }
+}

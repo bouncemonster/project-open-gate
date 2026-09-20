@@ -1,0 +1,76 @@
+{
+  "protocol": "V5.2_ADVERSARIAL_BENCHMARK",
+  "version": "5.2.1",
+  "revision_note": "Post self-audit correction of v5.2.0. Pre-audit headline 0.7708 retracted (holdout slicing bug). See report_v5_2.md section 0.",
+  "created": "2026-09-19",
+  "parent": "V5.1_BENCHMARK_VALID",
+  "research_question": "Can a detector identify computational substrate independent of generator, quantization, and observation model?",
+  "architecture": {
+    "layers": ["GENERATOR", "SUBSTRATE", "OBSERVATION"],
+    "generators": ["G01_analytic_smooth","G02_gaussian_correlated","G03_analytic_fractal","G04_wave_eigenmode","G05_chaotic_map","G06_nonlinear_dyn","G07_reaction_diffusion","G08_procedural_noise","G09_coupled_oscillator","G10_cosmological_like"],
+    "substrates_continuous": ["S_CONTINUOUS","S_UNKNOWN_CONTINUOUS"],
+    "substrates_computational": ["S_FLOAT32","S_FLOAT16","S_QUANT_8","S_QUANT_4","S_LATTICE","S_LOOKUP","S_HASH","S_FINITE_STATE","S_UNKNOWN_COMPUTATIONAL"],
+    "splits": {
+      "train_generators": ["G01","G02","G03","G04","G05"],
+      "validation_generators": ["G06","G07"],
+      "holdout_generators": ["G08","G09","G10"],
+      "train_substrates": ["S_FLOAT32","S_FLOAT16","S_QUANT_8","S_LATTICE"],
+      "holdout_substrates": ["S_LOOKUP","S_HASH","S_FINITE_STATE","S_QUANT_4","S_UNKNOWN_COMPUTATIONAL"]
+    }
+  },
+  "tests": {
+    "generator_disjoint_holdout": {"status": "MARGINAL_PASS", "balanced_accuracy": 0.6125, "bootstrap_ci": [0.5542, 0.6750], "n": 240, "balance": "40/40 per generator (stratified)"},
+    "generator_disjoint_per_gen": {"G08": 0.45, "G09": 0.775, "G10": 0.6125},
+    "substrate_disjoint_holdout": {"status": "PASS", "balanced_accuracy": 0.70, "n": "100:100 balanced", "per_substrate_recall": {"S_QUANT_4": 1.0, "S_LOOKUP": 1.0, "S_FINITE_STATE": 1.0, "S_HASH": 0.0, "S_UNKNOWN_COMPUTATIONAL": 0.0}},
+    "label_permutation_null": {"status": "PASS", "mean_accuracy": 0.5215, "n_perms": 20, "min": 0.4542, "max": 0.6792},
+    "identical_observation_null": {"status": "PASS", "accuracy": 0.5, "method": "bitwise-identical via lossless lookup-table roundtrip"},
+    "matched_statistic_adversarial": {"status": "FAIL", "monotonic_balanced_accuracy": 0.5, "hash_nonmonotonic_balanced_accuracy": 0.5},
+    "loo_generator": {"mean_balanced_accuracy": 0.625, "min": 0.5, "max": 0.875, "note": "non-uniform: generator-dependent"},
+    "loo_substrate": {"mean_balanced_accuracy": 0.625, "min": 0.425, "max": 0.795, "note": "precision-level substrates at chance; strong-quantization ones visible"},
+    "pairwise_substrate": {"status": "FAIL", "accuracy": 0.5, "total_pairs": 240},
+    "feature_permutation": {"driving_feature": "computational", "degradation": 0.1792},
+    "feature_ablation": {"computational_only": 0.775, "all_features": 0.6125, "spatial_only": 0.6042, "spectral_only": 0.4833, "precision_only": 0.4833},
+    "observation_robustness": {"float64": 0.6125, "float32": 0.6125, "float16": 0.575, "uint8": 0.5, "uint4": 0.5, "downsample_2x2": 0.5833, "noisy": 0.4125},
+    "feature_leakage": {"method": "quantile-binned normalized MI", "mi_generator_mean": 0.3623, "mi_substrate_mean": 0.1466, "verdict": "GENERATOR_DOMINANT", "max_leak_feature": "float64_float16_diff (MI_generator=1.00, perfect generator identifier)"},
+    "world_prime": {"detection_rate": 1.0, "n": 30, "interpretation": "detected AS QUANTIZATION (short prime-fractional ladder), not as primality; blind holdout, non-matched control"},
+    "unknown_computational": {"detection_rate": 0.0},
+    "calibration": {"continuous_mean": 0.5114, "computational_mean": 0.6311, "separation": 0.1197}
+  },
+  "success_criteria": {
+    "1_generator_holdout_survives": true,
+    "2_matched_stats_survive": false,
+    "3_substrate_holdout_survives": true,
+    "4_label_permutation_collapses": true,
+    "5_identical_obs_collapses": true,
+    "6_pairwise_substrate_discriminates": false,
+    "7_observation_robust": false
+  },
+  "final_status": "QUANTIZATION_DETECTOR",
+  "interpretation": "The detector identifies quantization artifacts (discrete value levels) but cannot identify computational substrate. When histogram statistics are matched (both monotonic and non-monotonic variants), performance collapses to chance. Pairwise same-generator/same-seed/different-substrate testing shows zero discriminative power. Novel computational mechanisms that preserve the value distribution (hash, XOR) are entirely undetected. World_PRIME is detected only because the prime-fractional ladder is visibly quantized, which confirms rather than refutes the failure mode.",
+  "key_findings": [
+    "V5.1's 97.5% and pre-audit V5.2's 77.08% were both inflated; corrected generator-disjoint headline is 61.25% [55.42%, 67.50%]",
+    "Histogram matching completely defeats the detector (0.50 under both matched variants)",
+    "Pairwise substrate discrimination is impossible (0.50 on 240 controlled pairs)",
+    "S_HASH and S_UNKNOWN_COMPUTATIONAL recall: 0% (the pre-audit 8% figure came from an unbalanced test)",
+    "Feature information is generator-dominant (MI 0.36 vs substrate MI 0.15); float64_float16_diff alone identifies the generator perfectly",
+    "uint8/uint4/noise observation channels destroy all detection power",
+    "Only the computational feature family carries signal (+17.92% permutation degradation)"
+  ],
+  "audit_response": {
+    "defects_fixed": 7,
+    "details": "report_v5_2.md section 0 and V5_2_ADVERSARIAL.md section 5",
+    "headline_correction": {"pre_audit": 0.7708, "post_audit": 0.6125, "cause": "holdout comp slice concentrated in single generator; G09/G10 had zero computational test samples"}
+  },
+  "next_gate": "DO NOT proceed to real-world data. V5.2 gate (spec section 67) requires survival of matched-statistic, pairwise, and unknown-substrate controls; all fail.",
+  "reproducibility": {
+    "protocol_hash": "c3deb202db7f2d47",
+    "base_seed": 133742,
+    "total_worlds": 2200,
+    "world_size": "60x30",
+    "seeds_per_generator": 20,
+    "entry_point": "python3 agent_loop.py auto --mode v5.2-deep --time-budget 14400",
+    "resume": "python3 agent_loop.py resume --mode v5.2-deep",
+    "results_json": "v5_2_artifacts/benchmark/v5_2_results.json",
+    "database": "history_v5_2.sqlite3"
+  }
+}

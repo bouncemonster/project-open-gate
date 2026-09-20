@@ -1,0 +1,20 @@
+{
+  "phase": "SELF_TEST",
+  "step": 0,
+  "best": {
+    "score": 0.0,
+    "cr": 0,
+    "ci": 0,
+    "model": "N/A"
+  },
+  "plateau_steps": 0,
+  "next_action": "SELF_TEST",
+  "next_reason": "",
+  "recent_events": [
+    "REPORT",
+    "STOP",
+    "INIT",
+    "SELF_TEST",
+    "SELF_TEST"
+  ]
+}

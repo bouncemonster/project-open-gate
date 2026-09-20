@@ -1,0 +1,45 @@
+{
+  "run_id": "run_1789774700_1967",
+  "phase": "FINISHED",
+  "global_best_score": 0.830429,
+  "global_best": {
+    "candidate_id": 553,
+    "score": 0.830429,
+    "pearson01": 0.891802,
+    "spearman01": 0.890916,
+    "mae01": 0.602684,
+    "gradient01": 0.64409,
+    "spectral01": 0.912882,
+    "autocorrelation01": 0.999284,
+    "entropy": 0.0,
+    "anisotropy": 0.033303,
+    "compression_ratio": 0.001111,
+    "quantization_levels": 7,
+    "quantization_dom_frac": 0.461111,
+    "escaped_fraction": 1.0,
+    "runtime_ms": 4.3,
+    "error_code": 0,
+    "evaluation_id": 433,
+    "cr": 0.9831880807715164,
+    "ci": -0.0058667288803120905
+  },
+  "track_a": {
+    "cr": 0.9831880807715164,
+    "ci": -0.0058667288803120905,
+    "step": 1e-05,
+    "best_score": 0.830429,
+    "steps_without_improvement": 19,
+    "total_steps": 100
+  },
+  "track_b": {
+    "cr": -0.7,
+    "ci": 0.07015,
+    "step": 0.0003125,
+    "best_score": 0.830429,
+    "steps_without_improvement": 6,
+    "total_steps": 100
+  },
+  "total_evals": 3484,
+  "candidate_counter": 3484,
+  "scout_count": 2
+}

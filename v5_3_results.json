@@ -1,0 +1,202 @@
+{
+ "T03_pairwise_primary": {
+  "track_A": {
+   "pairwise_accuracy": 1.0,
+   "n_pairs": 160,
+   "ci95": [
+    1.0,
+    1.0
+   ],
+   "per_generator": {
+    "G05_wave": 1.0,
+    "G06_procedural_dyn": 1.0
+   },
+   "per_substrate": {
+    "S32": 1.0,
+    "S16": 1.0,
+    "S_Q15": 1.0,
+    "S_HASH_NATIVE": 1.0
+   },
+   "null": 0.5
+  },
+  "track_B": {
+   "pairwise_accuracy": 0.99375,
+   "n_pairs": 160,
+   "ci95": [
+    0.98125,
+    1.0
+   ],
+   "per_generator": {
+    "G05_wave": 1.0,
+    "G06_procedural_dyn": 0.9875
+   },
+   "per_substrate": {
+    "S32": 1.0,
+    "S16": 1.0,
+    "S_Q15": 1.0,
+    "S_HASH_NATIVE": 0.975
+   },
+   "null": 0.5
+  },
+  "t01_world_level": {
+   "balanced_accuracy": 0.8531249999999999,
+   "n_continuous": 40,
+   "n_computational": 160
+  }
+ },
+ "T02_substrate_disjoint": {
+  "track_A": {
+   "S_FSM": 1.0,
+   "S_MOD": 1.0,
+   "S_UNKNOWN": 0.5
+  },
+  "track_B": {
+   "S_FSM": 0.875,
+   "S_MOD": 1.0,
+   "S_UNKNOWN": 0.525
+  }
+ },
+ "T12_double_disjoint": {
+  "track_A": {
+   "S_FSM": 0.925,
+   "S_MOD": 1.0,
+   "S_UNKNOWN": 1.0
+  },
+  "track_B": {
+   "S_FSM": 0.9,
+   "S_MOD": 1.0,
+   "S_UNKNOWN": 1.0
+  }
+ },
+ "T04_histogram_matched_A": {
+  "accuracy": 0.55,
+  "n_pairs": 160,
+  "null": 0.5
+ },
+ "T04_histogram_matched_B": {
+  "accuracy": 0.4375,
+  "n_pairs": 160,
+  "null": 0.5
+ },
+ "T05_spectrum_matched_A": {
+  "accuracy": 0.73125,
+  "n_pairs": 160,
+  "null": 0.5
+ },
+ "T05_spectrum_matched_B": {
+  "accuracy": 0.9625,
+  "n_pairs": 160,
+  "null": 0.5
+ },
+ "T06_temporal_matched_A": {
+  "accuracy": 1.0,
+  "n_pairs": 160,
+  "null": 0.5
+ },
+ "T06_temporal_matched_B": {
+  "accuracy": 0.95625,
+  "n_pairs": 160,
+  "null": 0.5
+ },
+ "S12_equal_output": {
+  "accuracy": 1.0,
+  "n_pairs": 160,
+  "null": 0.5
+ },
+ "T07_identical_null": {
+  "accuracy": 0.5,
+  "expected": 0.5
+ },
+ "T08_label_permutation": {
+  "mean_accuracy": 0.47406249999999994,
+  "min": 0.14375,
+  "max": 0.9875,
+  "n_perms": 20,
+  "expected": 0.5
+ },
+ "T09_leakage": {
+  "mi_generator_mean": 0.59232914371088,
+  "mi_substrate_mean": 0.1879158332405889,
+  "verdict": "GENERATOR_DOMINANT",
+  "blacklist": [
+   "float64_float16_diff"
+  ],
+  "per_feature_extreme_gen": [
+   [
+    "float64_float32_diff",
+    {
+     "mi_generator": 0.8467132018086354,
+     "mi_substrate": 0.4056390622295667,
+     "mi_seed": 0.6060951534464819
+    }
+   ],
+   [
+    "grad_mean",
+    {
+     "mi_generator": 0.8467132018086354,
+     "mi_substrate": 0.2614000499547582,
+     "mi_seed": 0.6121293912487626
+    }
+   ],
+   [
+    "precision_sensitivity",
+    {
+     "mi_generator": 0.8467132018086354,
+     "mi_substrate": 0.4056390622295667,
+     "mi_seed": 0.6060951534464819
+    }
+   ],
+   [
+    "float64_float16_diff",
+    {
+     "mi_generator": 0.8223773393621181,
+     "mi_substrate": 0.0,
+     "mi_seed": 0.6820397869111482
+    }
+   ],
+   [
+    "cc_n_components",
+    {
+     "mi_generator": 0.7978131459699133,
+     "mi_substrate": 0.07577976262735664,
+     "mi_seed": 0.604237638478921
+    }
+   ]
+  ]
+ },
+ "T03_clean_rerun": {
+  "accuracy": 0.99375,
+  "n_pairs": 160,
+  "excluded": 1
+ },
+ "T10_ablation": {
+  "spatial": 0.7,
+  "spectral": 0.6875,
+  "marginal": 1.0,
+  "temporal": 0.75,
+  "dynamical": 0.9,
+  "temporal+dynamical": 0.975,
+  "all": 0.99375
+ },
+ "T11_degradation": {
+  "null": 0.5,
+  "float32": 0.8875,
+  "float16": 0.725,
+  "uint8": 0.9,
+  "downsample2x2": 0.875,
+  "noisy": 0.66875
+ },
+ "status_checks": {
+  "1_pairwise_above_chance": true,
+  "2_hist_matched_survives": false,
+  "3_spectrum_matched_survives": true,
+  "4_temporal_matched_survives": true,
+  "5_unknown_substrate_survives": false,
+  "6_equal_output_survives": true,
+  "7_leakage_controlled": false,
+  "8_permutation_collapses": true,
+  "9_identical_at_chance": true,
+  "10_observation_robust": true
+ },
+ "final_status": "STATISTICAL_ARTIFACT"
+}

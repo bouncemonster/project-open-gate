@@ -1,0 +1,14 @@
+{
+  "os": "Windows 10",
+  "python_version": "3.12.10",
+  "compiler": "gcc",
+  "cpu": "Intel64 Family 6 Model 63 Stepping 2, GenuineIntel",
+  "source_hash": "e521421d5d037200b3ad2e2bababebc78cad835990a15673ecad597755c37c2c",
+  "protocol_hash": "aefd85c1b24cfbe51d67454cb37fbc0e839c21cfe260d215f08c4bd2e29dfea8",
+  "best_parameters": {
+    "cr": 0.9831880807715164,
+    "ci": -0.0058667288803120905,
+    "model": "V1_INV_PI",
+    "score": 0.830429
+  }
+}

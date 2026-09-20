@@ -1,0 +1,20 @@
+{
+  "phase": "NULL_SEARCH",
+  "step": 3484,
+  "best": {
+    "score": 0.830429,
+    "cr": 0.9831880807715164,
+    "ci": -0.0058667288803120905,
+    "model": "N/A"
+  },
+  "plateau_steps": 0,
+  "next_action": "NULL_SEARCH",
+  "next_reason": "",
+  "recent_events": [
+    "CONTROL",
+    "VALIDATION_START",
+    "VALIDATION_END",
+    "NULL_START",
+    "NULL_END"
+  ]
+}

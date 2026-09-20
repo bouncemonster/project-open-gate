@@ -1,0 +1,42 @@
+{
+  "number": 12,
+  "name": "best_render_V7_IMAGINARY",
+  "argv": [
+    "J:\\project\\project_open_gate\\proof_of_simulation\\archives\\v1_baseline\\kernel.exe",
+    "--render",
+    "--cr",
+    "0.983188",
+    "--ci",
+    "-0.005867",
+    "--driver",
+    "V7_IMAGINARY",
+    "--alpha",
+    "1.0",
+    "--degree",
+    "2",
+    "--channel",
+    "0",
+    "--max-iter",
+    "200",
+    "--seed",
+    "7331",
+    "--target",
+    "TARGET_A"
+  ],
+  "cwd": "J:\\project\\project_open_gate\\proof_of_simulation\\archives\\v2_audit\\v1_commands_20260919T000837_958116Z",
+  "timeout_seconds": 5,
+  "environment_overrides": {
+    "PATH_prefix": "C:\\Users\\zelin\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "pid": 23752,
+  "timed_out": false,
+  "returncode": 0,
+  "elapsed_seconds": 0.01514829999905487,
+  "stdout_path": "J:\\project\\project_open_gate\\proof_of_simulation\\archives\\v2_audit\\v1_commands_20260919T000837_958116Z\\012_best_render_V7_IMAGINARY.stdout.log",
+  "stdout_bytes": 1900,
+  "stdout_sha256": "105e90e13a64d3c83f55b38cba672352f0a83041fbcbfb33cb3193974d113533",
+  "stderr_path": "J:\\project\\project_open_gate\\proof_of_simulation\\archives\\v2_audit\\v1_commands_20260919T000837_958116Z\\012_best_render_V7_IMAGINARY.stderr.log",
+  "stderr_bytes": 0,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

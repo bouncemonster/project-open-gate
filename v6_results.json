@@ -1,0 +1,144 @@
+{
+ "branch": "active_response_operator",
+ "protocol_hash": "09f32e0dc373fe96",
+ "base_seed": 20260920,
+ "grid": [
+  16,
+  16
+ ],
+ "n_steps": 24,
+ "seeds_per_gen": 10,
+ "generators": {
+  "train": [
+   "G01_isotropic",
+   "G02_anisotropic"
+  ],
+  "holdout": [
+   "G03_drift",
+   "G04_sustained"
+  ]
+ },
+ "mechanisms": {
+  "train": [
+   "fixed_point",
+   "finite_state"
+  ],
+  "unseen": [
+   "modular",
+   "unknown_trunc"
+  ],
+  "continuous_ref": "continuous"
+ },
+ "c6_baseline_null": {
+  "accuracy": 0.5,
+  "n_pairs": 160,
+  "expected": 0.5,
+  "meaning": "pre-intervention baseline continuous-vs-computational"
+ },
+ "primary": {
+  "accuracy": 1.0,
+  "n_pairs": 80,
+  "setting": "out_of_sample: train seen_gen+seen_mech, test holdout_gen x all_computational",
+  "ci95": [
+   1.0,
+   1.0
+  ],
+  "null": 0.5,
+  "in_sample_diagnostic": 1.0,
+  "meaning": "response-operator discrimination continuous vs computational"
+ },
+ "C1_equivalent_implementation": {
+  "accuracy": 0.5,
+  "n_pairs": 40,
+  "expected": 0.5,
+  "bitwise_identical_response": true
+ },
+ "C2_intervention_permutation": {
+  "mean": 0.501875,
+  "max": 0.60625,
+  "n_perms": 20,
+  "expected": 0.5
+ },
+ "C3_response_surrogate": {
+  "mean": 0.4725,
+  "max": 0.5375,
+  "n_reps": 5,
+  "expected": 0.5
+ },
+ "C4_generator_holdout": {
+  "accuracy": 1.0,
+  "n_pairs": 40,
+  "ci95": [
+   1.0,
+   1.0
+  ]
+ },
+ "C5_unseen_mechanism": {
+  "accuracy": 1.0,
+  "n_pairs": 40,
+  "ci95": [
+   1.0,
+   1.0
+  ]
+ },
+ "C5_hard_both_unseen": {
+  "accuracy": 1.0,
+  "n_pairs": 40,
+  "ci95": [
+   1.0,
+   1.0
+  ]
+ },
+ "feature_separation": {
+  "baseline_only": {
+   "accuracy": 0.5,
+   "n_pairs": 80,
+   "ci95": [
+    0.5,
+    0.5
+   ]
+  },
+  "response_operator_only": {
+   "accuracy": 1.0,
+   "n_pairs": 80,
+   "ci95": [
+    1.0,
+    1.0
+   ]
+  },
+  "amplitude_only": {
+   "accuracy": 0.5,
+   "n_pairs": 80,
+   "ci95": [
+    0.4,
+    0.6125
+   ]
+  },
+  "baseline_plus_response": {
+   "accuracy": 1.0,
+   "n_pairs": 80,
+   "ci95": [
+    1.0,
+    1.0
+   ]
+  }
+ },
+ "deterministic_rerun": true,
+ "status_checks": {
+  "baseline_indistinguishable": true,
+  "primary_above_chance": true,
+  "generator_holdout_survives": true,
+  "unseen_mechanism_survives": true,
+  "equiv_impl_at_chance": true,
+  "equiv_impl_above_chance": false,
+  "permutation_at_chance": true,
+  "permutation_above_chance": false,
+  "surrogate_at_chance": true,
+  "surrogate_above_chance": false,
+  "deterministic_rerun": true,
+  "amplitude_drives_signal": false,
+  "operator_carries": true
+ },
+ "final_status": "ACTIVE_COMPUTATIONAL_SIGNATURE",
+ "never_emits": "SIMULATION_DETECTED"
+}

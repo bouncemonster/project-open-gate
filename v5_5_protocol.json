@@ -1,0 +1,12 @@
+{
+ "protocol": "V5.5_BRANCH_C_CONTROL_ARTIFACT_AUDIT",
+ "version": "5.5.0",
+ "created": "2026-09-20T11:17:17.476173",
+ "protocol_hash": "eeb3abea8d2fa374",
+ "base_seed": 20260919,
+ "branch": "C",
+ "hypothesis_tested": "V5.3 surviving matched-control signal (T05/T06/S12) is a transformation artifact, not a computational-substrate fingerprint",
+ "decisive_control": "substrate-free (S64-only) pairs differing solely by the phase-scramble transform, classified by the V5.3 \u00a712 detector",
+ "reuse": "cached V5.3 recurrence + feature store + V5Detector; no new world set",
+ "final_status": "BRANCH_CLOSED"
+}

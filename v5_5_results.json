@@ -1,0 +1,76 @@
+{
+ "branch": "C_detector_artifact_audit",
+ "protocol_hash": "eeb3abea8d2fa374",
+ "base_seed": 20260919,
+ "grid": [
+  60,
+  30
+ ],
+ "n_steps": 64,
+ "frame_every": 4,
+ "positive_substrates": [
+  "S32",
+  "S16",
+  "S_Q15",
+  "S_HASH_NATIVE"
+ ],
+ "positive_replication": {
+  "accuracy": 1.0,
+  "n_pairs": 160,
+  "ci95": [
+   1.0,
+   1.0
+  ],
+  "null": 0.5,
+  "meaning": "V5.3 \u00a712 native-vs-surrogate on unseen generators"
+ },
+ "artifact_null": {
+  "accuracy": 1.0,
+  "n_pairs": 40,
+  "ci95": [
+   1.0,
+   1.0
+  ],
+  "null": 0.5,
+  "substrate_present": false,
+  "meaning": "both members S64; only phase-scramble transform differs"
+ },
+ "classfree_identical_null": {
+  "accuracy": 0.5,
+  "n_pairs": 40,
+  "ci95": [
+   0.35,
+   0.65
+  ],
+  "expected": 0.5,
+  "meaning": "two independent scrambles of S64; same process, only seed noise"
+ },
+ "permutation_null": {
+  "mean": 0.46624999999999994,
+  "min": 0.0,
+  "max": 1.0,
+  "n_perms": 20
+ },
+ "deterministic_rerun": true,
+ "leakage_controls": {
+  "train_gen": [
+   "G01_smooth_nonlinear",
+   "G02_chaotic",
+   "G03_coupled_osc",
+   "G04_reaction_diff"
+  ],
+  "test_gen": "unseen holdout",
+  "generator_disjoint": true,
+  "note": "MI leakage already measured GENERATOR_DOMINANT in V5.3 T09"
+ },
+ "status_checks": {
+  "signal_present_on_real_pairs": true,
+  "signal_present_without_substrate(artifact)": true,
+  "classfree_null_at_chance": true,
+  "permutation_collapses": true,
+  "deterministic_rerun": true,
+  "controls_invariant_valid": true
+ },
+ "final_status": "BRANCH_CLOSED",
+ "never_emits": "SIMULATION_DETECTED"
+}

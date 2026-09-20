@@ -1,0 +1,264 @@
+{
+  "version": "V5",
+  "name": "PROOF_OF_SIMULATION_V5_BLIND_DETECTOR",
+  "description": "Blind detector of computational reality signatures",
+  "created": "2026-09-19T13:00:00Z",
+  
+  "world_types": {
+    "W01_CONTINUOUS_ANALYTIC": {
+      "id": 1,
+      "category": "continuous",
+      "description": "Smooth analytic functions (sin, cos, exp, polynomials)",
+      "split": "train"
+    },
+    "W02_GAUSSIAN_FIELD": {
+      "id": 2,
+      "category": "continuous",
+      "description": "Correlated Gaussian random fields with spectral control",
+      "split": "train"
+    },
+    "W03_FRACTAL_ANALYTIC": {
+      "id": 3,
+      "category": "continuous",
+      "description": "Analytic fractals (Mandelbrot boundary, Julia sets, IFS)",
+      "split": "train"
+    },
+    "W04_FLOAT32": {
+      "id": 4,
+      "category": "precision",
+      "description": "Double precision reduced to float32",
+      "split": "train",
+      "paired_with": "W01_CONTINUOUS_ANALYTIC"
+    },
+    "W05_FLOAT16": {
+      "id": 5,
+      "category": "precision",
+      "description": "Double precision reduced to float16",
+      "split": "train",
+      "paired_with": "W01_CONTINUOUS_ANALYTIC"
+    },
+    "W06_QUANTIZED_8BIT": {
+      "id": 6,
+      "category": "quantization",
+      "description": "Continuous field quantized to 8-bit integers",
+      "split": "train",
+      "paired_with": "W01_CONTINUOUS_ANALYTIC"
+    },
+    "W07_QUANTIZED_4BIT": {
+      "id": 7,
+      "category": "quantization",
+      "description": "Continuous field quantized to 4-bit integers",
+      "split": "train",
+      "paired_with": "W01_CONTINUOUS_ANALYTIC"
+    },
+    "W08_FIXED_GRID": {
+      "id": 8,
+      "category": "discrete",
+      "description": "Values computed on fixed regular grid",
+      "split": "train"
+    },
+    "W09_CELLULAR_AUTOMATON": {
+      "id": 9,
+      "category": "computational",
+      "description": "Cellular automaton evolution (Rule 30, 110, etc.)",
+      "split": "train"
+    },
+    "W10_PRNG": {
+      "id": 10,
+      "category": "computational",
+      "description": "Pseudorandom number generator field (SplitMix64, LCG)",
+      "split": "train"
+    },
+    "W11_HASH": {
+      "id": 11,
+      "category": "computational",
+      "description": "Hash-based procedural generation (SHA-256 derived)",
+      "split": "validation"
+    },
+    "W12_COMPRESSED_PROCEDURAL": {
+      "id": 12,
+      "category": "computational",
+      "description": "Compressed representation with decompression artifacts",
+      "split": "validation"
+    },
+    "W13_FINITE_STATE": {
+      "id": 13,
+      "category": "computational",
+      "description": "Finite state machine with limited state space",
+      "split": "validation"
+    },
+    "W14_LOOKUP_TABLE": {
+      "id": 14,
+      "category": "computational",
+      "description": "Precomputed lookup table with interpolation",
+      "split": "holdout"
+    },
+    "W15_PRIME_DRIVEN": {
+      "id": 15,
+      "category": "computational",
+      "description": "Prime-driven generation (from V4)",
+      "split": "holdout"
+    },
+    "W16_HYBRID_COMPUTATIONAL": {
+      "id": 16,
+      "category": "computational",
+      "description": "Hybrid of multiple computational mechanisms",
+      "split": "holdout"
+    },
+    "W17_UNKNOWN_COMPUTATIONAL": {
+      "id": 17,
+      "category": "computational",
+      "description": "Unknown computational mechanism (runtime generated)",
+      "split": "holdout"
+    }
+  },
+  
+  "observation_conditions": {
+    "O1_FULL_PRECISION": {
+      "id": 1,
+      "description": "Full float64 precision",
+      "precision": "float64",
+      "noise_sigma": 0.0
+    },
+    "O2_8BIT_OBSERVATION": {
+      "id": 2,
+      "description": "8-bit quantized observation",
+      "precision": "uint8",
+      "noise_sigma": 0.0
+    },
+    "O3_4BIT_OBSERVATION": {
+      "id": 3,
+      "description": "4-bit quantized observation",
+      "precision": "uint4",
+      "noise_sigma": 0.0
+    },
+    "O4_DOWNSAMPLED": {
+      "id": 4,
+      "description": "Spatially downsampled",
+      "precision": "float64",
+      "downsample_factor": 2,
+      "noise_sigma": 0.0
+    },
+    "O5_NOISY_OBSERVATION": {
+      "id": 5,
+      "description": "Noisy observation (Gaussian noise)",
+      "precision": "float64",
+      "noise_sigma": 0.05
+    },
+    "O6_FINITE_RESOLUTION": {
+      "id": 6,
+      "description": "Finite spatial resolution",
+      "precision": "float64",
+      "grid_resolution": "60x30",
+      "noise_sigma": 0.0
+    },
+    "O7_TEMPORAL_SUBSAMPLE": {
+      "id": 7,
+      "description": "Temporal subsampling",
+      "precision": "float64",
+      "temporal_stride": 2,
+      "noise_sigma": 0.0
+    }
+  },
+  
+  "fingerprint_features": {
+    "spatial": [
+      "entropy",
+      "histogram_moments",
+      "autocorrelation_2d",
+      "anisotropy",
+      "gradient_mean",
+      "gradient_std",
+      "laplacian_mean",
+      "laplacian_std",
+      "local_variance",
+      "edge_density",
+      "connected_component_stats"
+    ],
+    "spectral": [
+      "dct_energy_low",
+      "dct_energy_mid",
+      "dct_energy_high",
+      "spectral_sparsity",
+      "spectral_slope",
+      "spectral_peak_count",
+      "radial_spectrum_slope",
+      "directional_anisotropy",
+      "high_low_freq_ratio"
+    ],
+    "computational": [
+      "quantization_level",
+      "repeated_value_fraction",
+      "recurrence_rate_exact",
+      "recurrence_rate_near",
+      "recurrence_entropy",
+      "compression_ratio",
+      "run_length_mean",
+      "run_length_std",
+      "aliasing_score",
+      "sampling_artifact_score"
+    ],
+    "precision": [
+      "float64_float32_diff",
+      "float64_float16_diff",
+      "precision_sensitivity"
+    ],
+    "temporal": [
+      "temporal_autocorrelation",
+      "temporal_power_spectrum",
+      "temporal_recurrence",
+      "temporal_periodicity",
+      "transition_entropy",
+      "state_repetition_rate",
+      "lag_structure"
+    ]
+  },
+  
+  "detector_config": {
+    "type": "nearest_centroid_plus_lda",
+    "normalization": "zscore_per_feature",
+    "nearest_centroid_k": 5,
+    "lda_components": 10,
+    "threshold_calibration": "validation_set"
+  },
+  
+  "split_strategy": {
+    "train": ["W01", "W02", "W03", "W04", "W05", "W06", "W07", "W08", "W09", "W10"],
+    "validation": ["W11", "W12", "W13"],
+    "holdout": ["W14", "W15", "W16", "W17"],
+    "seeds_per_world": 20,
+    "seed_split": {
+      "train": 10,
+      "validation": 5,
+      "holdout": 5
+    }
+  },
+  
+  "benchmark_config": {
+    "metrics": ["accuracy", "precision", "recall", "specificity", "f1", "balanced_accuracy"],
+    "bootstrap_samples": 1000,
+    "confidence_level": 0.95
+  },
+  
+  "computational_budget": {
+    "total_seconds": 14400,
+    "priority": [
+      "correctness",
+      "paired_worlds",
+      "blind_benchmark",
+      "adversarial_controls",
+      "precision_resolution_tests",
+      "cross_generator_generalization",
+      "unknown_computational_holdout"
+    ]
+  },
+  
+  "reproducibility": {
+    "protocol_hash": null,
+    "source_hash": null,
+    "binary_hash": null,
+    "feature_schema_hash": null,
+    "detector_hash": null,
+    "base_seed": 133742
+  }
+}

@@ -1,0 +1,13 @@
+feature,value
+entropy,0.000000
+anisotropy,0.033303
+compression_ratio,0.001111
+escaped_fraction,1.000000
+quantization_index,0.461111
+score,0.830429
+pearson01,0.891802
+spearman01,0.890916
+mae01,0.602684
+gradient01,0.644090
+spectral01,0.912882
+autocorrelation01,0.999284

@@ -1,0 +1,181 @@
+{
+  "identity": "V1_BASELINE",
+  "created_at": "2026-09-18T23:55:51.088570+00:00",
+  "source_directory": "J:\\project\\project_open_gate\\proof_of_simulation",
+  "preservation": "byte-exact; original data untouched",
+  "files": [
+    {
+      "path": "Makefile",
+      "bytes": 813,
+      "sha256": "ba5c5648f1970f5e9ae5f41578f28d046c271e942f3a831fd87b23a94652cdaf"
+    },
+    {
+      "path": "README.md",
+      "bytes": 6651,
+      "sha256": "1eaf98c0d21999571e857dfed2dea976bfe99d96f445d4f6b075b404a25d546f"
+    },
+    {
+      "path": "agent_context.json",
+      "bytes": 381,
+      "sha256": "b404836d5c9c15ffb80c8e917f398a404efc194283028ba5cb1b7acf8ae0d5ca"
+    },
+    {
+      "path": "agent_loop.py",
+      "bytes": 31949,
+      "sha256": "f52321ddca097cbd0e1bb415649eb8bf200830af9076657bdbda3649545f651b"
+    },
+    {
+      "path": "analysis.py",
+      "bytes": 7269,
+      "sha256": "0f06737362debfc58d1986d7106397886503de4959cc26470b5056dc0de6da5e"
+    },
+    {
+      "path": "context.md",
+      "bytes": 355,
+      "sha256": "899605f2a0cd7d59aaa70e806b3fdaa7cec1356e635058945a04c43325dc9f0c"
+    },
+    {
+      "path": "control_summary.csv",
+      "bytes": 755466,
+      "sha256": "303193b9664dcd09c8dcd291754b92056c1fdfdb9dd5a74bf14b30c7d9c0ef41"
+    },
+    {
+      "path": "controller.py",
+      "bytes": 26694,
+      "sha256": "80631f4c79288afdff7dea6ca6063a8e5f4ce508f4a182c48ce120d0823d623e"
+    },
+    {
+      "path": "db.py",
+      "bytes": 13000,
+      "sha256": "5b91bd1e675e9a62e58d33a1ed3139f032cf8afd3e0a6aa620aa734f37381cce"
+    },
+    {
+      "path": "depth_summary.csv",
+      "bytes": 11083,
+      "sha256": "8821f4c64fb8078984f834517672279857931a4a1eb3d7127970da7a3a88c8f8"
+    },
+    {
+      "path": "fingerprint_summary.csv",
+      "bytes": 281,
+      "sha256": "64396f6582b9dc997dc1835948b9217d71f916e031b2c648019577d83d6551bf"
+    },
+    {
+      "path": "history.json",
+      "bytes": 1037376,
+      "sha256": "65914f2598a407e2e301d7ba8bf29d8c9ba5cebfd5ea4d0463e6bcca72020eb7"
+    },
+    {
+      "path": "history.sqlite3",
+      "bytes": 1052672,
+      "sha256": "f4325e65f60c7bc08272dc244990f2e1a13d197eeb05f09e77a6741fa0e1e2b2"
+    },
+    {
+      "path": "kernel.c",
+      "bytes": 44752,
+      "sha256": "c6a25d31cb049790cd39efb003e55c5f356745158a2d239cf726fef445e33dcd"
+    },
+    {
+      "path": "kernel.exe",
+      "bytes": 172890,
+      "sha256": "8139b36f53565afb9eb4838db6ccd3913276202dc9bc026484d83f4d90b05aae"
+    },
+    {
+      "path": "null_summary.csv",
+      "bytes": 1101,
+      "sha256": "21e96b0092919aee8dca342f0abfc1dbf008d3ad4295f38894ae55bf65485ac9"
+    },
+    {
+      "path": "protocol.json",
+      "bytes": 3982,
+      "sha256": "f5e47884845fc45eff8a99895e30b4732fd51c44656a8e8844f49d535b845275"
+    },
+    {
+      "path": "protocol.py",
+      "bytes": 8598,
+      "sha256": "8d754438e0a4b480a4d7b37b54db1c7ca7707c720ad02b3c414b62130c238128"
+    },
+    {
+      "path": "report.md",
+      "bytes": 6869,
+      "sha256": "e346215cedd8c3361e247b3039a2975db884c0431e652c06f83da5cccccebdcb"
+    },
+    {
+      "path": "report.py",
+      "bytes": 22498,
+      "sha256": "f39c320d6bcb08cdce4ce22768fe98d167f9b5747d6031bab27f526f718ea465"
+    },
+    {
+      "path": "reproducibility.json",
+      "bytes": 464,
+      "sha256": "18d248c7fa80642401d610d5467360e53a4102f82a93b41aa783698fa7f18b20"
+    },
+    {
+      "path": "run.log",
+      "bytes": 3095,
+      "sha256": "a1abcc1a7c8841a1ca82e1148a0a1ee273cfcf9c21a0eaef8e84f3a27b4fb2b8"
+    },
+    {
+      "path": "state.json",
+      "bytes": 1119,
+      "sha256": "85f9fd06eea4ff454750deeca365bf61304a21a0b535c9be5c1689d628af8f95"
+    },
+    {
+      "path": "ui.py",
+      "bytes": 8422,
+      "sha256": "f549e597584cafbfbb44415958f7c77fa65c20b25839e36b6a61c907ebbbf282"
+    },
+    {
+      "path": "worldforge.py",
+      "bytes": 16863,
+      "sha256": "d96a586d46dee9b3796adfc472ca25da0b4f3eb602be72f38c35eed4bbcc4c6e"
+    },
+    {
+      "path": "best/best_difference.txt",
+      "bytes": 62,
+      "sha256": "d4e985f0f568897e6c58562f8f4d8961f68f87c06a4caa9c40a6946b2c154ae5"
+    },
+    {
+      "path": "best/best_map.txt",
+      "bytes": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6"
+    },
+    {
+      "path": "best/best_metrics.json",
+      "bytes": 457,
+      "sha256": "ceea4def9c3cf68e12f12e6ef09dbdf2ed026c0762625f2f3e5213cba31c4bbe"
+    },
+    {
+      "path": "best/target_map.txt",
+      "bytes": 1860,
+      "sha256": "03fc3b521e5edde08c1609953782a3df26eb52e080d2601f0b9a820be5f02379"
+    }
+  ],
+  "database": {
+    "query_database": "history.sqlite3",
+    "integrity_check": [
+      "ok"
+    ],
+    "foreign_key_check": [],
+    "tables": [
+      "benchmark_runs",
+      "best_snapshots",
+      "evaluations",
+      "events",
+      "models",
+      "null_runs",
+      "runs",
+      "sqlite_sequence",
+      "validations"
+    ]
+  },
+  "git_status": {
+    "returncode": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git\n"
+  },
+  "git_head": {
+    "returncode": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git\n"
+  }
+}

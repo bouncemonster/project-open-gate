@@ -1,0 +1,66 @@
+{
+ "protocol": "V5.3_NATIVE_COMPUTATIONAL_FINGERPRINT",
+ "version": "5.3.0",
+ "created": "2026-09-20T00:01:55.962980",
+ "protocol_hash": "61194be46d415f0f",
+ "base_seed": 20260919,
+ "grid": [
+  60,
+  30
+ ],
+ "n_steps": 64,
+ "seeds_per_generator": 20,
+ "generators": {
+  "train": [
+   "G01_smooth_nonlinear",
+   "G02_chaotic",
+   "G03_coupled_osc",
+   "G04_reaction_diff"
+  ],
+  "holdout": [
+   "G05_wave",
+   "G06_procedural_dyn"
+  ],
+  "loo": [
+   "G07_logistic_field",
+   "G08_diffusion_mix"
+  ]
+ },
+ "substrates": {
+  "reference": [
+   "S64"
+  ],
+  "train": [
+   "S32",
+   "S16",
+   "S_Q15",
+   "S_HASH_NATIVE"
+  ],
+  "holdout": [
+   "S_FSM",
+   "S_MOD",
+   "S_UNKNOWN"
+  ],
+  "all": [
+   "S64",
+   "S32",
+   "S16",
+   "S_Q15",
+   "S_FSM",
+   "S_MOD",
+   "S_HASH_NATIVE",
+   "S_UNKNOWN"
+  ]
+ },
+ "substrate_implementations": {
+  "S64": "float64 reference",
+  "S32": "IEEE754 single rounding of every stored state each step",
+  "S16": "IEEE754 half rounding of every stored state each step",
+  "S_Q15": "16-bit signed fixed point; add/mul in Q15 each step; transcendentals via documented float fallback",
+  "S_FSM": "13-state lattice snap every step (state count hidden from detector)",
+  "S_MOD": "Z_100003 residue-ring recurrence with x1000 integer coefficients (constants versioned in source)",
+  "S_HASH_NATIVE": "SplitMix64 chain term added INSIDE each recurrence step (0.05*u_hash)",
+  "S_UNKNOWN": "top-2-mantissa-bit truncation of every state (novel; never trained on)"
+ },
+ "final_status": "STATISTICAL_ARTIFACT"
+}

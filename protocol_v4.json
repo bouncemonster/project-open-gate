@@ -1,0 +1,441 @@
+{
+  "admissibility": {
+    "escaped_fraction_max": 0.95,
+    "escaped_fraction_min": 0.05,
+    "normalized_entropy_min": 0.2,
+    "smooth_std_min": 0.05
+  },
+  "boundary_suspect_threshold": 0.05,
+  "contrasts": {
+    "TRACK_A": "C_full = score(V1) - max(score(V0), score(S1), score(S2))",
+    "TRACK_B": "C_event = score(V9) - mean(V11_MATCHED_EVENT)",
+    "TRACK_C": "C_residual = score(V10) - max(score(S1), score(S2))"
+  },
+  "database": "history_v4.sqlite3",
+  "domain": [
+    -1.5,
+    1.5,
+    -1.5,
+    1.5
+  ],
+  "generic_controls": [
+    "constant",
+    "x_ramp",
+    "y_ramp",
+    "bilinear",
+    "radial",
+    "low_frequency_analytic"
+  ],
+  "holdout_control_seeds": [
+    404,
+    505,
+    606,
+    707,
+    809
+  ],
+  "holdout_eigenmodes": [
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      1,
+      3
+    ],
+    [
+      1,
+      4
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      3,
+      2
+    ],
+    [
+      3,
+      3
+    ],
+    [
+      3,
+      4
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      4,
+      2
+    ],
+    [
+      4,
+      3
+    ],
+    [
+      4,
+      4
+    ]
+  ],
+  "holdout_targets": [
+    "TARGET_B",
+    "TARGET_PHASE"
+  ],
+  "kernel": {
+    "alpha": 1.0,
+    "channel": 0,
+    "degree": 2,
+    "height": 30,
+    "max_iter": 200,
+    "seed": 7331,
+    "target": "TARGET_A",
+    "width": 60
+  },
+  "matched_event_seeds_search": [
+    101,
+    202,
+    303
+  ],
+  "name": "INTERIOR_DYNAMICS_PRIME_CONTRAST",
+  "null": {
+    "exceedance_formula": "(1 + count(null_best >= observed_best)) / (1 + N_null)",
+    "preferred_runs": 48,
+    "random_param_runs": 32,
+    "search_seeds": [
+      133742,
+      233742,
+      333742,
+      433742,
+      533742,
+      633742,
+      733742,
+      833742
+    ],
+    "standard_runs": 32
+  },
+  "priority_order": [
+    "driver correctness",
+    "interior scout",
+    "track-local contrasts",
+    "matched-event controls",
+    "boundary audit",
+    "temporal field response",
+    "32-48 null runs",
+    "100 spectral surrogates",
+    "depth/resolution",
+    "WORLD_PRIME diagnostics"
+  ],
+  "report_sections": [
+    "Executive Summary",
+    "V3 Audit",
+    "Interior Regime Definition",
+    "Search Domain",
+    "Prime Drivers",
+    "Matched Event Controls",
+    "Track-Local Results",
+    "Boundary Diagnostics",
+    "Prime-Specific Contrasts",
+    "Difference-Field Analysis",
+    "High-Pass Analysis",
+    "Temporal Prime Response",
+    "Search-Aware Null",
+    "Spectral Target Null",
+    "Holdout Targets",
+    "Reproducibility",
+    "WORLD_PRIME Detector",
+    "V1/V2/V3/V4 Comparison",
+    "Limitations",
+    "Final Scientific Conclusion"
+  ],
+  "reproducibility_runs": 3,
+  "s2_windows": [
+    3,
+    5,
+    7
+  ],
+  "scout_domain": [
+    -1.5,
+    1.5,
+    -1.5,
+    1.5
+  ],
+  "scout_grid": 17,
+  "search": {
+    "algorithm": "8-direction hill climbing + deterministic mutation + multi-start",
+    "logical_steps": 100,
+    "multi_start_count": 8,
+    "scout_grid": 17
+  },
+  "search_control_seeds": [
+    101,
+    202,
+    303
+  ],
+  "search_seeds": [
+    133742,
+    233742,
+    333742,
+    433742,
+    533742
+  ],
+  "sections": 80,
+  "shifted_event_shifts_holdout": [
+    2,
+    3,
+    7,
+    13,
+    17,
+    19,
+    23
+  ],
+  "shifted_event_shifts_search": [
+    1,
+    5,
+    11
+  ],
+  "spectral_surrogate_seeds": [
+    1000,
+    1001,
+    1002,
+    1003,
+    1004,
+    1005,
+    1006,
+    1007,
+    1008,
+    1009,
+    1010,
+    1011,
+    1012,
+    1013,
+    1014,
+    1015,
+    1016,
+    1017,
+    1018,
+    1019,
+    1020,
+    1021,
+    1022,
+    1023,
+    1024,
+    1025,
+    1026,
+    1027,
+    1028,
+    1029,
+    1030,
+    1031,
+    1032,
+    1033,
+    1034,
+    1035,
+    1036,
+    1037,
+    1038,
+    1039,
+    1040,
+    1041,
+    1042,
+    1043,
+    1044,
+    1045,
+    1046,
+    1047,
+    1048,
+    1049,
+    1050,
+    1051,
+    1052,
+    1053,
+    1054,
+    1055,
+    1056,
+    1057,
+    1058,
+    1059,
+    1060,
+    1061,
+    1062,
+    1063,
+    1064,
+    1065,
+    1066,
+    1067,
+    1068,
+    1069,
+    1070,
+    1071,
+    1072,
+    1073,
+    1074,
+    1075,
+    1076,
+    1077,
+    1078,
+    1079,
+    1080,
+    1081,
+    1082,
+    1083,
+    1084,
+    1085,
+    1086,
+    1087,
+    1088,
+    1089,
+    1090,
+    1091,
+    1092,
+    1093,
+    1094,
+    1095,
+    1096,
+    1097,
+    1098,
+    1099
+  ],
+  "spectral_surrogates": 100,
+  "statuses": [
+    "NO_PRIME_SPECIFIC_SIGNAL",
+    "GENERIC_RESONANCE",
+    "BOUNDARY_ARTIFACT",
+    "DYNAMICAL_REGIME_ARTIFACT",
+    "PRIME_CANDIDATE_SIGNAL",
+    "ROBUST_PRIME_SPECIFIC_SIGNAL",
+    "METHODOLOGICAL_ARTIFACT",
+    "IMPLEMENTATION_ERROR",
+    "UNRESOLVED"
+  ],
+  "temporal": {
+    "Z_CAP": 1000000.0,
+    "block_bootstrap_block": 5,
+    "bootstrap_resamples": 2000,
+    "bootstrap_seed": 42,
+    "circular_shifts": [
+      1,
+      2,
+      3,
+      5,
+      7,
+      11,
+      13,
+      17,
+      19,
+      23,
+      29,
+      31,
+      37,
+      41,
+      43,
+      47
+    ],
+    "detrend_window": 10,
+    "max_iter_values": [
+      200,
+      1000,
+      5000
+    ],
+    "minimum_pairs": 5
+  },
+  "time_budget": 14400,
+  "tracks": {
+    "TRACK_A": "V1_FULL",
+    "TRACK_B": "V9_EVENT",
+    "TRACK_C": "V10_RESIDUAL"
+  },
+  "v9_audit_depths": [
+    200,
+    1000,
+    5000
+  ],
+  "validation": {
+    "alpha_values": [
+      0.5,
+      1.0,
+      2.0
+    ],
+    "depths": [
+      100,
+      200,
+      500,
+      1000
+    ],
+    "local_offsets": [
+      [
+        -0.01,
+        0
+      ],
+      [
+        0.01,
+        0
+      ],
+      [
+        0,
+        -0.01
+      ],
+      [
+        0,
+        0.01
+      ],
+      [
+        -0.01,
+        -0.01
+      ],
+      [
+        0.01,
+        0.01
+      ],
+      [
+        -0.01,
+        0.01
+      ],
+      [
+        0.01,
+        -0.01
+      ]
+    ],
+    "repeat_seeds": [
+      7331,
+      8331,
+      9331
+    ],
+    "resolutions": [
+      [
+        30,
+        15
+      ],
+      [
+        60,
+        30
+      ],
+      [
+        120,
+        60
+      ]
+    ]
+  },
+  "version": "V4"
+}

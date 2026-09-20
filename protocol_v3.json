@@ -1,0 +1,377 @@
+{
+  "benchmark": {
+    "feature_audit_cohorts": [
+      "WORLD_PRIME",
+      "WORLD_LATTICE",
+      "WORLD_PRNG",
+      "WORLD_HASH",
+      "WORLD_ANALYTIC"
+    ],
+    "policy": "WORLD_PRIME is holdout only; detector frozen as DETECTOR_V1",
+    "prime_seeds": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ]
+  },
+  "boundary": {
+    "ci_offsets": [
+      -0.05,
+      -0.01,
+      0.0,
+      0.01,
+      0.05
+    ],
+    "cr_values": [
+      1.0,
+      1.25,
+      1.5,
+      1.75,
+      2.0,
+      2.25,
+      2.5,
+      2.75,
+      3.0
+    ],
+    "gradient_step": 0.001
+  },
+  "domains": {
+    "expanded": [
+      -3.0,
+      3.0,
+      -3.0,
+      3.0
+    ],
+    "main": [
+      -2.0,
+      2.0,
+      -2.0,
+      2.0
+    ],
+    "note": "expanded is a diagnostic comparison; it never replaces main"
+  },
+  "drivers": {
+    "S1_ANALYTIC": "D(k)=1/max(R(k),1), Riemann R, k<=2 protected",
+    "S2_DATA_SMOOTHED": "D(k)=moving average of P, window fixed in advance",
+    "V0_NONE": "D(k)=0",
+    "V10_MATCHED": "V10 scaled so reference RMS equals RMS(P-centered)",
+    "V10_RESIDUAL": "D(k)=standardize(P-S1_riemann) over first 200",
+    "V11_MATCHED_EVENT": "real event amplitudes/count, permuted positions",
+    "V12_SHIFTED_EVENT": "exact E circularly shifted",
+    "V13_GAP_MATCHED_EVENT": "event count/amplitudes, permuted circular gaps",
+    "V14_CONSTANT_FIELD": "field control F=0.5 (not a temporal driver)",
+    "V15_X_RAMP": "field control F=u",
+    "V16_Y_RAMP": "field control F=v",
+    "V17_BILINEAR_RAMP": "field control F=u*v",
+    "V18_RADIAL_GRADIENT": "field control F=hypot(u-0.5,v-0.5)",
+    "V1_FULL": "D(k)=P(k)=1/max(pi(k),1), P(0)=1",
+    "V5_SHUFFLED": "P shuffled with SplitMix64(7331)",
+    "V9_ENERGY_MATCHED": "E scaled so reference RMS equals RMS(P-centered)",
+    "V9_EVENT": "D(k)=E(k)=P(k)-P(k-1)",
+    "V9_MATCHED": "E centered, rescaled to reference RMS(E)"
+  },
+  "dynamics": {
+    "alpha_primary": 1.0,
+    "channel_primary": 0,
+    "degree_primary": 2,
+    "equation": "z(k)=z(k-1)^2+c+alpha*D(k)",
+    "escape_radius_sq": 4.0,
+    "k_start": 1,
+    "selectable_drivers": [
+      "EXTERNAL_DRIVER_FILE"
+    ],
+    "z0_grid": [
+      [
+        -1.8,
+        1.8
+      ],
+      [
+        -1.0,
+        1.0
+      ]
+    ]
+  },
+  "experiment": "V3_DEEP_ARITHMETIC_ISOLATION",
+  "forbidden_claims": [
+    "The universe is a simulation.",
+    "This proves simulation.",
+    "Prime numbers are the code of reality.",
+    "This is quantum evidence."
+  ],
+  "grid": {
+    "height": 30,
+    "max_iter_primary": 200,
+    "width": 60
+  },
+  "kernel_binary": "kernel_v3",
+  "matched_event": {
+    "seeds": [
+      101,
+      202,
+      303,
+      404,
+      505
+    ]
+  },
+  "model_id": "V3_ARITHMETIC_ISOLATION",
+  "null": {
+    "exceedance_formula": "(1+count(null_best>=observed_best))/(1+N_null)",
+    "preferred_runs": 48,
+    "same_budget_as_primary": true,
+    "search_seeds": [
+      5001,
+      5002,
+      5003,
+      5004,
+      5005,
+      5006,
+      5007,
+      5008,
+      5009,
+      5010,
+      5011,
+      5012,
+      5013,
+      5014,
+      5015,
+      5016,
+      5017,
+      5018,
+      5019,
+      5020,
+      5021,
+      5022,
+      5023,
+      5024,
+      5025,
+      5026,
+      5027,
+      5028,
+      5029,
+      5030,
+      5031,
+      5032,
+      5033,
+      5034,
+      5035,
+      5036,
+      5037,
+      5038,
+      5039,
+      5040,
+      5041,
+      5042,
+      5043,
+      5044,
+      5045,
+      5046,
+      5047,
+      5048
+    ],
+    "standard_runs": 32,
+    "type": "random_search_null"
+  },
+  "s2_windows": [
+    3,
+    5,
+    9
+  ],
+  "score": {
+    "frozen": true,
+    "weights": {
+      "autocorrelation01": 0.15,
+      "gradient01": 0.15,
+      "mae01": 0.15,
+      "pearson01": 0.25,
+      "spearman01": 0.15,
+      "spectral01": 0.15
+    }
+  },
+  "search": {
+    "algorithm": "hill_climbing",
+    "candidates_per_step": 9,
+    "expected_per_run": 1189,
+    "logical_steps": 100,
+    "multi_start_points": [
+      [
+        -0.7,
+        0.27015
+      ],
+      [
+        0.285,
+        0.01
+      ],
+      [
+        -0.8,
+        0.156
+      ],
+      [
+        0.285,
+        0.0
+      ],
+      [
+        -1.0,
+        0.0
+      ]
+    ],
+    "scout_grid": 17,
+    "seeds": [
+      133742,
+      233742,
+      333742
+    ]
+  },
+  "shifted_event": {
+    "shifts": [
+      1,
+      2,
+      3,
+      5,
+      7,
+      11,
+      13,
+      17,
+      19,
+      23
+    ]
+  },
+  "status_values": [
+    "GENERIC_RESONANCE",
+    "NO_PRIME_SPECIFIC_SIGNAL",
+    "PRIME_CANDIDATE_SIGNAL",
+    "ROBUST_PRIME_SPECIFIC_SIGNAL",
+    "BOUNDARY_ARTIFACT",
+    "CONTROL_IMPLEMENTATION_ERROR",
+    "METHODOLOGICAL_ARTIFACT",
+    "IMPLEMENTATION_ERROR"
+  ],
+  "targets": {
+    "highpass_keep_modes": 3,
+    "holdout_fields": [
+      "TARGET_B",
+      "TARGET_PHASE"
+    ],
+    "low_frequency_controls": [
+      "L1_u",
+      "L2_v",
+      "L3_uv",
+      "L4_abs_sin_pi_u",
+      "L5_abs_cos_pi_v",
+      "L6_sin_sin"
+    ],
+    "primary": "TARGET_A",
+    "spectral_surrogate_seeds": [
+      9001,
+      9002,
+      9003,
+      9004,
+      9005,
+      9006,
+      9007,
+      9008,
+      9009,
+      9010
+    ],
+    "spectral_surrogates": 10
+  },
+  "temporal": {
+    "block_bootstrap_block": 21,
+    "bootstrap_resamples": 1000,
+    "bootstrap_seed": 424242,
+    "circular_shifts": [
+      1,
+      2,
+      3,
+      5,
+      7,
+      11,
+      13,
+      17,
+      19,
+      23,
+      29,
+      31
+    ],
+    "depths_full": 5000,
+    "depths_light": 1000,
+    "detrend_window": 21,
+    "drivers": [
+      "V0_NONE",
+      "V1_FULL",
+      "V9_EVENT",
+      "V10_RESIDUAL"
+    ],
+    "matching_radius": 10,
+    "minimum_pairs": 20
+  },
+  "tracks": {
+    "TRACK_A": "V1_FULL",
+    "TRACK_B": "V9_EVENT",
+    "TRACK_C": "V10_RESIDUAL"
+  },
+  "validation": {
+    "alpha_values": [
+      0.25,
+      0.5,
+      1.0,
+      2.0
+    ],
+    "depths": [
+      200,
+      500,
+      1000,
+      1500,
+      2000
+    ],
+    "local_offsets": [
+      [
+        0.001,
+        0
+      ],
+      [
+        -0.001,
+        0
+      ],
+      [
+        0,
+        0.001
+      ],
+      [
+        0,
+        -0.001
+      ]
+    ],
+    "repeat_seeds": [
+      133742,
+      233742,
+      333742
+    ],
+    "resolutions": [
+      [
+        60,
+        30
+      ],
+      [
+        120,
+        60
+      ]
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "number": 26,
+  "name": "holdout_V4_TARGET_B",
+  "argv": [
+    "J:\\project\\project_open_gate\\proof_of_simulation\\archives\\v1_baseline\\kernel.exe",
+    "--render",
+    "--cr",
+    "0.983188",
+    "--ci",
+    "-0.005867",
+    "--driver",
+    "V4",
+    "--alpha",
+    "1.0",
+    "--degree",
+    "2",
+    "--channel",
+    "0",
+    "--max-iter",
+    "200",
+    "--seed",
+    "7331",
+    "--target",
+    "TARGET_B"
+  ],
+  "cwd": "J:\\project\\project_open_gate\\proof_of_simulation\\archives\\v2_audit\\v1_commands_20260919T000837_958116Z",
+  "timeout_seconds": 5,
+  "environment_overrides": {
+    "PATH_prefix": "C:\\Users\\zelin\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "pid": 23444,
+  "timed_out": false,
+  "returncode": 0,
+  "elapsed_seconds": 0.01469580000048154,
+  "stdout_path": "J:\\project\\project_open_gate\\proof_of_simulation\\archives\\v2_audit\\v1_commands_20260919T000837_958116Z\\026_holdout_V4_TARGET_B.stdout.log",
+  "stdout_bytes": 1900,
+  "stdout_sha256": "a21471e0ef3d969f7a5ffe9f928d5ebec1b310a24739fd7e2856309be606e0ca",
+  "stderr_path": "J:\\project\\project_open_gate\\proof_of_simulation\\archives\\v2_audit\\v1_commands_20260919T000837_958116Z\\026_holdout_V4_TARGET_B.stderr.log",
+  "stderr_bytes": 0,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

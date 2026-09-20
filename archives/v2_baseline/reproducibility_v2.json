@@ -1,0 +1,23 @@
+{
+  "experiment": "V2_CORRECTED",
+  "protocol_version": "2.0.0",
+  "protocol_hash": "3dcfe1daf0c73a63a0fd6b5fa5c1aa07e543b785bfa48e3a240c103edfb84309",
+  "source_hash": "c45e316f7938d1b79d7f066cce8797abfb8a060cbbc41ee55d7909e1440a4c06",
+  "binary_hash": "fcc9372b307fb16204735571a2ecdd4ecc5cef26e60a74a33f2a53c1be7a2384",
+  "os": "Windows 10",
+  "python_version": "3.12.10",
+  "cpu": "Intel64 Family 6 Model 63 Stepping 2, GenuineIntel",
+  "best": {
+    "score": 0.8583213052764331,
+    "cr": 2.0,
+    "ci": 0.01113203125,
+    "track": "TRACK_A",
+    "driver": "V1_INV_PI"
+  },
+  "status": "GENERIC_RESONANCE",
+  "run_ids": {
+    "TRACK_A": "V2_PRIMARY_TRACK_A_s133742_1789778426",
+    "TRACK_B": "V2_PRIMARY_TRACK_B_s133742_1789778433",
+    "TRACK_C": "V2_PRIMARY_TRACK_C_s133742_1789778440"
+  }
+}
