@@ -77,7 +77,10 @@ simulated. Run via `python v6_pipeline.py`.
 - **C Compiler**: GCC (≥7) or Clang with C11 support
 - **Python**: 3.8+ (stdlib only — no NumPy, SciPy, or external packages)
 - **OS**: Windows, Linux, or macOS
-- **Disk**: ~50 MB for database and artifacts
+- **Disk**: source + reports are small; the working evidentiary databases
+  (`history*.sqlite3`, dominated by the closed-branch V2/V3/V4 stores) total
+  ~1.1 GB on disk. Heavy stores and generated artifact trees are reproducible
+  and excluded from version control — see *Repository Hygiene & Entrypoints*.
 
 ## Installation
 
@@ -133,6 +136,17 @@ python3 agent_loop.py auto
 | `validate` | Run validation suite on best found parameters |
 | `report` | Generate report.md and artifacts |
 
+### Research-pipeline entry points (standalone)
+
+V5.5 and V6 are self-contained scripts, **not** wired into the `agent_loop.py`
+`--mode` dispatcher (which covers V1/V2 plus `deep-v3`, `deep-v4`, `v5.2-deep`,
+`v5.3-deep`). Run them directly:
+
+| Pipeline | Command | Depends on |
+|----------|---------|------------|
+| V5.5 | `python v5_5_pipeline.py` | `v5_3_*`, `v5_detector.py` |
+| V6   | `python v6_pipeline.py`    | `v6_core.py`, `v6_db.py`, `v5_detector.py` |
+
 ### Options
 
 | Flag | Description | Default |
@@ -159,12 +173,13 @@ proof_of_simulation/
 ├── state.json         # Checkpoint for resume (auto-generated)
 ├── agent_context.json # Machine-readable current state
 ├── context.md         # Human-readable LLM context (≤120 lines)
-├── experiment.db      # SQLite database
+├── history.sqlite3   # V1/V2 SQLite evidence store (WAL mode)
 ├── report.md          # Generated report
+├── v6_core.py         # Active black-box response benchmark (V6)
+├── v6_pipeline.py     # V6 controls + decision gate
 ├── best/              # Best result artifacts
-├── validation/        # Validation results
-├── benchmark/         # Benchmark data
-└── archives/          # Historical snapshots
+├── archives/          # Historical snapshots + retired scratch tooling (archives/scratch)
+└── .gitignore         # Excludes heavy/regenerable evidence from version control
 ```
 
 ## Protocol
@@ -203,7 +218,8 @@ python3 agent_loop.py auto
 
 ## Data Layout
 
-- **experiment.db**: SQLite3 with WAL journaling
+- **history.sqlite3** (V1/V2) and per-version stores **history_v2 … history_v6.sqlite3**:
+  SQLite3, WAL journaling
   - `runs`: experiment metadata
   - `evaluations`: per-candidate results
   - `models`: driver/model definitions
@@ -226,6 +242,29 @@ Results are classified into levels 0–6:
 | 4 | Strong — passes stability and null tests |
 | 5 | Very strong — holds across depths, resolutions, holdouts |
 | 6 | Exceptional — all criteria met with high margins |
+
+## Repository Hygiene & Entrypoints
+
+Version control tracks the **durable source of truth**: all Python/C source,
+reports (`report*.md`, `V*_.md`), frozen protocol/result JSON, summary CSVs, and
+the `archives/` lineage. It **excludes** heavy, regenerable material so history
+stays lean while the evidence remains available locally:
+
+- `*.sqlite3` (+ `-wal`/`-shm`) — the sole on-disk evidence stores for closed
+  branches V2/V3/V4 and the active V6 store. Their decisive numbers are
+  captured by the committed reports/CSV/JSON, so they need not live in history.
+- `*.exe` / `*.o` — compiled kernels, rebuilt from `kernel.c` / `kernel_v3.c` via `make`.
+- `*.pkl` — pipeline caches, regenerated on the next run.
+- `v3_artifacts/ … v5_5_artifacts/` — large generated intermediate trees
+  (`v6_artifacts/` is small and **is** tracked as a §11 deliverable).
+
+**Entrypoints.** `agent_loop.py` orchestrates V1/V2 and dispatches the
+`--mode` deep pipelines for V3/V4/V5.2/V5.3. V5.5 and V6 are standalone
+(`python v5_5_pipeline.py`, `python v6_pipeline.py`). The `Makefile` builds the
+V1/V2 kernel and wraps `agent_loop.py` commands only.
+
+**Archived tooling.** Retired one-off diagnostic scripts and driver dumps live
+in `archives/scratch/` (kept for provenance, not part of any pipeline).
 
 ## License
 
