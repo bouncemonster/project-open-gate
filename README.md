@@ -127,6 +127,14 @@ python3 agent_loop.py benchmark
 python3 agent_loop.py auto
 ```
 
+### Repository self-check
+
+`python verify.py` (or `make verify`) runs a read-only consistency audit across
+the whole project: source compilation, local-import resolution, the full report
+lineage, V6 deliverables + frozen protocol-hash reproducibility, and SQLite
+integrity of every `history*.sqlite3`. Exit 0 = operationally ready. Flags:
+`--quick` (fast `quick_check`), `--skip-db` (source/deliverables only).
+
 ## CLI Reference
 
 | Command | Description |

@@ -12,7 +12,7 @@ ifeq ($(OS),Windows_NT)
   OUT := kernel.exe
 endif
 
-.PHONY: all clean test self-test init benchmark auto
+.PHONY: all clean test self-test init benchmark auto verify
 
 all: kernel
 
@@ -41,3 +41,7 @@ benchmark: kernel
 
 auto: kernel
 	python3 agent_loop.py auto
+
+# Consolidated repository self-check (read-only: source, deliverables, DBs)
+verify:
+	python3 verify.py
