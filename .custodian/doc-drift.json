@@ -2,7 +2,7 @@
   "version": 1,
   "entries": {
     "archives/v1_baseline/README.md": "1eaf98c0d2199957",
-    "README.md": "e597e8ea0dd107bd",
+    "README.md": "73852a406d621c5d",
     "agent_context.json": "64bba049e4e9e9f1",
     "archives/v1_baseline/agent_context.json": "b404836d5c9c15ff",
     "archives/v1_baseline/best/best_metrics.json": "ceea4def9c3cf68e",
@@ -161,6 +161,6 @@
     "v6_artifacts/v6_results.json": "5682dc74793da6b1",
     "v6_protocol.json": "1dac0d13cb0ab3e7",
     "v6_results.json": "5682dc74793da6b1",
-    "v7_artifacts/v7_controls.json": "7e4a4228b80c5648"
+    "v7_artifacts/v7_controls.json": "61ac61a1f330fc1b"
   }
 }
