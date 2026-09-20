@@ -140,6 +140,33 @@ def mech_unknown_trunc(dev):
     return out
 
 
+def mech_cont_nonlinear(dev):
+    # CONTINUOUS (uncountable-state) but NON-ADDITIVE probe. Fixes 0 (baseline stays
+    # bitwise identical) and is odd (preserves +P/-P symmetry), yet f(x+y) != f(x)+f(y).
+    # A genuine nonlinearity with no finite lattice, no exact recurrence and no
+    # collisions -> if it is classified as 'computational' the detector is measuring
+    # non-additivity, not computation.
+    return [x / (1.0 + abs(x)) for x in dev]
+
+
+def mech_finite_additive(dev):
+    # FINITE representation (bounded 40-bit mantissa lattice) whose truncation is
+    # lossless across the whole probing window, so the step map stays additive to
+    # ~1e-12: superposition/recurrence/collapse are indistinguishable from the
+    # continuous reference. Isolates 'finiteness without measurable non-additivity'.
+    import math
+    k = 40
+    out = []
+    for x in dev:
+        if x == 0.0:
+            out.append(0.0)
+            continue
+        m, e = math.frexp(x)
+        m = math.ldexp(math.floor(math.ldexp(m, k)), -k)
+        out.append(math.ldexp(m, e))
+    return out
+
+
 MECHANISMS = {
     "continuous": mech_identity,
     "continuous_alt": mech_identity,
@@ -147,7 +174,24 @@ MECHANISMS = {
     "finite_state": mech_finite_state,
     "modular": mech_modular,
     "unknown_trunc": mech_unknown_trunc,
+    "cont_nonlinear": mech_cont_nonlinear,
+    "finite_additive": mech_finite_additive,
 }
+
+# Adversarial probes (spec §9 falsifiability). These are NEVER used to train the
+# primary detector nor included in ALL_COMPUTATIONAL / CONTINUOUS_MECHS; they are
+# held-out characterisation cells that decouple the class LABEL from the measured
+# PROPERTY. Together they test whether the response operator keys on non-additivity
+# (a real dynamical property) or merely on the pre-assigned computational label.
+#
+#   cont_nonlinear : UNCOUNTABLE state (continuous) but NON-ADDITIVE -> if the
+#                    detector calls it "computational" the signature is of
+#                    non-additivity, not of computation/finiteness (false positive).
+#   finite_additive: bounded finite representation (40-bit lattice) whose truncation
+#                    is lossless within the probing window -> superposition holds to
+#                    ~1e-12; a valid detector cannot separate it from continuous
+#                    (finiteness below intervention resolution is invisible).
+ADVERSARIAL_MECHS = ["cont_nonlinear", "finite_additive"]
 
 
 def _is_alt(mech):

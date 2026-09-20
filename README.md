@@ -69,7 +69,11 @@ generator-confounded (1.000 in-sample, 0.500 out-of-sample). Hence
 `ACTIVE_COMPUTATIONAL_SIGNATURE`: on synthetic worlds, controlled interventions
 reveal a reproducible, generalisable difference between additive and
 non-additive hidden update rules that passive observation of the matched
-baseline cannot. This says **nothing** about whether any real universe is
+baseline cannot. **Falsifiability probes (V6.1, §9)** make the claim testable and
+bound its meaning: a *continuous-but-nonlinear* mechanism is misclassified as
+computational (measured false positive) while a *finite-but-additive* one is
+indistinguishable from continuous (false negative avoided) — so the detector keys
+on **non-additivity**, not on computation or finiteness per se. This says **nothing** about whether any real universe is
 simulated. Run via `python v6_pipeline.py`.
 
 ## Requirements

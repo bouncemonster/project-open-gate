@@ -29,7 +29,7 @@ from v5_detector import V5Detector
 import v6_core as C
 from v6_core import (
     ALL_GENERATORS, TRAIN_GENERATORS, HOLDOUT_GENERATORS,
-    TRAIN_MECHANISMS, UNSEEN_MECHANISMS, ALL_COMPUTATIONAL,
+    TRAIN_MECHANISMS, UNSEEN_MECHANISMS, ALL_COMPUTATIONAL, ADVERSARIAL_MECHS,
     ALGEBRA_FEATS, STRUCT_FEATS, AMPLITUDE_FEATS, OPERATOR_FEATS,
     BASELINE_FEATS, TRAJ_ROLES,
     battery_responses, features_from_responses, baseline_features, stable_seed,
@@ -94,7 +94,7 @@ class V6Benchmark:
 
     # -- build every instance once ----------------------------------------
     def build_instances(self):
-        mechs = [REF, "continuous_alt"] + ALL_COMPUTATIONAL
+        mechs = [REF, "continuous_alt"] + ALL_COMPUTATIONAL + ADVERSARIAL_MECHS
         for gen in ALL_GENERATORS:
             for seed in self.seeds(gen):
                 for mech in mechs:
@@ -278,6 +278,61 @@ class V6Benchmark:
                 battery_responses(gen, mech, seed))
         return feat2 == self.feat
 
+    # -- §9 falsifiability: adversarial probes that decouple label vs property --
+    def adversarial_probes(self):
+        """Train the canonical computational-vs-continuous detector, then ask how it
+        classifies held-out probes relative to the continuous reference. A true
+        computational mech and the equivalent implementation are included as anchors.
+        tie -> counts 0.5 (chance). Reveals whether the detector tracks non-additivity
+        (cont_nonlinear should read computational = false positive; finite_additive
+        should read continuous) or merely the pre-assigned label."""
+        ks = OPERATOR_FEATS
+        X, y = [], []
+        for gen in TRAIN_GENERATORS:
+            for seed in self.seeds(gen):
+                ref = self.feat[(gen, REF, seed)]
+                for m in TRAIN_MECHANISMS:
+                    d = _sub(self.feat[(gen, m, seed)], ref, ks)
+                    X.append(d); y.append("A")
+                    X.append(_neg(d)); y.append("B")
+        det = V5Detector()
+        det.fit(X, y)
+
+        def probe(mech):
+            score = ties = n = 0
+            sup = rec = col = 0.0
+            for gen in ALL_GENERATORS:
+                for seed in self.seeds(gen):
+                    f = self.feat[(gen, mech, seed)]
+                    d = _sub(f, self.feat[(gen, REF, seed)], ks)
+                    n += 1
+                    sup += f["superposition_err"]
+                    rec += f["recurrence"]
+                    col += f["collision"]
+                    if _is_tie(d):
+                        ties += 1
+                        score += 0.5
+                    elif det.predict(d) == "A":
+                        score += 1
+            return {"n": n, "classified_computational_rate": score / n,
+                    "tie_rate": ties / n, "mean_superposition_err": sup / n,
+                    "mean_recurrence": rec / n, "mean_collision": col / n}
+        order = ["fixed_point", "modular", "cont_nonlinear",
+                 "finite_additive", "continuous_alt"]
+        probes = {m: probe(m) for m in order}
+        # honest interpretation bound: the signal is non-additivity iff a
+        # continuous-but-nonlinear probe is misread as computational while a
+        # finite-but-additive probe is NOT.
+        reads_comp = probes["cont_nonlinear"]["classified_computational_rate"]
+        finite_add = probes["finite_additive"]["classified_computational_rate"]
+        interp = {
+            "signal_is_nonadditivity_not_computation": (
+                reads_comp > ABOVE and finite_add <= ABOVE),
+            "cont_nonlinear_false_positive": reads_comp,
+            "finite_additive_read_computational": finite_add,
+        }
+        return probes, interp
+
     # -- §8 decision gate --------------------------------------------------
     def _decide(self, checks):
         if not checks["baseline_indistinguishable"]:
@@ -335,6 +390,7 @@ class V6Benchmark:
         c3 = self.c3_surrogate()
         sep = self.feature_separation()
         det = self.determinism_check()
+        probes, interp = self.adversarial_probes()
 
         prim_hits_ci = pci
         checks = {
@@ -365,6 +421,13 @@ class V6Benchmark:
                   f"amplitude={sep['amplitude_only']['accuracy']:.3f} "
                   f"both={sep['baseline_plus_response']['accuracy']:.3f}")
         self._log(f"deterministic rerun identical: {det}")
+        self._log("§9 falsifiability probes (rate classified 'computational'):")
+        for _m, _p in probes.items():
+            self._log(f"    {_m:16s} comp={_p['classified_computational_rate']:.3f} "
+                      f"tie={_p['tie_rate']:.3f} sup={_p['mean_superposition_err']:.2e} "
+                      f"rec={_p['mean_recurrence']:.3f} coll={_p['mean_collision']:.3f}")
+        self._log(f"    -> signal is non-additivity (not computation): "
+                  f"{interp['signal_is_nonadditivity_not_computation']}")
 
         status = self._decide(checks)
         self._log(f"FINAL STATUS: {status}")
@@ -400,6 +463,8 @@ class V6Benchmark:
             "C5_hard_both_unseen": {"accuracy": self._acc(hard), "n_pairs": len(hard),
                                     "ci95": list(bootstrap_ci(hard))},
             "feature_separation": sep,
+            "falsifiability_probes": probes,
+            "interpretation": interp,
             "deterministic_rerun": det,
             "status_checks": checks,
             "final_status": status,

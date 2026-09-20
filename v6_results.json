@@ -1,6 +1,6 @@
 {
  "branch": "active_response_operator",
- "protocol_hash": "09f32e0dc373fe96",
+ "protocol_hash": "91133c9a8ad1f7b4",
  "base_seed": 20260920,
  "grid": [
   16,
@@ -54,14 +54,14 @@
   "bitwise_identical_response": true
  },
  "C2_intervention_permutation": {
-  "mean": 0.501875,
-  "max": 0.60625,
+  "mean": 0.5153125000000001,
+  "max": 0.65625,
   "n_perms": 20,
   "expected": 0.5
  },
  "C3_response_surrogate": {
-  "mean": 0.4725,
-  "max": 0.5375,
+  "mean": 0.54,
+  "max": 0.6375,
   "n_reps": 5,
   "expected": 0.5
  },
@@ -122,6 +122,53 @@
     1.0
    ]
   }
+ },
+ "falsifiability_probes": {
+  "fixed_point": {
+   "n": 40,
+   "classified_computational_rate": 1.0,
+   "tie_rate": 0.0,
+   "mean_superposition_err": 0.24356956429612614,
+   "mean_recurrence": 0.2999999999999997,
+   "mean_collision": 0.25
+  },
+  "modular": {
+   "n": 40,
+   "classified_computational_rate": 1.0,
+   "tie_rate": 0.0,
+   "mean_superposition_err": 1.5429286513918465,
+   "mean_recurrence": 0.5799999999999997,
+   "mean_collision": 0.53125
+  },
+  "cont_nonlinear": {
+   "n": 40,
+   "classified_computational_rate": 1.0,
+   "tie_rate": 0.0,
+   "mean_superposition_err": 0.5521394458248878,
+   "mean_recurrence": 0.0,
+   "mean_collision": 0.0
+  },
+  "finite_additive": {
+   "n": 40,
+   "classified_computational_rate": 0.5,
+   "tie_rate": 1.0,
+   "mean_superposition_err": 4.584332637075264e-12,
+   "mean_recurrence": 0.0,
+   "mean_collision": 0.0
+  },
+  "continuous_alt": {
+   "n": 40,
+   "classified_computational_rate": 0.5,
+   "tie_rate": 1.0,
+   "mean_superposition_err": 1.5642280321099276e-16,
+   "mean_recurrence": 0.0,
+   "mean_collision": 0.0
+  }
+ },
+ "interpretation": {
+  "signal_is_nonadditivity_not_computation": true,
+  "cont_nonlinear_false_positive": 1.0,
+  "finite_additive_read_computational": 0.5
  },
  "deterministic_rerun": true,
  "status_checks": {

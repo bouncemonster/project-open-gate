@@ -3,9 +3,9 @@
 ## Active Black-Box Response Benchmark
 
 - **Branch:** `active_response_operator`
-- **Protocol hash:** `09f32e0dc373fe96`
-- **Base seed:** `20260920` · grid 16×16 · 24 intervention steps · 10 seeds/generator · 240 black-box worlds
-- **Final status:** `ACTIVE_COMPUTATIONAL_SIGNATURE`
+- **Protocol hash:** `91133c9a8ad1f7b4` (V6.1 — falsifiability probes added)
+- **Base seed:** `20260920` · grid 16×16 · 24 intervention steps · 10 seeds/generator · 320 black-box worlds (8 mechanisms × 40 worlds)
+- **Final status:** `ACTIVE_COMPUTATIONAL_SIGNATURE` — **bounded**: the response operator detects **non-additivity**, not computation per se (see §9)
 - **Never emitted:** `SIMULATION_DETECTED`
 
 Reproduce with `python v6_pipeline.py`. Deliverables: `v6_results.json`,
@@ -38,7 +38,7 @@ constant while fixing deviation = 0. Consequence: the unperturbed baseline is
 The worlds are therefore genuinely indistinguishable *before* intervention — the
 matching is forced by construction and then **verified**, not asserted (C6).
 
-Six hidden mechanisms share each baseline:
+Six core mechanisms share each baseline (plus two **adversarial probes**, §9):
 
 | mechanism | family | continuous reference? |
 |---|---|---|
@@ -48,6 +48,8 @@ Six hidden mechanisms share each baseline:
 | `finite_state` | deviation snapped to a 21-level alphabet | no |
 | `modular` | coarse lattice + periodic fold (wrap-around collisions) | no |
 | `unknown_trunc` | **unseen** mechanism: finite binary **mantissa** truncation (frexp/ldexp, 5 bits) | no |
+| `cont_nonlinear` | **probe (§9):** continuous (uncountable) `x/(1+|x|)`, non-additive | labelled continuous, non-additive |
+| `finite_additive` | **probe (§9):** finite 40-bit lattice, additive within the window | labelled finite, additive |
 
 The observer only ever sees `intervention → response trajectory`; the
 implementation is never revealed.
@@ -157,6 +159,33 @@ baseline = 0.500 and the response operator = 1.000, and the amplitude-only
 contrast additionally proves the result is not an ordinary observable
 difference.
 
+### §9 falsifiability — the class label is decoupled from the measured property
+
+A valid detector must be capable of being *wrong*. Two adversarial probes break
+the class-label ↔ additivity correlation, then are classified by the canonical
+detector trained **only** on the real `fixed_point`/`finite_state` vs `continuous`
+contrast. "computational" = classified as the non-additive class; a tie counts as
+chance (0.5).
+
+| probe | label by design | true additivity | classified "computational" | tie rate | mean superposition_err |
+|---|---|---|---|---|---|
+| `fixed_point` (anchor) | computational | non-additive | 1.000 | 0.000 | 2.4e-01 |
+| `modular` (anchor) | computational | non-additive | 1.000 | 0.000 | 1.5e+00 |
+| **`cont_nonlinear`** | **continuous** | **non-additive** | **1.000** | 0.000 | 5.5e-01 |
+| **`finite_additive`** | **finite** | **additive** | **0.500** | 1.000 | 4.6e-12 |
+| `continuous_alt` (anchor) | continuous | additive | 0.500 | 1.000 | 1.6e-16 |
+
+**Result.** A *continuous, uncountable-state* mechanism that is merely non-additive
+is classified "computational" **100%** of the time (a deliberate false positive),
+while a *genuinely finite-representation* mechanism that stays additive within the
+probing window is **never** distinguished from continuous (100% ties,
+superposition error 4.6e-12). The detector therefore keys on the **dynamical
+property — non-additivity of the response operator** — not on the pre-assigned
+label and not on state-space finiteness per se. This falsifies the tautology risk
+("computational" merely meant "non-additive") and **bounds** the headline: the
+signature certifies *reproducible non-additivity revealed by controlled
+interventions*, **not** "this world is computed."
+
 ---
 
 ## Scope and what this does NOT mean
@@ -173,14 +202,15 @@ here should be read that way. `SIMULATION_DETECTED` is never emitted.
 
 ### Honest limitations
 
-1. **The probe is well-matched to the manipulation.** The discriminating feature
-   (superposition / additivity error) is the direct signature of exactly the
-   nonlinearity injected into the computational mechanisms, so a perfect score is
-   partly by construction. The controls (C1–C3) confirm the detection is causal
-   and not artifactual, but they cannot make the *choice* of feature
-   assumption-free. The genuinely non-trivial empirical content is that the
-   relational signature transfers across unseen generators **and** an unseen
-   mechanism while the amplitude cue does not.
+1. **What the signature certifies is now measured, not assumed.** The
+discriminating feature is additivity/superposition error. §9 shows empirically
+that the detector tracks **non-additivity**, not the "computational" label: a
+continuous-but-nonlinear probe is flagged computational (measured false positive)
+and a finite-but-additive probe is not (false negative avoided). This removes the
+tautology that "computational" was defined as non-additive — and simultaneously
+means the headline must be read as "reproducible non-additivity," not "detection
+of computation." C1–C3 confirm the detection is causal; §9 confirms it is specific
+to the property rather than to the label.
 2. **Toy generators, near-optimally clean signals.** Real substrates embedded in
    unknown dynamics need not present such a tidy separation; here every control
    is designed to be decisive on small, highly-controlled worlds.
