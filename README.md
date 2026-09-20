@@ -28,7 +28,8 @@ This project tests whether a deterministic Julia set iteration with prime-number
 | **V5.2** | Is V5.1's signal a genuine substrate signature? | **QUANTIZATION_DETECTOR — CLOSED; NO real-world analysis authorized** | `report_v5_2.md`, `V5_2_ADVERSARIAL.md`, `protocol_v5_2.json` |
 | **V5.3** | Do *natively-executed* substrates leave a fingerprint under aggressive statistical control? | **STATISTICAL_ARTIFACT — no established native-substrate signal; NOT a simulation detector** | `report_v5_3.md`, `v5_3_protocol.json`, `v5_3_results.json` |
 | **V5.5** | Are V5.3's surviving matched-control results real signal or control artifacts? (Branch C audit; V5.4 never existed) | **BRANCH_CLOSED — matched-control "signal" reproduced with NO substrate (1.000); it is a transformation artifact** | `report_v5_5.md`, `v5_5_preflight.md`, `v5_5_results.json`, `v5_5_protocol.json` |
-| **V6** | Can hidden computational constraints be detected from the **response to controlled interventions** (the response operator), not from passive observation? (Active black-box benchmark; synthetic only) | **ACTIVE_COMPUTATIONAL_SIGNATURE — baseline matched to chance (C6 0.500); out-of-sample response-operator discrimination 1.000 survives unseen generators (C4) and an unseen mechanism (C5); all causal controls collapse to chance (C1 0.500, C2 0.502, C3 0.472); amplitude cue fails to generalise. NOT a simulation detector; synthetic-only** | `report_v6.md`, `v6_results.json`, `v6_protocol.json`, `v6_core.py`, `v6_pipeline.py`, `history_v6.sqlite3` |
+| **V6** | Can hidden computational constraints be detected from the **response to controlled interventions** (the response operator), not from passive observation? (Active black-box benchmark; synthetic only) | **ACTIVE_COMPUTATIONAL_SIGNATURE (bounded) — baseline matched to chance (C6 0.500); out-of-sample response-operator discrimination 1.000 survives unseen generators (C4) and an unseen mechanism (C5); all causal controls collapse to chance (C1 0.500, C2 0.515, C3 0.540). §9: detector keys on non-additivity, not computation; §9b: operator separation is multi-feature/redundant, not one scalar. NOT a simulation detector; synthetic-only** | `report_v6.md`, `v6_results.json`, `v6_protocol.json`, `v6_core.py`, `v6_pipeline.py`, `history_v6.sqlite3` |
+| **V7** | Is there a **falsifiable real-data signature** of a discrete (hypercubic-lattice) spacetime substrate? (UHECR axis-anisotropy test) | **V7_ENGINE_VALID_READY_FOR_REAL_DATA — control-gated statistic built & validated on synthetic skies (positive z=+117.6 p=0.003 fires; isotropic null p=0.086 silent); NOT yet run on observational data; a null is the expected outcome. Bounds a lattice substrate, cannot prove a simulator** | `report_v7.md`, `v7_lattice.py`, `v7_artifacts/v7_controls.json` |
 
 V5.2 verdict (post self-audit, revision 2): under matched statistics, pairwise
 same-generator controls and unseen-substrate holdout, the detector collapses to
@@ -150,7 +151,7 @@ integrity of every `history*.sqlite3`. Exit 0 = operationally ready. Flags:
 
 ### Research-pipeline entry points (standalone)
 
-V5.5 and V6 are self-contained scripts, **not** wired into the `agent_loop.py`
+V5.5, V6 and V7 are self-contained scripts, **not** wired into the `agent_loop.py`
 `--mode` dispatcher (which covers V1/V2 plus `deep-v3`, `deep-v4`, `v5.2-deep`,
 `v5.3-deep`). Run them directly:
 
@@ -158,6 +159,7 @@ V5.5 and V6 are self-contained scripts, **not** wired into the `agent_loop.py`
 |----------|---------|------------|
 | V5.5 | `python v5_5_pipeline.py` | `v5_3_*`, `v5_detector.py` |
 | V6   | `python v6_pipeline.py`    | `v6_core.py`, `v6_db.py`, `v5_detector.py` |
+| V7   | `python v7_lattice.py`     | none (stdlib only) |
 
 ### Options
 
@@ -189,6 +191,8 @@ proof_of_simulation/
 ├── report.md          # Generated report
 ├── v6_core.py         # Active black-box response benchmark (V6)
 ├── v6_pipeline.py     # V6 controls + decision gate
+├── v7_lattice.py      # V7 falsifiable real-data lattice-signature test (engine)
+├── report_v7.md       # V7 hypothesis, statistic, control gate, scope
 ├── best/              # Best result artifacts
 ├── archives/          # Historical snapshots + retired scratch tooling (archives/scratch)
 └── .gitignore         # Excludes heavy/regenerable evidence from version control

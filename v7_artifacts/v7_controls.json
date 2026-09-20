@@ -1,0 +1,29 @@
+{
+  "protocol": {
+    "base_seed": 20260921,
+    "n_events": 256,
+    "n_rotations": 120,
+    "n_null": 300,
+    "kernel_delta_deg": 8.0,
+    "alpha": 0.05,
+    "hypothesis": "arrival directions cluster along hypercubic face-normal axes",
+    "cannot_claim": "proof of a simulator; only bounds/rejects a lattice signature"
+  },
+  "null_control": {
+    "stat": 0.09219135911888998,
+    "p_value": 0.08637873754152824,
+    "null_mean": 0.08394944118894847,
+    "null_sd": 0.005262386530759954,
+    "z": 1.566193946751243,
+    "n_null": 300
+  },
+  "positive_control": {
+    "stat": 0.702744671991883,
+    "p_value": 0.0033222591362126247,
+    "null_mean": 0.08394944118894847,
+    "null_sd": 0.005262386530759954,
+    "z": 117.58832749854518,
+    "n_null": 300
+  },
+  "engine_status": "V7_ENGINE_VALID_READY_FOR_REAL_DATA"
+}

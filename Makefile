@@ -12,7 +12,7 @@ ifeq ($(OS),Windows_NT)
   OUT := kernel.exe
 endif
 
-.PHONY: all clean test self-test init benchmark auto verify
+.PHONY: all clean test self-test init benchmark auto verify v6 v7
 
 all: kernel
 
@@ -45,3 +45,10 @@ auto: kernel
 # Consolidated repository self-check (read-only: source, deliverables, DBs)
 verify:
 	python3 verify.py
+
+# Standalone research pipelines (also runnable via `python <script>`)
+v6:
+	python3 v6_pipeline.py
+
+v7:
+	python3 v7_lattice.py
