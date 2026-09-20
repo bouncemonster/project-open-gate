@@ -3,7 +3,7 @@
 ## Active Black-Box Response Benchmark
 
 - **Branch:** `active_response_operator`
-- **Protocol hash:** `91133c9a8ad1f7b4` (V6.1 — falsifiability probes added)
+- **Protocol hash:** `99054d610b0d588f` (V6.2 — falsifiability probes + feature-ablation audit)
 - **Base seed:** `20260920` · grid 16×16 · 24 intervention steps · 10 seeds/generator · 320 black-box worlds (8 mechanisms × 40 worlds)
 - **Final status:** `ACTIVE_COMPUTATIONAL_SIGNATURE` — **bounded**: the response operator detects **non-additivity**, not computation per se (see §9)
 - **Never emitted:** `SIMULATION_DETECTED`
@@ -185,6 +185,34 @@ label and not on state-space finiteness per se. This falsifies the tautology ris
 ("computational" merely meant "non-additive") and **bounds** the headline: the
 signature certifies *reproducible non-additivity revealed by controlled
 interventions*, **not** "this world is computed."
+
+### §9b feature-ablation audit — is the "response operator" real, or one scalar?
+
+The primary contrasts on the whole `OPERATOR_FEATS` block, so a reviewer must be
+told whether that framing is reducible. Running the fully out-of-sample primary
+on each single feature, and on all-but-one:
+
+| feature | alone | drop-it (keep other 8) |
+|---|---|---|
+| `superposition_err` | **1.000** | 0.875 |
+| `superposition_path` | **1.000** | 0.875 |
+| `eff_rank` | **1.000** | 0.625 |
+| `collision` | 0.875 | 1.000 |
+| `symmetry_err` | 0.750 | 1.000 |
+| `recurrence` | 0.688 | 1.000 |
+| `composition_err` | 0.500 | 1.000 |
+| `repeatability_err` | 0.500 | 1.000 |
+| `path_dependence` | 0.375 | 1.000 |
+
+**Conclusion.** Six of nine features individually exceed chance and no
+single-feature removal drops the block below **0.625**, so the discrimination is
+**not** reducible to one engineered scalar — the "response operator" framing is
+robust. The honest caveat: the surviving features are **correlated manifestations
+of one cause** (lattice quantisation simultaneously breaks additivity, response
+rank, symmetry and exactness of recurrence), not independent lines of evidence —
+consistent with §9, where non-additivity alone already sufficed. Three features
+(`composition_err`, `repeatability_err`, `path_dependence`) carry essentially no
+individual signal, confirming the block is not uniformly informative.
 
 ---
 

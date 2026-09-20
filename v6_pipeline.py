@@ -333,6 +333,34 @@ class V6Benchmark:
         }
         return probes, interp
 
+    # -- feature-ablation audit: is 'response operator' real or one scalar? ----
+    def operator_ablation(self):
+        """The primary uses the whole OPERATOR_FEATS block. A reviewer must know
+        whether the discrimination is genuinely multi-feature (a response
+        OPERATOR) or collapses onto a single engineered scalar. Runs the fully
+        out-of-sample primary once per single feature and once per all-but-one."""
+        single, drop = {}, {}
+        for k in OPERATOR_FEATS:
+            h = self.discriminate(self.feat, [k], TRAIN_GENERATORS,
+                                  TRAIN_MECHANISMS, HOLDOUT_GENERATORS,
+                                  ALL_COMPUTATIONAL)
+            single[k] = self._acc(h)
+            rest = [x for x in OPERATOR_FEATS if x != k]
+            h2 = self.discriminate(self.feat, rest, TRAIN_GENERATORS,
+                                   TRAIN_MECHANISMS, HOLDOUT_GENERATORS,
+                                   ALL_COMPUTATIONAL)
+            drop[k] = self._acc(h2)
+        above = [k for k, a in single.items() if a > ABOVE]
+        interp = {
+            "single_features_above_chance": above,
+            "redundant_overdetermined": (len(above) > 1
+                                         and min(drop.values()) >= ABOVE),
+            "max_single_feature": max(single, key=single.get),
+            "max_single_acc": max(single.values()),
+            "min_drop_one_acc": min(drop.values()),
+        }
+        return {"single_feature": single, "drop_one": drop}, interp
+
     # -- §8 decision gate --------------------------------------------------
     def _decide(self, checks):
         if not checks["baseline_indistinguishable"]:
@@ -391,6 +419,7 @@ class V6Benchmark:
         sep = self.feature_separation()
         det = self.determinism_check()
         probes, interp = self.adversarial_probes()
+        ablation, abl_interp = self.operator_ablation()
 
         prim_hits_ci = pci
         checks = {
@@ -428,6 +457,15 @@ class V6Benchmark:
                       f"rec={_p['mean_recurrence']:.3f} coll={_p['mean_collision']:.3f}")
         self._log(f"    -> signal is non-additivity (not computation): "
                   f"{interp['signal_is_nonadditivity_not_computation']}")
+        self._log("§9b feature ablation (out-of-sample acc per single operator feature):")
+        for _k, _a in sorted(ablation["single_feature"].items(),
+                             key=lambda kv: -kv[1]):
+            self._log(f"    {_k:20s} single={_a:.3f} drop_one={ablation['drop_one'][_k]:.3f}")
+        self._log(f"    -> features individually above chance: "
+                  f"{abl_interp['single_features_above_chance']}")
+        self._log(f"    -> separation redundant/overdetermined: "
+                  f"{abl_interp['redundant_overdetermined']} "
+                  f"(min drop-one {abl_interp['min_drop_one_acc']:.3f})")
 
         status = self._decide(checks)
         self._log(f"FINAL STATUS: {status}")
@@ -465,6 +503,8 @@ class V6Benchmark:
             "feature_separation": sep,
             "falsifiability_probes": probes,
             "interpretation": interp,
+            "operator_ablation": ablation,
+            "ablation_interpretation": abl_interp,
             "deterministic_rerun": det,
             "status_checks": checks,
             "final_status": status,

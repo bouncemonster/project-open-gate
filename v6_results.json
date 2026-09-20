@@ -1,6 +1,6 @@
 {
  "branch": "active_response_operator",
- "protocol_hash": "91133c9a8ad1f7b4",
+ "protocol_hash": "99054d610b0d588f",
  "base_seed": 20260920,
  "grid": [
   16,
@@ -169,6 +169,44 @@
   "signal_is_nonadditivity_not_computation": true,
   "cont_nonlinear_false_positive": 1.0,
   "finite_additive_read_computational": 0.5
+ },
+ "operator_ablation": {
+  "single_feature": {
+   "superposition_err": 1.0,
+   "superposition_path": 1.0,
+   "symmetry_err": 0.75,
+   "composition_err": 0.5,
+   "path_dependence": 0.375,
+   "repeatability_err": 0.5,
+   "recurrence": 0.6875,
+   "collision": 0.875,
+   "eff_rank": 1.0
+  },
+  "drop_one": {
+   "superposition_err": 0.875,
+   "superposition_path": 0.875,
+   "symmetry_err": 1.0,
+   "composition_err": 1.0,
+   "path_dependence": 1.0,
+   "repeatability_err": 1.0,
+   "recurrence": 1.0,
+   "collision": 1.0,
+   "eff_rank": 0.625
+  }
+ },
+ "ablation_interpretation": {
+  "single_features_above_chance": [
+   "superposition_err",
+   "superposition_path",
+   "symmetry_err",
+   "recurrence",
+   "collision",
+   "eff_rank"
+  ],
+  "redundant_overdetermined": true,
+  "max_single_feature": "superposition_err",
+  "max_single_acc": 1.0,
+  "min_drop_one_acc": 0.625
  },
  "deterministic_rerun": true,
  "status_checks": {

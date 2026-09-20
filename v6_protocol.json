@@ -1,8 +1,8 @@
 {
  "protocol": "V6_ACTIVE_BLACKBOX_RESPONSE_BENCHMARK",
  "version": "6.0.0",
- "created": "2026-09-20T14:07:23.778319",
- "protocol_hash": "91133c9a8ad1f7b4",
+ "created": "2026-09-20T14:21:24.268311",
+ "protocol_hash": "99054d610b0d588f",
  "base_seed": 20260920,
  "hypothesis_tested": "hidden computational constraints are detectable from the response to controlled interventions (the response operator), not from passive observation",
  "central_object": "intervention -> response",
