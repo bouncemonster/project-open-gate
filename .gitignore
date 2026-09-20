@@ -39,6 +39,9 @@ v5_3_artifacts/
 v5_5_artifacts/
 
 # NOTE: v6_artifacts/ is intentionally TRACKED (small, active-branch §11 deliverable).
+# NOTE: v7_artifacts/ is intentionally TRACKED (small, active frontier), EXCEPT
+# the regenerable ingestion self-test fixtures:
+v7_artifacts/selftest_*.csv
 
 # --- Empty scratch dirs ---------------------------------------------------
 benchmark/

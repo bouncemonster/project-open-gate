@@ -12,6 +12,9 @@ benchmark) is the current branch: synthetic-only, never emits SIMULATION_DETECTE
 - `python verify.py [--quick|--skip-db]` — read-only repo self-check
   (source, imports, report lineage, V6 hash reproducibility, DB integrity). Exit 0 = ready.
 - `python v5_5_pipeline.py` — V5.5 audit (depends on `v5_3_*`, `v5_detector.py`).
+- `python v7_lattice.py` — V7 lattice-signature test: control gate + ingestion
+  self-test on synthetic skies. `python v7_lattice.py <catalogue.csv> [cut_eV]`
+  scores a real UHECR event list (columns `ra,dec[,energy]` deg/eV or `x,y,z`).
 - `make` / `make test` — build & self-test the V1/V2 C kernel only (Makefile does
   not cover V3–V6; those pipelines are standalone scripts).
 

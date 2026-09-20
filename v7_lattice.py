@@ -23,6 +23,7 @@ import math
 import random
 import json
 import os
+import sys
 
 # ---- fixed, preregistered constants (chosen before seeing any data) ----------
 BASE_SEED = 20260921        # distinct from V6
@@ -157,6 +158,121 @@ def pvalue_from_null(observed, null_scores):
             "n_null": len(null_scores)}
 
 
+# ----------------------- real-data ingestion path -----------------------------
+def radec_to_unit(ra_deg, dec_deg):
+    ra = math.radians(ra_deg)
+    dec = math.radians(dec_deg)
+    cd = math.cos(dec)
+    return (cd * math.cos(ra), cd * math.sin(ra), math.sin(dec))
+
+
+def load_events(path, energy_cut_ev=None):
+    """Load an observed event catalogue and return unit direction vectors.
+
+    Accepts CSV or whitespace rows. If a header is present, columns named
+    (case-insensitive) ra/dec[/energy] or x/y/z[/energy] are used; otherwise the
+    first numeric columns are read as (ra_deg, dec_deg[, energy_eV]). Rows below
+    `energy_cut_ev` are dropped. This is the single frozen entry point through
+    which real data (e.g. an Auger / Telescope Array public list) is scored by
+    the SAME statistic + null as the controls -- nothing about the test is tuned
+    to the data after the fact.
+    """
+    events, n_total = [], 0
+    with open(path, "r", encoding="utf-8", errors="ignore") as f:
+        lines = [ln.strip() for ln in f if ln.strip() and not ln.startswith("#")]
+    if not lines:
+        return events, n_total
+    delim = "," if "," in lines[0] else None
+    body = lines
+    header_cols = None
+    first = [c.strip().lower() for c in (lines[0].split(delim) if delim else lines[0].split())]
+    if any(c in ("ra", "dec", "x", "y", "z", "energy") for c in first):
+        header_cols = first
+        body = lines[1:]
+    for ln in body:
+        parts = [c.strip() for c in (ln.split(delim) if delim else ln.split())]
+        try:
+            nums = [float(p) for p in parts if p != ""]
+        except ValueError:
+            continue
+        if not nums:
+            continue
+        n_total += 1
+        energy = None
+        v = None
+        if header_cols:
+            if "x" in header_cols and "y" in header_cols and "z" in header_cols:
+                i, j, k = (header_cols.index("x"), header_cols.index("y"),
+                           header_cols.index("z"))
+                if max(i, j, k) < len(nums):
+                    v = normalize((nums[i], nums[j], nums[k]))
+            elif "ra" in header_cols and "dec" in header_cols:
+                i, j = header_cols.index("ra"), header_cols.index("dec")
+                if max(i, j) < len(nums):
+                    v = radec_to_unit(nums[i], nums[j])
+            if "energy" in header_cols:
+                e = header_cols.index("energy")
+                if e < len(nums):
+                    energy = nums[e]
+        elif len(nums) >= 3:
+            v = radec_to_unit(nums[0], nums[1])
+            energy = nums[2]
+        elif len(nums) == 2:
+            v = radec_to_unit(nums[0], nums[1])
+        if v is None:
+            continue
+        if energy_cut_ev is not None and energy is not None and energy < energy_cut_ev:
+            continue
+        events.append(v)
+    return events, n_total
+
+
+def unit_to_radec(v):
+    ra = math.degrees(math.atan2(v[1], v[0])) % 360.0
+    dec = math.degrees(math.asin(max(-1.0, min(1.0, v[2]))))
+    return ra, dec
+
+
+def write_catalogue(path, sky, seed):
+    """Dump a synthetic sky to an ra/dec/energy CSV (used only to self-test the
+    file parser end-to-end; clearly named selftest_* and never a 'result')."""
+    rng = random.Random(seed)
+    with open(path, "w", encoding="utf-8", newline="") as f:
+        f.write("ra,dec,energy\n")
+        for v in sky:
+            ra, dec = unit_to_radec(v)
+            f.write(f"{ra:.6f},{dec:.6f},{rng.uniform(6e19,1.2e20):.4e}\n")
+
+
+def score_events(events, source, n_total, energy_cut_ev, artifacts_dir=None):
+    """Score a list of unit directions with the frozen statistic + matched null."""
+    rotations = build_rotations(N_ROTATIONS, BASE_SEED)
+    null_scores = build_null_scores(rotations, BASE_SEED + 2, n_events=len(events))
+    obs = alignment_statistic(events, rotations)
+    pv = pvalue_from_null(obs, null_scores)
+    result = {"source_file": source, "n_total": n_total, "n_used": len(events),
+              "energy_cut_ev": energy_cut_ev, "stat": obs, **pv,
+              "verdict": ("LATTICE_SIGNATURE_DETECTED (investigate systematics)"
+                          if pv["p_value"] < SIGNIFICANCE_ALPHA else
+                          "NO_SIGNATURE - consistent with isotropy (places a bound)")}
+    if artifacts_dir:
+        os.makedirs(artifacts_dir, exist_ok=True)
+        with open(os.path.join(artifacts_dir, "v7_realdata.json"), "w", encoding="utf-8") as f:
+            json.dump(result, f, indent=2)
+    print(f"[V7] source={source} n_used={result['n_used']} stat={obs:.4f} "
+          f"p={pv['p_value']:.4f} z={pv['z']:+.2f} -> {result['verdict']}")
+    return result
+
+
+def score_catalogue(path, energy_cut_ev=None, artifacts_dir="v7_artifacts"):
+    """Run the frozen V7 test on an observed catalogue file."""
+    events, n_total = load_events(path, energy_cut_ev)
+    if len(events) < 30:
+        raise ValueError(f"too few usable events after cut ({len(events)})")
+    return score_events(events, os.path.basename(path), n_total, energy_cut_ev,
+                        artifacts_dir=artifacts_dir)
+
+
 # ------------------------------- driver ---------------------------------------
 def run(artifacts_dir="v7_artifacts"):
     os.makedirs(artifacts_dir, exist_ok=True)
@@ -173,8 +289,26 @@ def run(artifacts_dir="v7_artifacts"):
     lat_obs = alignment_statistic(lat, rotations)
     lat_p = pvalue_from_null(lat_obs, null_scores)
 
-    # Gate: the test is trustworthy only if positive fires AND null stays silent.
-    valid = (lat_p["p_value"] < SIGNIFICANCE_ALPHA) and (iso_p["p_value"] > SIGNIFICANCE_ALPHA)
+    # Ingestion self-test: prove a real catalogue FILE is parsed and scored
+    # correctly end-to-end (parser round-trip + energy cut), not just in-memory.
+    lat_csv = os.path.join(artifacts_dir, "selftest_lattice.csv")
+    iso_csv = os.path.join(artifacts_dir, "selftest_isotropic.csv")
+    write_catalogue(lat_csv, lat, BASE_SEED + 5)
+    write_catalogue(iso_csv, iso, BASE_SEED + 6)
+    ev_lat, _ = load_events(lat_csv)
+    ev_iso, _ = load_events(iso_csv)
+    ev_iso_cut, _ = load_events(iso_csv, energy_cut_ev=9e19)
+    ing_lat = score_events(ev_lat, "selftest_lattice.csv", len(ev_lat), None)
+    ing_iso = score_events(ev_iso, "selftest_isotropic.csv", len(ev_iso), None)
+    ingest_ok = (len(ev_lat) == N_EVENTS and len(ev_iso) == N_EVENTS
+                 and ing_lat["p_value"] < SIGNIFICANCE_ALPHA
+                 and ing_iso["p_value"] > SIGNIFICANCE_ALPHA
+                 and len(ev_iso_cut) < len(ev_iso))
+
+    # Gate: trustworthy only if positive fires, null stays silent, and the
+    # real-data ingestion path is verified.
+    valid = ((lat_p["p_value"] < SIGNIFICANCE_ALPHA)
+             and (iso_p["p_value"] > SIGNIFICANCE_ALPHA) and ingest_ok)
     status = "V7_ENGINE_VALID_READY_FOR_REAL_DATA" if valid else "V7_ENGINE_INVALID"
 
     result = {
@@ -187,6 +321,13 @@ def run(artifacts_dir="v7_artifacts"):
         },
         "null_control": {"stat": iso_obs, **iso_p},
         "positive_control": {"stat": lat_obs, **lat_p},
+        "ingestion_selftest": {
+            "parser_roundtrip": (len(ev_lat) == N_EVENTS and len(ev_iso) == N_EVENTS),
+            "lattice_fires": ing_lat["p_value"] < SIGNIFICANCE_ALPHA,
+            "isotropic_silent": ing_iso["p_value"] > SIGNIFICANCE_ALPHA,
+            "energy_cut_filters": len(ev_iso_cut) < len(ev_iso),
+            "passed": ingest_ok,
+        },
         "engine_status": status,
     }
     with open(os.path.join(artifacts_dir, "v7_controls.json"), "w", encoding="utf-8") as f:
@@ -196,9 +337,17 @@ def run(artifacts_dir="v7_artifacts"):
     print(f"[V7] null     (isotropic sky):   stat={iso_obs:.4f} p={iso_p['p_value']:.3f} z={iso_p['z']:+.2f}")
     print(f"[V7] positive (known lattice):   stat={lat_obs:.4f} p={lat_p['p_value']:.4f} z={lat_p['z']:+.2f}")
     print(f"[V7] gate (positive fires AND null silent): {valid}")
+    print(f"[V7] ingestion self-test (file parser + energy cut): passed={ingest_ok} "
+          f"(n_parsed={len(ev_lat)}/{len(ev_iso)}, cut->{len(ev_iso_cut)})")
     print(f"[V7] wrote {os.path.join(artifacts_dir, 'v7_controls.json')}")
     return result
 
 
 if __name__ == "__main__":
-    run()
+    # no arg        -> run the control + ingestion self-test
+    # <catalogue.csv> [energy_cut_eV] -> score a real event catalogue with the frozen test
+    if len(sys.argv) > 1:
+        cut = float(sys.argv[2]) if len(sys.argv) > 2 else None
+        score_catalogue(sys.argv[1], energy_cut_ev=cut)
+    else:
+        run()

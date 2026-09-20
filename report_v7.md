@@ -41,6 +41,21 @@ Both hold → the statistic has **power** (sees a real lattice) **and specificit
 (says nothing when there is none). The gate `positive_fires AND null_silent` is
 what makes any future real-data number meaningful instead of noise.
 
+## Ingestion path is wired and self-tested
+`load_events()` reads a real catalogue (CSV or whitespace; `ra,dec[,energy]` in
+degrees/eV, or `x,y,z`), applies an energy cut, and feeds the SAME frozen
+statistic + null. `python v7_lattice.py` also runs an **ingestion self-test**
+that writes two synthetic catalogue files and scores them through the parser:
+
+| check | result |
+|---|---|
+| parser round-trip (256 rows → 256 unit vectors) | pass |
+| energy cut (9×10¹⁹ eV) filters 256 → 127 | pass |
+| lattice CSV (read from disk) fires | z = +117.6, p = 0.003 |
+| isotropic CSV (read from disk) silent | p = 0.086 |
+
+So `READY_FOR_REAL_DATA` is verified end-to-end, not asserted.
+
 ## Scope & honesty
 - A detection would bound **a coarse cubic-lattice substrate**, not prove a
   simulator, and would demand the orientation/energy systematics be exhausted
@@ -51,11 +66,20 @@ what makes any future real-data number meaningful instead of noise.
   simulation?" framing; that conservatism *is* the contribution.
 
 ## Next step (bounded, concrete)
-Ingest a public UHECR event catalogue (Pierre Auger Observatory / Telescope
-Array, arrival directions + energy), apply the **frozen** statistic + null above
-to events above a preregistered energy cut, and report the p-value as a bound.
-This needs an external data download (a distinct task), so it is proposed rather
-than silently performed.
+Obtain a public UHECR event catalogue (Pierre Auger Observatory / Telescope
+Array: arrival directions + energy), then run the frozen test directly:
+
+```
+python v7_lattice.py <catalogue.csv> [energy_cut_eV]
+```
+
+It prints the p-value and writes `v7_artifacts/v7_realdata.json`. Expected
+honest outcome: **no detection** — a bound on the lattice spacing, reproducing
+the published Auger isotropy limits. (This environment's shell policy forbids
+curl/wget downloads, so acquiring the catalogue is a separate, authorised step;
+the analysis side is complete and validated.)
 
 ## Reproduce
-`python v7_lattice.py` → prints the gate and writes `v7_artifacts/v7_controls.json`.
+`python v7_lattice.py` → prints the control gate + ingestion self-test and writes
+`v7_artifacts/v7_controls.json`. Score a real catalogue with
+`python v7_lattice.py <catalogue.csv> [energy_cut_eV]`.

@@ -25,5 +25,12 @@
     "z": 117.58832749854518,
     "n_null": 300
   },
+  "ingestion_selftest": {
+    "parser_roundtrip": true,
+    "lattice_fires": true,
+    "isotropic_silent": true,
+    "energy_cut_filters": true,
+    "passed": true
+  },
   "engine_status": "V7_ENGINE_VALID_READY_FOR_REAL_DATA"
 }
