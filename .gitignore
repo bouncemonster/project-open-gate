@@ -48,3 +48,5 @@ validation/
 .DS_Store
 Thumbs.db
 *.swp
+AGENTS.local.md
+.qoder/settings.local.json
