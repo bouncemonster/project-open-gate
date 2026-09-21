@@ -12,7 +12,7 @@ ifeq ($(OS),Windows_NT)
   OUT := kernel.exe
 endif
 
-.PHONY: all clean test self-test init benchmark auto verify v6 v7
+.PHONY: all clean test self-test init benchmark auto verify v6 v7 stress
 
 all: kernel
 
@@ -52,3 +52,8 @@ v6:
 
 v7:
 	python3 v7_lattice.py
+
+# Long deep-validation battery over V6+V7 math & plumbing (stdlib, deterministic).
+# Underscore-prefixed source => intentionally excluded from verify.py module scan.
+stress:
+	python3 -u _stress.py

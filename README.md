@@ -136,6 +136,17 @@ lineage, V6 deliverables + frozen protocol-hash reproducibility, and SQLite
 integrity of every `history*.sqlite3`. Exit 0 = operationally ready. Flags:
 `--quick` (fast `quick_check`), `--skip-db` (source/deliverables only).
 
+### Deep validation battery
+
+`python -u _stress.py` (or `make stress`) runs a long (~11 min), deterministic
+stress suite over the V6 and V7 math and plumbing — SO(3) rotation validity,
+sphere uniformity, catalogue-loader round-trips, Monte-Carlo type-I calibration
+convergence across orientation-pool sizes, power-vs-N, V6 feature algebra,
+determinism, and the bitwise fixed-point premise. It prints PASS/FAIL with
+numbers; the Russian write-up of the latest full run (24/24) is `report_stress.md`.
+The underscore prefix keeps this test out of `verify.py`'s module scan while still
+version-controlling it.
+
 ## CLI Reference
 
 | Command | Description |

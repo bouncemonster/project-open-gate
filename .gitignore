@@ -47,6 +47,9 @@ v7_artifacts/selftest_*.csv
 benchmark/
 validation/
 
+# --- Scratch run logs from the stress/verify batteries (regenerable) ------
+_*.log
+
 # --- Editor / OS noise ----------------------------------------------------
 .DS_Store
 Thumbs.db
