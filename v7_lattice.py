@@ -32,6 +32,12 @@ N_ROTATIONS = 120          # orientation pool (look-elsewhere handled by null)
 N_NULL = 300               # isotropic Monte-Carlo realisations
 KERNEL_DELTA_DEG = 8.0     # angular clustering kernel width around an axis
 SIGNIFICANCE_ALPHA = 0.05  # preregistered threshold
+# V7.1 calibration & sensitivity (fixed up front, not tuned to results):
+CALIB_TRYS = 150           # isotropic skies to measure the empirical type-I rate
+SENS_WIDTHS = [4.0, 8.0, 12.0, 20.0, 30.0, 45.0]  # true on-axis scatter (deg)
+SENS_DILUTIONS = [0.05, 0.10, 0.15, 0.20, 0.30, 0.50]  # fraction placed on axes
+SENS_REPS = 30             # realisations per sensitivity point
+MIN_POWER_AT_4DEG = 0.80   # engine must resolve a clean lattice with this power
 
 
 # ---------------------------- geometry helpers --------------------------------
@@ -244,10 +250,14 @@ def write_catalogue(path, sky, seed):
             f.write(f"{ra:.6f},{dec:.6f},{rng.uniform(6e19,1.2e20):.4e}\n")
 
 
-def score_events(events, source, n_total, energy_cut_ev, artifacts_dir=None):
-    """Score a list of unit directions with the frozen statistic + matched null."""
-    rotations = build_rotations(N_ROTATIONS, BASE_SEED)
-    null_scores = build_null_scores(rotations, BASE_SEED + 2, n_events=len(events))
+def score_events(events, source, n_total, energy_cut_ev, artifacts_dir=None,
+                 rotations=None, null_scores=None):
+    """Score a list of unit directions with the frozen statistic + matched null.
+    A shared (rotations, null_scores) built at the same n_events may be passed to
+    avoid recomputation; otherwise a null matched to len(events) is built."""
+    if rotations is None or null_scores is None:
+        rotations = build_rotations(N_ROTATIONS, BASE_SEED)
+        null_scores = build_null_scores(rotations, BASE_SEED + 2, n_events=len(events))
     obs = alignment_statistic(events, rotations)
     pv = pvalue_from_null(obs, null_scores)
     result = {"source_file": source, "n_total": n_total, "n_used": len(events),
@@ -271,6 +281,61 @@ def score_catalogue(path, energy_cut_ev=None, artifacts_dir="v7_artifacts"):
         raise ValueError(f"too few usable events after cut ({len(events)})")
     return score_events(events, os.path.basename(path), n_total, energy_cut_ev,
                         artifacts_dir=artifacts_dir)
+
+
+# ---------------------- V7.1 calibration & sensitivity ------------------------
+def empirical_type1(rotations, null_scores, seed, n_tries=CALIB_TRYS):
+    """Measure the FALSE-POSITIVE rate: score n_tries fresh isotropic skies
+    against the shared null. If the p-values are honest, the fraction below a
+    nominal level tracks that level. This replaces the old single-draw 'null
+    silent' check, which passed ~95% of the time by luck and so never actually
+    verified calibration or the look-elsewhere correction."""
+    rng = random.Random(seed)
+    levels = (0.01, 0.05, 0.10)
+    below = {a: 0 for a in levels}
+    ps = []
+    for _ in range(n_tries):
+        sky = [rand_direction(rng) for _ in range(N_EVENTS)]
+        obs = alignment_statistic(sky, rotations)
+        p = pvalue_from_null(obs, null_scores)["p_value"]
+        ps.append(p)
+        for a in levels:
+            if p < a:
+                below[a] += 1
+    ps.sort()
+    return {"n_tries": n_tries,
+            "fpr_0.01": below[0.01] / n_tries,
+            "fpr_0.05": below[0.05] / n_tries,
+            "fpr_0.10": below[0.10] / n_tries,
+            "median_p": ps[n_tries // 2]}
+
+
+def _detection_rate(sky_fn, rotations, null_scores, seed, reps=SENS_REPS):
+    rng = random.Random(seed)
+    det = 0
+    for r in range(reps):
+        sky = sky_fn(rng, r)
+        obs = alignment_statistic(sky, rotations)
+        if pvalue_from_null(obs, null_scores)["p_value"] < SIGNIFICANCE_ALPHA:
+            det += 1
+    return det / reps
+
+
+def sensitivity(rotations, null_scores, seed):
+    """Power vs true lattice scatter width (at frac_axis=0.85) and vs dilution
+    (at 4 deg). Documents the operating range so a real-data null is interpretable
+    as a bound and a near-threshold miss is not mistaken for absence."""
+    widths = [{"delta_true_deg": w,
+               "power": _detection_rate(lambda rng, r, w=w: lattice_sky(
+                   N_EVENTS, rng.randrange(1 << 30), delta_true_deg=w, frac_axis=0.85),
+                   rotations, null_scores, seed + int(w * 100))}
+              for w in SENS_WIDTHS]
+    dilutions = [{"frac_axis": fr,
+                  "power": _detection_rate(lambda rng, r, fr=fr: lattice_sky(
+                      N_EVENTS, rng.randrange(1 << 30), delta_true_deg=4.0, frac_axis=fr),
+                      rotations, null_scores, seed + int(fr * 1000))}
+                 for fr in SENS_DILUTIONS]
+    return {"width_scan": widths, "dilution_scan": dilutions}
 
 
 # ------------------------------- driver ---------------------------------------
@@ -298,17 +363,33 @@ def run(artifacts_dir="v7_artifacts"):
     ev_lat, _ = load_events(lat_csv)
     ev_iso, _ = load_events(iso_csv)
     ev_iso_cut, _ = load_events(iso_csv, energy_cut_ev=9e19)
-    ing_lat = score_events(ev_lat, "selftest_lattice.csv", len(ev_lat), None)
-    ing_iso = score_events(ev_iso, "selftest_isotropic.csv", len(ev_iso), None)
+    ing_lat = score_events(ev_lat, "selftest_lattice.csv", len(ev_lat), None,
+                           rotations=rotations, null_scores=null_scores)
+    ing_iso = score_events(ev_iso, "selftest_isotropic.csv", len(ev_iso), None,
+                           rotations=rotations, null_scores=null_scores)
     ingest_ok = (len(ev_lat) == N_EVENTS and len(ev_iso) == N_EVENTS
                  and ing_lat["p_value"] < SIGNIFICANCE_ALPHA
                  and ing_iso["p_value"] > SIGNIFICANCE_ALPHA
                  and len(ev_iso_cut) < len(ev_iso))
 
-    # Gate: trustworthy only if positive fires, null stays silent, and the
-    # real-data ingestion path is verified.
+    # V7.1 calibration: measure the empirical type-I (false-positive) rate
+    # instead of trusting a single lucky isotropic draw.
+    calib = empirical_type1(rotations, null_scores, BASE_SEED + 7)
+    calibration_ok = (calib["fpr_0.05"] <= SIGNIFICANCE_ALPHA + 0.07
+                      and calib["fpr_0.10"] <= 0.22
+                      and calib["median_p"] >= 0.20)
+
+    # V7.1 sensitivity: quantify power vs lattice sharpness and dilution.
+    sens = sensitivity(rotations, null_scores, BASE_SEED + 8)
+    power_4 = next(s["power"] for s in sens["width_scan"] if s["delta_true_deg"] == 4.0)
+    power_ok = power_4 >= MIN_POWER_AT_4DEG
+
+    # Gate: trustworthy only if positive fires, null stays silent, ingestion is
+    # verified, p-values are calibrated (no inflated false positives), AND the
+    # engine has real power against a clean lattice.
     valid = ((lat_p["p_value"] < SIGNIFICANCE_ALPHA)
-             and (iso_p["p_value"] > SIGNIFICANCE_ALPHA) and ingest_ok)
+             and (iso_p["p_value"] > SIGNIFICANCE_ALPHA) and ingest_ok
+             and calibration_ok and power_ok)
     status = "V7_ENGINE_VALID_READY_FOR_REAL_DATA" if valid else "V7_ENGINE_INVALID"
 
     result = {
@@ -328,6 +409,9 @@ def run(artifacts_dir="v7_artifacts"):
             "energy_cut_filters": len(ev_iso_cut) < len(ev_iso),
             "passed": ingest_ok,
         },
+        "calibration_type1": {**calib, "calibration_ok": calibration_ok},
+        "sensitivity": {**sens, "power_at_4deg": power_4,
+                        "min_power_required": MIN_POWER_AT_4DEG, "power_ok": power_ok},
         "engine_status": status,
     }
     with open(os.path.join(artifacts_dir, "v7_controls.json"), "w", encoding="utf-8") as f:
@@ -336,9 +420,17 @@ def run(artifacts_dir="v7_artifacts"):
     print(f"[V7] status: {status}")
     print(f"[V7] null     (isotropic sky):   stat={iso_obs:.4f} p={iso_p['p_value']:.3f} z={iso_p['z']:+.2f}")
     print(f"[V7] positive (known lattice):   stat={lat_obs:.4f} p={lat_p['p_value']:.4f} z={lat_p['z']:+.2f}")
-    print(f"[V7] gate (positive fires AND null silent): {valid}")
+    print(f"[V7] gate (positive+null+ingestion+calibration+power): {valid}")
     print(f"[V7] ingestion self-test (file parser + energy cut): passed={ingest_ok} "
           f"(n_parsed={len(ev_lat)}/{len(ev_iso)}, cut->{len(ev_iso_cut)})")
+    print(f"[V7] type-I calibration: FPR@.01={calib['fpr_0.01']:.3f} "
+          f"@.05={calib['fpr_0.05']:.3f} @.10={calib['fpr_0.10']:.3f} "
+          f"median_p={calib['median_p']:.3f} (alpha={SIGNIFICANCE_ALPHA}) ok={calibration_ok}")
+    print("[V7] power vs lattice width (deg): "
+          + " ".join(f"{s['delta_true_deg']:.0f}:{s['power']:.2f}" for s in sens["width_scan"])
+          + f"  (power@4={power_4:.2f} req>={MIN_POWER_AT_4DEG}) ok={power_ok}")
+    print("[V7] power vs dilution frac_axis: "
+          + " ".join(f"{s['frac_axis']:.2f}:{s['power']:.2f}" for s in sens["dilution_scan"]))
     print(f"[V7] wrote {os.path.join(artifacts_dir, 'v7_controls.json')}")
     return result
 
