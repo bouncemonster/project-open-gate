@@ -131,8 +131,11 @@ python3 agent_loop.py auto
 ### Repository self-check
 
 `python verify.py` (or `make verify`) runs a read-only consistency audit across
-the whole project: source compilation, local-import resolution, the full report
-lineage, V6 deliverables + frozen protocol-hash reproducibility, and SQLite
+the whole project: source compilation, local-import resolution, the full V1–V7
+report lineage, the frozen V6 protocol-hash reproducibility, and the **V7.1
+current-version engine gate** (positive control fires, isotropic null silent,
+ingestion self-test, measured type-I calibration and power — all cross-checked
+against `v7_artifacts/v7_controls.json` and `report_v7.md`), plus SQLite
 integrity of every `history*.sqlite3`. Exit 0 = operationally ready. Flags:
 `--quick` (fast `quick_check`), `--skip-db` (source/deliverables only).
 

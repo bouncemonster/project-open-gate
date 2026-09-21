@@ -73,9 +73,10 @@ def check_local_imports(modules):
 def check_reports_exist():
     expected = ["report.md", "report_v2.md", "report_v3.md", "report_v4.md",
                 "report_v5.md", "report_v5_1.md", "report_v5_2.md",
-                "report_v5_3.md", "report_v5_5.md", "report_v6.md", "README.md"]
+                "report_v5_3.md", "report_v5_5.md", "report_v6.md",
+                "report_v7.md", "README.md"]
     miss = [f for f in expected if not os.path.exists(f)]
-    check(not miss, "reports: full V1-V6 lineage present",
+    check(not miss, "reports: full V1-V7 lineage present",
           ", ".join(miss) if miss else f"{len(expected)} reports")
 
 
@@ -120,6 +121,41 @@ def check_v6_reproducibility():
           "V6: final_status appears in report", str(status))
 
 
+# ------------------------------------------------------------------ V7 (current)
+def check_v7_deliverables():
+    """Current-version gate (V7.1 is the active frontier). Confirm the engine
+    deliverables exist, that the stored control results are internally consistent
+    (positive control fires, isotropic null stays silent, ingestion self-test
+    passed, type-I calibration and power hold), and that the report's status line
+    matches the artifact's engine_status. V7 does NOT supersede the frozen V6
+    result -- it is a distinct, later experiment on the same lineage."""
+    need = ["report_v7.md", "v7_lattice.py", "v7_artifacts/v7_controls.json"]
+    miss = [f for f in need if not os.path.exists(f)]
+    check(not miss, "V7: engine deliverables present",
+          ", ".join(miss) if miss else "3/3")
+    if miss:
+        return
+    import json
+    try:
+        ctl = json.load(open("v7_artifacts/v7_controls.json", encoding="utf-8"))
+    except Exception as e:
+        check(False, "V7: controls JSON readable", str(e))
+        return
+    alpha = ctl.get("protocol", {}).get("alpha", 0.05)
+    pos = ctl.get("positive_control", {}).get("p_value", 1.0)
+    nul = ctl.get("null_control", {}).get("p_value", 0.0)
+    ingest = ctl.get("ingestion_selftest", {}).get("passed", False)
+    calib = ctl.get("calibration_type1", {}).get("calibration_ok", False)
+    power = ctl.get("sensitivity", {}).get("power_ok", False)
+    gate = (pos < alpha) and (nul >= alpha) and ingest and calib and power
+    check(gate, "V7: engine gate holds (positive fires, null silent, calibrated, powered)",
+          f"pos_p={pos:.4f} null_p={nul:.4f} ingest={ingest} calib={calib} power={power}")
+    status = ctl.get("engine_status")
+    md = open("report_v7.md", encoding="utf-8").read()
+    check(status is not None and status in md,
+          "V7: engine_status appears in report_v7.md", str(status))
+
+
 # -------------------------------------------------------------------- database
 def _open_ro(path):
     return sqlite3.connect("file:" + path.replace("\\", "/") + "?mode=ro", uri=True)
@@ -160,6 +196,7 @@ def main():
     check_reports_exist()
     check_v6_deliverables()
     check_v6_reproducibility()
+    check_v7_deliverables()
 
     if not args.skip_db:
         print("== databases ==")
