@@ -61,3 +61,7 @@ AGENTS.local.md
 *.log
 *_output.txt
 
+
+# --- Large regenerable run history ---
+history.json
+
