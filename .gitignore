@@ -56,3 +56,8 @@ Thumbs.db
 *.swp
 AGENTS.local.md
 .qoder/settings.local.json
+
+# --- Run logs (regenerable; keep on disk) ---
+*.log
+*_output.txt
+
