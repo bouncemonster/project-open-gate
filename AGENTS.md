@@ -37,3 +37,8 @@ benchmark) is the current branch: synthetic-only, never emits SIMULATION_DETECTE
 - Detailed guidance goes to .qoder/rules/*.md with model_decision/glob triggers.
 - Working principle: understand architecture/context before flagging issues; resolve
   weak points (fix or document) rather than merely listing them; close tasks at ~90%.
+## Git / path
+- Git root: `J:\project\project_open_gate\proof_of_simulation`
+- Alias: `J:\project\project-open-gate` (junction)
+- Remote: `git@github.com:bouncemonster/project-open-gate.git`
+- Branch: `main` — no force-push; keep heavy `*.sqlite3` / data dirs gitignored
